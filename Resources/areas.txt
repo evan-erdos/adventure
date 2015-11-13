@@ -1,0 +1,150 @@
+%YAML 1.1
+%TAG !intf! _PathwaysEngine.Adventure.
+%TAG !maps! _PathwaysEngine.Adventure.Setting.
+---
+
+### Areas ###
+Diazarad: !maps!Area+yml &id_diazarad
+  safe: false
+  level: 0
+  rooms:
+  - *id_Canyon_Path
+  - *id_Upper_Pathway
+  - *id_Quarantine_Gate
+  - *id_Quarantine_Marketplace
+  - *id_Quarantine_Customs
+  - *id_Quarantine_Abbey
+  - *id_Quarantine_Obelisk
+
+  description:
+    formats: [ Refresh ]
+    nouns: /area|diazarad/
+    desc: |
+      This is Diazarad.
+
+Observatory: !maps!Area+yml &id_observatory
+  safe: false
+  level: 1
+  rooms:
+  - *id_Curved_Path
+  - *id_Outside
+
+  description:
+    formats: [ Refresh ]
+    nouns: /area|observatory|mountain/
+    desc: |
+      This is the Observatory.
+
+Annex: !maps!Area+yml &id_annex
+  safe: false
+  level: 1
+  rooms:
+  - *id_Outside_Annex
+
+  description:
+    formats: [ Refresh ]
+    nouns: /area|annex|mountain/
+    desc: |
+      This is the Observatory's Annex.
+
+
+
+### Rooms ###
+Curved Path: !maps!Room+yml &id_Curved_Path
+  description:
+    formats: [ Refresh, Newline ]
+    nouns: /path|rail|curve/
+    desc: |
+      You shiver as the wind coming up the ravine blows across this gently curved walkway, which runs between the main Observatory and the Annex. It always feels a bit rickety, but you're usually too cold to notice it shaking too much. 
+
+Outside the Observatory: !maps!Room+yml &id_Outside
+  description:
+    formats: [ Refresh, Newline ]
+    nouns: /path|rail|curve/
+    desc: |
+      This path runs all the way around the circumference of the building. The entrance is on whatever side the telescope is not pointing. 
+
+Outside the Annex: !maps!Room+yml &id_Outside_Annex
+  description:
+    formats: [ Refresh, Newline ]
+    nouns: /annex|outside|building/
+    desc: |
+      You're just outside the Annex.
+
+Canyon Path: !maps!Room+yml &id_Canyon_Path
+  description:
+    formats: [ Refresh, Newline ]
+    nouns: /cliffs|crag|path/
+    desc: |
+      You are along a sandy path, which weaves its way through cragged rocks. It runs along the inside edge of a canyon, and you can hear water lapping against rocks. It's breezy: while the sun feels warm on your skin, you shiver slightly when a strong gust blows into the canyon.
+
+Quarantine Gate: !maps!Room+yml &id_Quarantine_Gate
+  description:
+    formats: [ Refresh, Newline ]
+    nouns: /quarantine|gate|stone/
+    desc: |
+      A brilliant white stone wall bars your passage through this area. This structure looks ancient, but seems to have held up very well over the ages. A tall, walled path runs directly through the middle of the structure. An equally ancient obelisk stands tall at the entrance.
+      The obelisk reads:
+          ### **D I A Z A R A D** ###
+
+
+Quarantine Hall: !maps!Room+yml &id_Quarantine_Hall
+  description:
+    formats: [ Refresh, Newline ]
+    nouns: /quarantine|hall|stone/
+    desc: |
+      A short corridor leads from the entrance of the Quaranatine to the Abbey, which appears to have filled with sand. A collapsed room and a marketplace can be found to either side, through thick doors.
+
+
+Quarantine Marketplace: !maps!Room+yml &id_Quarantine_Marketplace
+  description:
+    formats: [ Refresh, Newline ]
+    nouns: /quarantine|hall|market|stone/
+    desc: |
+      This used to be a market, where traders would set up shop at granite slabs, and barter for goods coming in and out of the Quarantine. Now it's been cleared out, and only a few clay pots, and the worn counters remain.
+
+
+Quarantine Customs Office: !maps!Room+yml &id_Quarantine_Customs
+  description:
+    formats: [ Refresh, Newline ]
+    nouns: /quarantine|hall|market|stone/
+    desc: |
+      This room must once have been the main administrative center for this Quarantine. Rocks have since collapsed into it, and very little else remains.
+
+
+Quarantine Abbey: !maps!Room+yml &id_Quarantine_Abbey
+  description:
+    formats: [ Refresh, Newline ]
+    nouns: /quarantine|hall|market|stone/
+    desc: |
+      This Abbey would have been a rather pleasant place to relax before this area was abandoned. Now the grass has overgrown, and sand has blown into the doorway on the other side, barring all entry into this land.
+
+Quarantine Obelisk: !maps!Room+yml &id_Quarantine_Obelisk
+  description:
+    formats: [ Refresh, Newline ]
+    nouns: /quarantine|hall|market|stone/
+    desc: |
+      There is another obelisk here in the sand, mostly obscured.
+      Only the top is visible, and it reads:
+        ### **D I A Z A R A D** ###
+        These lands have been barred indefinitely by the Council.
+
+Upper Pathway: !maps!Room+yml &id_Upper_Pathway
+  description:
+    nouns: /upper|path|high/
+    desc: |
+      This path leads up to a rocky outcrop, which provides an astounding view of the landscape, and of the ancient monument. From up here you can almost see into the nearer rooms of the Quarantine Gate.
+
+Lower Pathway: !maps!Room+yml &id_Lower_Pathway
+  description:
+    nouns: /lower|path|low/
+    desc: |
+      This path leads from the Quarantine downwards, towards the waterline, and continues through jagged rocks. It looks well worn, as if many have walked this path to get to the Quarantine Gates.
+
+Canyon Arch: !maps!Room+yml &id_Canyon_Arch
+  description:
+    nouns: /arch|rock|path/
+    desc: |
+      This rock structure is truly something to behold. It is a single slab of sanstone, spanning quite a distance, stretched between two giant boulders. It might be twice as tall were it not for all this sand.
+
+...

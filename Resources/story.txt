@@ -1,0 +1,64 @@
+%YAML 1.1
+%TAG !intf! _PathwaysEngine.Adventure.
+---
+
+init_0: !intf!Encounter+yml
+  reuse: false
+  input: Trigger
+  description:
+    formats: [ Refresh ]
+    desc: |
+      You fall through the door, cold from either blood loss or the weather. Was it the weather, or did the fall break something open? *Is it really raining, out there?* You're not sure about... anything. *You were just out there.* It wasn't raining, you aren't even wet. Everything is ok. It is very dark and you feel the quiet, safe, very safe, and dark...
+      You wake up dreaming in a distantly reminiscent setting. It must be... No, you can't quite place it, but you feel an unusual fondness for it. You are inside an ancient barrow hidden deep within a dark forest. The barrow opens into a narrow tunnel at its southern end. You can see a faint glow at the far end. A strangely familiar brass lantern is lying on the ground, next to a sword of Elvish workmanship. And then it all changes again, your vision is blurry, and the room is swirling, and mixing...
+      Shuddering, you sit up. There is a surfacial laceration on your inner calf, and while there's some blood in the sand, it's clotted up nicely. You're still dizzy, but at least now you know why. With difficulty, you recall the unfortunate circumstances that lead you to this strange place. Having been thoroughly let down by your primary parachute, and being that your reach towards the secondary was not worthy of any speed records, your tumble around that conifer resulted in a number of perforations. In aggregate, you can definitly feel them, but you haven't yet found all the little holes in yourself yet. That *goddamn* tree, who put it there? Why? Your anger at this particular *pinus oocarpa* points out to you that the kind of tree in question simply doesn't grow anywhere near here. You recall that most of the pines are found much closer inland, and typically on the Pacific side of the mountains... This is just another example of an alarming number of strange things you've noticed recently. Regaining control over yourself after your frustration with that imprudent tree, you're conscious enough to take an inventory of your situation. You recall tossing your bent M-16 into the woods, however you don't recall throwing the bag of clips out with it, but alas, they are nowhere to be found. Your rations, also, seem to have run away. Most of your walk into the pyramid seems a blur, but at least you're here. For a moment, you see a strange bronze lantern on the ground, but when you blink, you find your flashlight in front of you, and still on.It's pointing down a narrow tunnel, with your M9 Bayonet next to it. You look at the knife again, and for just a moment, it seemed to be reflecting blue light, but then it was gone. Must've been some ambient something or other. You pick them up and examine the extremely concerning and shiny door that closed behind you under its own volition when you stumbled through.
+
+pyramid_opens_0: !intf!Encounter+yml
+  reuse: false
+  input: Trigger
+  description:
+    formats: [ Refresh ]
+    desc: |
+      You enter a strange antechamber. This must be the great Pyramid, neither Aztec or Mayan, they said. It is a sobering moment, being one of eight selected to save the world from the waken god, but more sobering yet is the door that closed behind you under it's own power. You begin to seriously hope that someone else got through this pyramid already, that your team has planted the bomb, and are on their way back down from wherever they are, having already completed the mission. Your lightheadedness begins to fade, but you didn't notice becoming lightheaded. Something about the stale air must be thoroughly unhealthy: when the door closed, all circulation effectively stopped, leaving you alone with the skittering of small bugs in the foliage, etching out a living in the cracked walls - but there is foliage. It must be perpetually dark in here, but there are plants everywhere, climbing the walls and burrowing through the stone. You hack at one with your knife, only to find it's as real as any plant you've encountered. There are a lot of things that are severely out of place in this pyramid, and it's disconcerting. You see a faint light down the hallway, and a larger hall.
+
+antechamber_0: !intf!Encounter+yml
+  reuse: false
+  input: Trigger
+  description:
+    formats: [ Refresh ]
+    desc: |
+      There's some powder on the floor in the middle of this hall, and it seems to be phosphorescent. The whole room smells like a volcano, but the plants seem to like it. They've grown into a circle around the oddly-placed powder. You knew there was a perfectly rational explanation to all this flora. As you approach, you notice an absolutely pustulant stench coming from the west hall, rather, the left hall, your compass doesn't seem to have acclimated to this acrid climate, it's limply and drunkenly pointing in every which way. So much for navigation. The pillars that line the hall seem to be exceptionally unstable, as if any force exerted on them would just cause them to crumble. You leave them alone, for now, perhaps you can collapse the entrance when you leave, to contain this sleeping god thing, or whatever you may find in this place. As you walk closer, the rotten odor begins to become much more severe, as though a small animal recently died in the left wing.
+
+antechamber_rune_0: !intf!Encounter+yml
+  reuse: false
+  input: Trigger
+  description:
+    formats: [ Refresh ]
+    desc: |
+      There's another rune on the floor, and it is also glowing. You could only assume they're here for a reason, but you don't know what it is. As to why they glow so brightly is anybody's guess, or, rather, it would be, if there was anybody else around here.
+
+my_first_corpse: !intf!Encounter+yml
+  reuse: false
+  input: Trigger
+  description:
+    formats: [ Refresh ]
+    desc: |
+      That is not a small animal, it is a corpse. It is a deader than dead corpse which has had every living muscle torn from it's tendons, and every tendon from every bone. He lays in a pathetic, cowering sprawl in a massive pool of his own blood. It is truly gruesome. You notice little green stains here and there, which surprisingly, smell even worse. Whatever they are, they probably killed him. In the places that it contacts the bone, it has dissolved his skeleton. You'd perform a litmus test, but that would be disgusting, and you have to save the world from whatever did this to him. You suspect it's one of your crew, but you notice he is a good four inches shorter than anybody who flew in with you on the C-151. There's nothing more you can do for him, so you move on.
+
+homo_superior: !intf!Encounter+yml
+  reuse: false
+  input: Trigger
+  description:
+    formats: [ Refresh ]
+    desc: |
+      "It is these that are your marvels? Your achievements, your BEST? These are the things that define you, your people? Perhaps it is not I who lacks self-control, not I who have an impossible urge to destroy. You are here to remove me, to bury my influence with an explosive. Perhaps the relationship is perverted, perhaps more men are less than a single man. Perhaps your aggregate is your downfall, that your mindless stupor can only be cured by solitude. You walk in pairs, with your heads down, less interested in what lies above than what you lie next to. Perhaps this, too, is your shortcoming. Rape and murder give you such power! You beat the other party into submission, your own will for pleasure is greater than theirs is to live. That is good, to you. Never a thought spared for the moment when someone else's willpower outdoes your own, and you find yourself torn by their gut hook."
+      "You will meet me soon. I am the face of death, lilac skin and velvet hair, your doom, soft, quiet. A heroin syringe, a prostitute, a gun. You will meet me, and my unbounded force. It is out of my will you have endured this wretched place, and it is my dream alone which killed so many previously. You are differentiated, you have found the logic, you have come to see me as not a monster, but a man. You are wrong, I am a monster. I am the most terrible nightmare you have ever encountered. You will endure ten more death experiences before meeting me. Your soul will burn for each one, and you will lose all hope, and regain it when you come to consciousness. Jesus only withstood three. I am Homo Superior. I am your living god, now. Limb from limb, asunder broke your bread, for mine is the kingdom, you love her forever, notwithstanding the fire, heit will do without you, dust to carbon, you are to die again, with malice for despair, and terror for your struggles. You have met the three. What, if not these, remains to corrupt you? I will show you. The crowd that applauds your coronation is the same crowd that will applaud your beheading. People like a show."
+
+th_empath: !intf!Encounter+yml
+  reuse: false
+  input: Trigger
+  description:
+    formats: [ Refresh ]
+    desc: |
+      She feels for animals, and she hurts when they hurt, and is relieved when the quills come out. I absorb them, I don't need them to be around to have a conversation with them. I pretend, vividly, and I anticipate what they'd say. I create them from my mind, and I anticipate events as though they happened.
+
+...

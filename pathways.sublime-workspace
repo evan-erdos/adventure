@@ -1,0 +1,1847 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"Aud",
+				"AudioSource"
+			],
+			[
+				"GetCom",
+				"GetComponent"
+			],
+			[
+				"paths",
+				"paths_yaml"
+			],
+			[
+				"Pathw",
+				"Pathways"
+			],
+			[
+				"Eq",
+				"EquipmentBase"
+			],
+			[
+				"gEt",
+				"GetComponent"
+			],
+			[
+				"type",
+				"typeof"
+			],
+			[
+				"Desc",
+				"descItems"
+			],
+			[
+				"Drawl",
+				"DrawCircle"
+			],
+			[
+				"ve",
+				"Vector3"
+			],
+			[
+				"items",
+				"items"
+			],
+			[
+				"T",
+				"T"
+			],
+			[
+				"try",
+				"TryGetValue"
+			],
+			[
+				"list",
+				"List"
+			],
+			[
+				"Back",
+				"BackpackEnum"
+			],
+			[
+				"Get",
+				"GetEnumerator"
+			],
+			[
+				"Ben",
+				"Ben Scott	title"
+			],
+			[
+				"yaml",
+				"yaml_files"
+			],
+			[
+				"Yaml",
+				"yaml_files"
+			],
+			[
+				"tye",
+				"typeof"
+			],
+			[
+				"Gam",
+				"GameStates"
+			],
+			[
+				"Com",
+				"CommandInput"
+			],
+			[
+				"Pat",
+				"PathwaysEngine"
+			],
+			[
+				"Markd",
+				"MarkdownOptions"
+			],
+			[
+				"adva",
+				"advanceValue"
+			],
+			[
+				"Peek",
+				"PeekType"
+			],
+			[
+				"inde",
+				"indentAmount"
+			],
+			[
+				"last",
+				"lastIndents"
+			],
+			[
+				"resu",
+				"reuse"
+			],
+			[
+				"mous",
+				"mouseY"
+			],
+			[
+				"GameS",
+				"GameState"
+			],
+			[
+				"Star",
+				"StartCoroutine"
+			],
+			[
+				"file",
+				"file_name"
+			],
+			[
+				"mouseX",
+				"mouseX"
+			],
+			[
+				"GetB",
+				"GetButtonDown"
+			],
+			[
+				"InputKey",
+				"inputKey"
+			],
+			[
+				"_",
+				"_gameState"
+			],
+			[
+				"targ",
+				"targetObj"
+			],
+			[
+				"GetComp",
+				"GetComponentsInChildren"
+			],
+			[
+				"tc",
+				"tpc"
+			],
+			[
+				"spr",
+				"_sprint"
+			],
+			[
+				"Add",
+				"AddInputListener"
+			],
+			[
+				"ax",
+				"_axisX"
+			],
+			[
+				"Ona",
+				"OnAxisX"
+			],
+			[
+				"OnAxis",
+				"OnAxisY"
+			],
+			[
+				"On",
+				"OnAxisX"
+			],
+			[
+				"GetT",
+				"GetType"
+			],
+			[
+				"see",
+				"_seen"
+			],
+			[
+				"wait",
+				"waitInactive"
+			],
+			[
+				"wa",
+				"waitInactive"
+			],
+			[
+				"Inven",
+				"InventoryManager"
+			],
+			[
+				"ha",
+				"handIK"
+			],
+			[
+				"use",
+				"uselessToAttackMsg"
+			],
+			[
+				"size",
+				"size"
+			],
+			[
+				"local",
+				"localPosition"
+			],
+			[
+				"Dep",
+				"DepthOfField"
+			],
+			[
+				"Depth",
+				"DepthOfField34"
+			],
+			[
+				"cam",
+				"mainCamera"
+			],
+			[
+				"mar",
+				"margin-bottom"
+			],
+			[
+				"bord",
+				"border-color"
+			],
+			[
+				"paddi",
+				"padding-bottom"
+			],
+			[
+				"back",
+				"background"
+			],
+			[
+				"backg",
+				"background-repeat"
+			],
+			[
+				"bacg",
+				"background-image"
+			],
+			[
+				"marg",
+				"margin-left"
+			],
+			[
+				"backgroun",
+				"background-image"
+			]
+		]
+	},
+	"buffers":
+	[
+		{
+			"file": "Pathways.cs",
+			"settings":
+			{
+				"buffer_size": 29027,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "Utilities/External/Markdown.cs",
+			"settings":
+			{
+				"buffer_size": 47297,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "Terminal.cs",
+			"settings":
+			{
+				"buffer_size": 4164,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "Adventure/MessageWindow.cs",
+			"settings":
+			{
+				"buffer_size": 1216,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "Player.cs",
+			"settings":
+			{
+				"buffer_size": 6210,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "Adventure/Person.cs",
+			"settings":
+			{
+				"buffer_size": 8362,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "Adventure/Creature.cs",
+			"settings":
+			{
+				"buffer_size": 649,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "Utilities/Controls.cs",
+			"settings":
+			{
+				"buffer_size": 4150,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "Adventure/Thing.cs",
+			"settings":
+			{
+				"buffer_size": 752,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "Adventure/Room.cs",
+			"settings":
+			{
+				"buffer_size": 1699,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "Adventure/Area.cs",
+			"settings":
+			{
+				"buffer_size": 571,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "Inventory/ItemCollection.cs",
+			"settings":
+			{
+				"buffer_size": 1492,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "Movement/ThirdPersonController.cs",
+			"settings":
+			{
+				"buffer_size": 12572,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"contents": "/* Ben Scott * bescott@andrew.cmu.edu * 2015-07-07 * Hand */\n\nusing UnityEngine;\nusing System.Collections;\nusing System.Collections.Generic;\nusing invt=PathwaysEngine.Inventory;\nusing util=PathwaysEngine.Utilities;\n\nnamespace PathwaysEngine.Movement {\n	public class Hand : MonoBehaviour {\n		public bool ikActive = false;\n		public Transform objHand = null;\n        public AvatarIKGoal handGoal;\n		public Hands hand = Hands.Left;\n		public invt::IWieldable heldItem;\n		public util::key fire, lamp;\n\n		public Hand() {\n			fire = new util::key((n)=>fire.input=n);\n			lamp = new util::key((n)=>lamp.input=n);\n		}\n\n		public void SwitchItem(invt::IWieldable item) {\n		//	if (heldItem!=null) heldItem.Stow();\n		//	else heldItem.Drop();\n			heldItem = item;\n		}\n\n		void Awake() {\n			if (hand==Hands.Right) Player.right = this;\n			else if (hand==Hands.Left) Player.left = this;\n		}\n\n        void Start() {\n            handGoal = (hand==Hands.Left)?\n                (AvatarIKGoal.LeftHand):(AvatarIKGoal.RightHand);\n        }\n\n		public void Update() {\n			if (heldItem!=null && (hand==Hands.Left && lamp.input\n			|| hand==Hands.Right && fire.input)) heldItem.Use();\n		}\n	}\n}",
+			"file": "Movement/Hand.cs",
+			"file_size": 1250,
+			"file_write_time": 130850211710000000,
+			"settings":
+			{
+				"buffer_size": 1159,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "Inventory/Weapon.cs",
+			"settings":
+			{
+				"buffer_size": 664,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "Inventory/Gun.cs",
+			"settings":
+			{
+				"buffer_size": 8548,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "Inventory/Lamp.cs",
+			"settings":
+			{
+				"buffer_size": 2191,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "Inventory/Flashlight.cs",
+			"settings":
+			{
+				"buffer_size": 482,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "Inventory/Equipment/Crystal.cs",
+			"settings":
+			{
+				"buffer_size": 8865,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "Adventure/Encounter.cs",
+			"settings":
+			{
+				"buffer_size": 1234,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "RailiingPlacer.cs",
+			"settings":
+			{
+				"buffer_size": 1647,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "Inventory/Backpack.cs",
+			"settings":
+			{
+				"buffer_size": 768,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "Inventory/Bag.cs",
+			"settings":
+			{
+				"buffer_size": 2659,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "Inventory/Item.cs",
+			"settings":
+			{
+				"buffer_size": 2023,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "Adventure/Connector.cs",
+			"settings":
+			{
+				"buffer_size": 730,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "Inventory/ItemGroup.cs",
+			"settings":
+			{
+				"buffer_size": 1318,
+				"line_ending": "Unix"
+			}
+		}
+	],
+	"build_system": "",
+	"build_system_choices":
+	[
+		[
+			[
+				[
+					"Packages/AAAPackageDev/Support/Convert to ....sublime-build",
+					""
+				],
+				[
+					"Packages/AAAPackageDev/Support/Convert to ....sublime-build",
+					"JSON"
+				],
+				[
+					"Packages/AAAPackageDev/Support/Convert to ....sublime-build",
+					"Property List"
+				],
+				[
+					"Packages/AAAPackageDev/Support/Convert to ....sublime-build",
+					"YAML (Block Style)"
+				],
+				[
+					"Packages/AAAPackageDev/Support/Convert to ....sublime-build",
+					"YAML (Default Style)"
+				]
+			],
+			[
+				"Packages/AAAPackageDev/Support/Convert to ....sublime-build",
+				"Property List"
+			]
+		]
+	],
+	"build_varint": "",
+	"command_palette":
+	{
+		"height": 267.0,
+		"last_filter": "Snippet: ",
+		"selected_items":
+		[
+			[
+				"Snippet: ",
+				"Snippet: class"
+			],
+			[
+				"package",
+				"Package Control: Discover Packages"
+			],
+			[
+				"insta",
+				"Package Control: Install Package"
+			],
+			[
+				"inst",
+				"Package Control: Install Package"
+			],
+			[
+				"pack",
+				"Preferences: Browse Packages"
+			]
+		],
+		"width": 584.0
+	},
+	"console":
+	{
+		"height": 146.0,
+		"history":
+		[
+			"clear",
+			"import urllib.request,os,hashlib; h = 'eb2297e1a458f27d836c04bb0cbaf282' + 'd0e7a3098092775ccb37ca9d6b2e4b7d'; pf = 'Package Control.sublime-package'; ipp = sublime.installed_packages_path(); urllib.request.install_opener( urllib.request.build_opener( urllib.request.ProxyHandler()) ); by = urllib.request.urlopen( 'http://packagecontrol.io/' + pf.replace(' ', '%20')).read(); dh = hashlib.sha256(by).hexdigest(); print('Error validating download (got %s instead of %s), please try manual install' % (dh, h)) if dh != h else open(os.path.join( ipp, pf), 'wb' ).write(by)"
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"file_history":
+	[
+		"/Users/bescott/Developer/bescott/recitation/01/src/main/java/edu/cmu/cs/cs214/rec01/Example.java",
+		"/Users/bescott/Developer/iasEnvy.github.io/_site/index.html",
+		"/Users/bescott/Desktop/gd-remix.md",
+		"/Users/bescott/Developer/iasEnvy.github.io/_layouts/main.html",
+		"/Users/bescott/Developer/pathways-master/Assets/PathwaysEngine/Adventure/ParserObject.cs",
+		"/Users/bescott/Developer/pathways-master/Assets/PathwaysEngine/Adventure/Road.cs",
+		"/Users/bescott/Developer/pathways-master/Assets/PathwaysEngine/Adventure/Message.cs",
+		"/Users/bescott/Developer/pathways-master/Assets/PathwaysEngine/Player.cs",
+		"/Users/bescott/Developer/pathways-master/Assets/PathwaysEngine/Adventure/Connector.cs",
+		"/Users/bescott/Developer/pathways-master/Assets/PathwaysEngine/Utilities/Controls.cs",
+		"/usr/local/bin/unity_subl.sh",
+		"/tmp/subl stdin 4HsfKK.txt",
+		"/tmp/subl stdin q4aXFX.txt",
+		"/Users/bescott/Developer/pathways-master/Pathways.cs",
+		"/Users/bescott/Developer/pathways-master/",
+		"/Users/bescott/Developer/pathways-master/Assets/PathwaysEngine/Inventory/ItemCollection.cs",
+		"/Users/bescott/Developer/pathways-master/Assets/PathwaysEngine/Mechanics/Person.cs",
+		"/Users/bescott/Developer/pathways-master/Assets/PathwaysEngine/Mechanics/Setting/Area.cs",
+		"/Users/bescott/Developer/pathways-master/Assets/PathwaysEngine/Mechanics/Setting/Room.cs",
+		"/Users/bescott/Developer/pathways-master/Assets/PathwaysEngine/Terminal.cs",
+		"/Users/bescott/Developer/pathways-master/Assets/PathwaysEngine/ParserObject.cs",
+		"/Users/bescott/Developer/pathways-master/Assets/PathwaysEngine/Thing.cs",
+		"/Users/bescott/Developer/pathways-master/Assets/PathwaysEngine/Place.cs",
+		"/Users/bescott/Developer/pathways-master/Assets/PathwaysEngine/Inventory/Flashlight.cs",
+		"/Users/bescott/Developer/pathways-master/Assets/PathwaysEngine/Utilities/External/Markdown.cs",
+		"/Users/bescott/Developer/pathways-master/Assets/PathwaysEngine/Inventory/Lamp.cs",
+		"/Users/bescott/Developer/pathways-master/Assets/PathwaysEngine/Inventory/Potion.cs",
+		"/Users/bescott/Developer/pathways-master/Assets/PathwaysEngine/Inventory/Weapon.cs",
+		"/Users/bescott/Desktop/Old Desktop/miller-rabin.c",
+		"/Users/bescott/Library/Application Support/Sublime Text 3/Packages/User/Preferences.sublime-settings",
+		"/Users/bescott/Desktop/unions.c",
+		"/Users/bescott/Developer/pathways-master/Assets/PathwaysEngine/Mechanics/Setting/rooms.yml",
+		"/Users/bescott/Developer/pathways-master/Assets/PathwaysEngine/Inventory/items.yml",
+		"/Users/bescott/Developer/pathways-master/Assets/PathwaysEngine/Mechanics/encounters.yml",
+		"/Users/bescott/Developer/pathways-master/Assets/PathwaysEngine/pathways.yml",
+		"/Users/bescott/Developer/pathways-master/Assets/Plugins/YamlDotNet/Examples/Loading_a_YAML_stream.cs",
+		"/Users/bescott/Developer/pathways-master/Assets/Plugins/YamlDotNet/Examples/Serializing_an_object_graph.cs",
+		"/Users/bescott/Downloads/varicolor-0.2-2.1/varicolor-v0.2.1.sublime-syntax",
+		"/Users/bescott/Documents/old varicolor/varicolor-v0.0.2.sublime-syntax",
+		"/Users/bescott/Developer/varicolor-master/varicolor-v0.2.1.tmTheme",
+		"/Users/bescott/Developer/varicolor-master/varicolor-v0.2.1.sublime-syntax",
+		"/Users/bescott/.Trash/varicolor-v0.0.2.PLIST-sublime-syntax",
+		"/Users/bescott/.Trash/varicolor 21.11.40/varicolor-v0.2.1.sublime-syntax",
+		"/Users/bescott/.Trash/varicolor 21.11.51/varicolor-v0.2.1.sublime-syntax",
+		"/Users/bescott/Library/Application Support/Sublime Text 3/Packages/varicolor/varicolor-v0.2.1.sublime-syntax",
+		"/Users/bescott/Downloads/varicolor-0.2.1/varicolor-v0.2.1.sublime-syntax",
+		"/Users/bescott/Developer/varicolor-master/varicolor-v0.0.2.sublime-syntax",
+		"/Users/bescott/Developer/pathways-master/Assets/Plugins/YamlDotNet/Examples/Deserializing_multiple_documents.cs",
+		"/Users/bescott/Developer/pathways-master/Assets/Plugins/YamlDotNet/Examples/Deserializing_an_object_graph.cs",
+		"/Users/bescott/Developer/varicolor-master/imperative.YAML-tmLanguage",
+		"/Users/bescott/Desktop/TypeBuilder.cs",
+		"/Users/bescott/Developer/varicolor-master/varicolor-package/varicolor.tmTheme",
+		"/Users/bescott/Developer/pathways-master/Assets/PathwaysEngine/Mechanics/Setting/regions.yml",
+		"/Users/bescott/Developer/pathways-master/Assets/PathwaysEngine/test.yml",
+		"/Users/bescott/Developer/pathways-master/Assets/PathwaysEngine/Mechanics/Setting/Connector.cs",
+		"/Users/bescott/Developer/pathways-master/Assets/PathwaysEngine/Utilities/Anchor.cs",
+		"/Users/bescott/Developer/pathways-master/Assets/PathwaysEngine/Mechanics/Map/rooms.yml",
+		"/Users/bescott/Developer/pathways-master/Assets/PathwaysEngine/Inventory/Equipment/Shoes.cs",
+		"/Users/bescott/Developer/pathways-master/Assets/PathwaysEngine/Inventory/Equipment/EquipmentBase.cs",
+		"/Users/bescott/Developer/pathways-master/Assets/PathwaysEngine/Inventory/IEquippable/EquipmentBase.cs",
+		"/Users/bescott/Developer/pathways-master/Assets/PathwaysEngine/Inventory/ItemSet.cs",
+		"/Users/bescott/Developer/pathways-master/Assets/PathwaysEngine/Inventory/Backpack.cs",
+		"/Users/bescott/Developer/pathways-master/Assets/PathwaysEngine/Mechanics/Encounter.cs",
+		"/Users/bescott/Developer/pathways-master/Assets/PathwaysEngine/Mechanics/Setting/Region.cs",
+		"/Users/bescott/Developer/pathways-master/Assets/PathwaysEngine/Mechanics/Map/Room.cs",
+		"/Users/bescott/Developer/pathways-master/Assets/PathwaysEngine/Mechanics/Map/RoomConnector.cs",
+		"/Users/bescott/Developer/pathways-master/Assets/PathwaysEngine/Utilities/External/YAML.cs",
+		"/usr/local/bin/timer.sh",
+		"/Users/bescott/Desktop/timer.sh",
+		"/Users/bescott/Developer/pathways-master/Assets/PathwaysEngine/Movement/FirstPersonHeadBob.cs",
+		"/Users/bescott/Developer/pathways-master/Assets/PathwaysEngine/Movement/FirstPersonCharacter.cs",
+		"/Users/bescott/Developer/vividity-master/src/main.t",
+		"/Users/bescott/Developer/iasEnvy.github.io/src/other.md",
+		"/Users/bescott/Developer/iasEnvy.github.io/src/about.md",
+		"/Users/bescott/Developer/iasEnvy.github.io/src/gd.md",
+		"/Users/bescott/Developer/vividity-master/src/rooms.t",
+		"/Users/bescott/Developer/vividity-master/src/dijkstra.t",
+		"/Users/bescott/Developer/vividity-master/src/combat.t",
+		"/Users/bescott/Developer/vividity-master/src/adaline.t",
+		"/Users/bescott/Developer/iasEnvy.github.io/index.md",
+		"/Users/bescott/Developer/pathways-master/Assets/PathwaysEngine/Movement/Map/Room.cs",
+		"/Users/bescott/Developer/pathways-master/Assets/PathwaysEngine/Movement/PrototypeMotor.cs",
+		"/Users/bescott/Developer/pathways-master/Assets/PathwaysEngine/Movement/PrototypeGimbal.cs",
+		"/Users/bescott/Developer/pathways-master/Assets/PathwaysEngine/Movement/Look.cs",
+		"/usr/local/SUPPORTERS.md",
+		"/Users/bescott/Developer/pathways-master/Assets/PathwaysEngine/Inventory/Item.cs",
+		"/Users/bescott/Developer/pathways-master/Assets/PathwaysEngine/Movement/ThirdPersonController.cs",
+		"/Users/bescott/Developer/pathways-master/Assets/PathwaysEngine/Statistics/Creature.cs",
+		"/Users/bescott/Documents/Player_0.cs",
+		"/Users/bescott/Developer/pathways-master/Assets/PathwaysEngine/External/Markdown.cs",
+		"/Users/bescott/Developer/pathways-master/Assets/PathwaysEngine/Statistics/Person.cs",
+		"/Users/bescott/Developer/pathways-master/Assets/PathwaysEngine/Statistics/Stat.cs",
+		"/Users/bescott/Developer/pathways-master/Assets/PathwaysEngine/Inventory/Holdall",
+		"/Users/bescott/Developer/pathways-master/Assets/PathwaysEngine/Movement/StateMachine/FlashlightWield.cs",
+		"/Users/bescott/Developer/pathways-master/Assets/PathwaysEngine/UserInterface/Terminal.cs",
+		"/Users/bescott/Developer/pathways-master/Assets/PathwaysEngine/UserInterface/Encounter.cs",
+		"/Users/bescott/Developer/pathways-master/Assets/PathwaysEngine/Movement/StateMachine/FlashlightStowed.cs",
+		"/Users/bescott/Developer/pathways-master/Assets/PathwaysEngine/Movement/StateMachine/IKControl.cs",
+		"/Users/bescott/Developer/pathways-master/Assets/PathwaysEngine/Inventory/Bag.cs",
+		"/Users/bescott/Documents/ItemContainer.cs",
+		"/Users/bescott/Documents/Backpack_0.cs",
+		"/Users/bescott/Developer/pathways-master/Assets/PathwaysEngine/Utilities/LockTransform.cs",
+		"/Users/bescott/Desktop/proper update",
+		"/Users/bescott/Developer/pathways-master/Assets/PathwaysEngine/PathwaysEngine.sublime-project",
+		"/Users/bescott/Developer/pathways-master/Assets/PathwaysEngine/Manuscript/pathways.yml",
+		"/Users/bescott/Developer/pathways-master/Assets/PathwaysEngine/Inventory/tasty ideas.md",
+		"/Users/bescott/Library/Application Support/Sublime Text 3/Packages/varicolor-package/Snippets/foreach",
+		"/Users/bescott/Documents/Backpack.cs",
+		"/Users/bescott/Developer/pathways-master/Assets/PathwaysEngine/PathwaysEngine.sublime-workspace",
+		"/Users/bescott/Developer/ep-master/Assets/Electrophysiology/EP Lab.sublime-workspace",
+		"/Users/bescott/Desktop/Old Desktop/CS15 0112 TR01 DLR0/3D Motion System/Assets/3D Motion System.sublime-project",
+		"/Users/bescott/Desktop/pathways-master Backup/Assets/Pathways.sublime-project",
+		"/Users/bescott/Desktop/pathways-master Backup/Assets/Pathways.sublime-project.meta",
+		"/Users/bescott/Desktop/Old Desktop/CS15 0112 TR01 DLR0/3D Motion System/3D Motion System.sublime-workspace",
+		"/Users/bescott/Desktop/Old Desktop/Primary.sublime-workspace",
+		"/Users/bescott/Developer/pathways-master/Assets/PathwaysEngine/PathwaysEngine.sublime-project.meta",
+		"/Users/bescott/Desktop/pathways-master Backup/Assets/Pathways.sublime-workspace",
+		"/Users/bescott/Developer/ep-master/Assets/Electrophysiology/EP Lab.sublime-project",
+		"/Users/bescott/Desktop/Old Desktop/CS15 0112 TR01 DLR0/3D Motion System.sublime-project",
+		"/Users/bescott/Developer/pathways-master/Assets/PathwaysEngine/Manuscript/Encounters.yml",
+		"/Users/bescott/Developer/pathways-master/Assets/PathwaysEngine/UserInterface/Controls.cs",
+		"/Users/bescott/Downloads/YamlDotNet-master/Yaml/Core/Tokens/Scalar.cs",
+		"/Users/bescott/Downloads/YamlDotNet-master/Yaml/Core/IEmitter.cs",
+		"/Users/bescott/Developer/iasEnvy.github.io/_config.yml",
+		"/Users/bescott/Developer/iasEnvy.github.io/_drafts/2015-07-23-gd.md",
+		"/Users/bescott/Developer/pathways-master/Assets/PathwaysEngine/Utilities/AbstractTargetFollower.cs",
+		"/Users/bescott/Developer/pathways-master/Assets/PathwaysEngine/Utilities/md.cs",
+		"/Users/bescott/Developer/pathways-master/Assets/PathwaysEngine/Utilities/YAML.cs"
+	],
+	"find":
+	{
+		"height": 35.0
+	},
+	"find_in_files":
+	{
+		"height": 93.0,
+		"where_history":
+		[
+			""
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": true,
+		"find_history":
+		[
+			"\\broom\\b",
+			"room",
+			"{\n",
+			"Debug",
+			"Refresh",
+			"RefreshDescription",
+			"Room",
+			"Desc",
+			"messages",
+			"Messages",
+			"_amps",
+			"&amp;",
+			"parse",
+			"Term",
+			"Alert",
+			"Messages",
+			"messages",
+			"SetEnabled",
+			"WaitForInput",
+			"messages",
+			"EnableUI",
+			"focus",
+			"GameStates.Game",
+			"GameStates.Alert",
+			"Deserialize",
+			"GameStates.Game",
+			"Game",
+			"focus",
+			"Cursor",
+			"GameStates.Game",
+			"DisableUI",
+			"EnableUI",
+			"SetActive",
+			"Cursor",
+			"body",
+			"title",
+			"message",
+			"input",
+			"string input",
+			"Parse",
+			"_dead",
+			"InputAttribute",
+			"UnityEngine.UI",
+			"intf",
+			"dash",
+			"}\n",
+			"handObj",
+			"objHand",
+			"term",
+			"lamp",
+			"Burn",
+			"while",
+			"ParserObject",
+			"Statistic",
+			"Stat",
+			"StatSet",
+			"Stat",
+			"stat",
+			"IParseable",
+			"desc_ParserObject",
+			"((invt::Item) value)",
+			"temp",
+			"Wear",
+			"util",
+			"Terminal",
+			"PathwaysEngine",
+			"Terminal",
+			"intf::",
+			"GetYAML",
+			"Clear",
+			"yml",
+			"ymlf",
+			"yml",
+			"intf",
+			"animator",
+			"Desc",
+			"Message",
+			"item",
+			"IItemSet",
+			"ItemSetEnum",
+			"GetNearbyItems",
+			"Description",
+			"IStorable",
+			"Message",
+			"TimedEncounter",
+			"virtual",
+			"IParseable",
+			"IWearable",
+			" ",
+			"GameStates",
+			"IParseable",
+			"Find",
+			"nearItems",
+			"elem",
+			"type",
+			"countLimit",
+			"desc: |",
+			"yml",
+			"Travel",
+			"<Thing>",
+			"Description",
+			"IEquippable",
+			"Equip",
+			"IEquippable",
+			"Equip",
+			"IEquippable",
+			"Equip",
+			"IItem",
+			"HTML_Unity",
+			"info",
+			"random",
+			"list",
+			"Class",
+			"handGoal",
+			"animator",
+			"eval",
+			"Room",
+			" 	 ",
+			" 	  	 ",
+			"= ",
+			"String",
+			"name",
+			"AppendLine",
+			"Message",
+			"yaml",
+			"elem",
+			"s",
+			"nears"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": true,
+		"replace_history":
+		[
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"selected": 0,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "Pathways.cs",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 29027,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								6178,
+								6178
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Varicolor/varicolor-v0.2.1.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 2955.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "Utilities/External/Markdown.cs",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 47297,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								42382,
+								42382
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Varicolor/varicolor-v0.2.1.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 19225.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 7,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "Terminal.cs",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 4164,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								2830,
+								2830
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Varicolor/varicolor-v0.2.1.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "Adventure/MessageWindow.cs",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1216,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								806,
+								806
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Varicolor/varicolor-v0.2.1.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "Player.cs",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 6210,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								2223,
+								2223
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Varicolor/varicolor-v0.2.1.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 608.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 9,
+					"type": "text"
+				},
+				{
+					"buffer": 5,
+					"file": "Adventure/Person.cs",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 8362,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								4172,
+								4172
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Varicolor/varicolor-v0.2.1.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 1586.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 10,
+					"type": "text"
+				},
+				{
+					"buffer": 6,
+					"file": "Adventure/Creature.cs",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 649,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								343,
+								343
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Varicolor/varicolor-v0.2.1.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 6,
+					"type": "text"
+				},
+				{
+					"buffer": 7,
+					"file": "Utilities/Controls.cs",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 4150,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1047,
+								1047
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Varicolor/varicolor-v0.2.1.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 8.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 8,
+					"type": "text"
+				},
+				{
+					"buffer": 8,
+					"file": "Adventure/Thing.cs",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 752,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								377,
+								377
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Varicolor/varicolor-v0.2.1.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 4,
+					"type": "text"
+				},
+				{
+					"buffer": 9,
+					"file": "Adventure/Room.cs",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1699,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1046,
+								1050
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Varicolor/varicolor-v0.2.1.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 21.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 3,
+					"type": "text"
+				},
+				{
+					"buffer": 10,
+					"file": "Adventure/Area.cs",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 571,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								478,
+								478
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Varicolor/varicolor-v0.2.1.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 5,
+					"type": "text"
+				},
+				{
+					"buffer": 11,
+					"file": "Inventory/ItemCollection.cs",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1492,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								217,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Varicolor/varicolor-v0.2.1.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 12,
+					"type": "text"
+				},
+				{
+					"buffer": 12,
+					"file": "Movement/ThirdPersonController.cs",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 12572,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								10747,
+								10747
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Varicolor/varicolor-v0.2.1.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 4124.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 18,
+					"type": "text"
+				},
+				{
+					"buffer": 13,
+					"file": "Movement/Hand.cs",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1159,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								638,
+								648
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Varicolor/varicolor-v0.2.1.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 15,
+					"type": "text"
+				},
+				{
+					"buffer": 14,
+					"file": "Inventory/Weapon.cs",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 664,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								653,
+								653
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Varicolor/varicolor-v0.2.1.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 24,
+					"type": "text"
+				},
+				{
+					"buffer": 15,
+					"file": "Inventory/Gun.cs",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 8548,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								4932,
+								4932
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Varicolor/varicolor-v0.2.1.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 44.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 25,
+					"type": "text"
+				},
+				{
+					"buffer": 16,
+					"file": "Inventory/Lamp.cs",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 2191,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								874,
+								874
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Varicolor/varicolor-v0.2.1.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 13,
+					"type": "text"
+				},
+				{
+					"buffer": 17,
+					"file": "Inventory/Flashlight.cs",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 482,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								325,
+								325
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Varicolor/varicolor-v0.2.1.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 19,
+					"type": "text"
+				},
+				{
+					"buffer": 18,
+					"file": "Inventory/Equipment/Crystal.cs",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 8865,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								5266,
+								5266
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Varicolor/varicolor-v0.2.1.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 21,
+					"type": "text"
+				},
+				{
+					"buffer": 19,
+					"file": "Adventure/Encounter.cs",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1234,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								435,
+								435
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Varicolor/varicolor-v0.2.1.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 16,
+					"type": "text"
+				},
+				{
+					"buffer": 20,
+					"file": "RailiingPlacer.cs",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1647,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Varicolor/varicolor-v0.2.1.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 22,
+					"type": "text"
+				},
+				{
+					"buffer": 21,
+					"file": "Inventory/Backpack.cs",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 768,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								707,
+								707
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Varicolor/varicolor-v0.2.1.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 20,
+					"type": "text"
+				},
+				{
+					"buffer": 22,
+					"file": "Inventory/Bag.cs",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 2659,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								50,
+								50
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Varicolor/varicolor-v0.2.1.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 11,
+					"type": "text"
+				},
+				{
+					"buffer": 23,
+					"file": "Inventory/Item.cs",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 2023,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1284,
+								1284
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Varicolor/varicolor-v0.2.1.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 184.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 14,
+					"type": "text"
+				},
+				{
+					"buffer": 24,
+					"file": "Adventure/Connector.cs",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 730,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								715,
+								715
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Varicolor/varicolor-v0.2.1.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 17,
+					"type": "text"
+				},
+				{
+					"buffer": 25,
+					"file": "Inventory/ItemGroup.cs",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1318,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								113,
+								113
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Varicolor/varicolor-v0.2.1.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 23,
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 26.0
+	},
+	"input":
+	{
+		"height": 35.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.find_results":
+	{
+		"height": 0.0
+	},
+	"output.package_dev":
+	{
+		"height": 112.0
+	},
+	"pinned_build_system": "Packages/AAAPackageDev/Support/Convert to ....sublime-build",
+	"project": "pathways.sublime-project",
+	"replace":
+	{
+		"height": 48.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+			[
+				"room",
+				"~/Developer/pathways-master/Assets/PathwaysEngine/Adventure/Room.cs"
+			],
+			[
+				"hand",
+				"~/Developer/pathways-master/Assets/PathwaysEngine/Movement/Hand.cs"
+			],
+			[
+				"back",
+				"~/Developer/pathways-master/Assets/PathwaysEngine/Inventory/Backpack.cs"
+			],
+			[
+				"fa",
+				"~/Developer/pathways-master/Assets/PathwaysEngine/Inventory/Flashlight.cs"
+			],
+			[
+				"pers",
+				"~/Developer/pathways-master/Assets/PathwaysEngine/Adventure/Person.cs"
+			],
+			[
+				"conn",
+				"~/Developer/pathways-master/Assets/PathwaysEngine/Adventure/Connector.cs"
+			],
+			[
+				"thing",
+				"~/Developer/pathways-master/Assets/PathwaysEngine/Adventure/Thing.cs"
+			],
+			[
+				"item",
+				"~/Developer/pathways-master/Assets/PathwaysEngine/Inventory/Item.cs"
+			],
+			[
+				"pla",
+				"~/Developer/pathways-master/Assets/PathwaysEngine/Player.cs"
+			],
+			[
+				"en",
+				"~/Developer/pathways-master/Assets/PathwaysEngine/Mechanics/Encounter.cs"
+			],
+			[
+				"lamp",
+				"~/Developer/pathways-master/Assets/PathwaysEngine/Inventory/Lamp.cs"
+			],
+			[
+				"lam",
+				"~/Developer/pathways-master/Assets/PathwaysEngine/Inventory/Lamp.cs"
+			],
+			[
+				"pl",
+				"~/Developer/pathways-master/Assets/PathwaysEngine/Player.cs"
+			],
+			[
+				"contr",
+				"~/Developer/pathways-master/Assets/PathwaysEngine/Utilities/Controls.cs"
+			],
+			[
+				"area",
+				"~/Developer/pathways-master/Assets/PathwaysEngine/Mechanics/Setting/Road.cs"
+			],
+			[
+				"pat",
+				"~/Developer/pathways-master/Assets/PathwaysEngine/Pathways.cs"
+			],
+			[
+				"anchr",
+				"~/Developer/pathways-master/Assets/PathwaysEngine/Utilities/Anchor.cs"
+			],
+			[
+				"perso",
+				"~/Developer/pathways-master/Assets/PathwaysEngine/Mechanics/Person.cs"
+			],
+			[
+				"is",
+				"~/Developer/pathways-master/Assets/PathwaysEngine/Inventory/ItemSet.cs"
+			],
+			[
+				"bac",
+				"~/Developer/pathways-master/Assets/PathwaysEngine/Inventory/Backpack.cs"
+			],
+			[
+				"items",
+				"~/Developer/pathways-master/Assets/PathwaysEngine/Inventory/ItemSet.cs"
+			],
+			[
+				"prot",
+				"pathways-master/Movement/PrototypeMotor.cs"
+			],
+			[
+				"proto",
+				"pathways-master/Movement/PrototypeGimbal.cs"
+			],
+			[
+				"look",
+				"pathways-master/Movement/Look.cs"
+			],
+			[
+				"controls",
+				"pathways-master/Utilities/Controls.cs"
+			],
+			[
+				"itemset",
+				"pathways-master/Inventory/ItemSet.cs"
+			],
+			[
+				"play",
+				"pathways-master/Player.cs"
+			],
+			[
+				"per",
+				"pathways-master/Statistics/Person.cs"
+			],
+			[
+				"iitems",
+				"pathways-master/Inventory/ItemSet.cs"
+			],
+			[
+				"tpc",
+				"pathways-master/Movement/ThirdPersonController.cs"
+			],
+			[
+				"flasw",
+				"pathways-master/Movement/StateMachine/FlashlightWield.cs"
+			],
+			[
+				"ter",
+				"pathways-master/Terminal.cs"
+			],
+			[
+				"yam",
+				"pathways-master/Utilities/External/YAML.cs"
+			],
+			[
+				"term",
+				"PathwaysEngine/UserInterface/Terminal.cs"
+			],
+			[
+				"enc",
+				"PathwaysEngine/UserInterface/Encounter.cs"
+			],
+			[
+				"graphtool",
+				"cboe-remote/src/tools/graphtool.cpp"
+			]
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_symbol":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"selected_group": 0,
+	"settings":
+	{
+	},
+	"show_minimap": true,
+	"show_open_files": false,
+	"show_tabs": true,
+	"side_bar_visible": false,
+	"side_bar_width": 256.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+		"max_columns": 1
+	}
+}

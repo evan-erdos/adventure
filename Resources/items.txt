@@ -1,0 +1,85 @@
+%YAML 1.1
+%TAG !invt! _PathwaysEngine.Inventory.
+%TAG !intf! _PathwaysEngine.Adventure.
+---
+
+Backpack: !invt!Item+yml
+  mass: 2
+  description:
+    nouns: /bag|(back)?[ps]ack|container/
+    rand_descriptions:
+    - "It's flaps twirl in the breeze."
+    - "You stare at it, wistfully, but not too long. You feel enriched."
+    desc: |
+      Your backpack is only slightly worn, and has taken you on many an adventure. You typically don't leave home without it.
+      
+      (Type "wear bag" to equip it, and "open bag" to look through your inventory.)
+
+MagLite LR05: !invt!Lamp+yml
+  cost: 56
+  mass: 2
+  time: 5760
+  description:
+    nouns: /(flash)?light|maglite|lr05/
+    desc: |
+      On the side of this flashlight is a label promising the batteries will last of six days of constant operation. The label is peeling off in a few corners, and you have doubts.
+      
+      (Type "light" to turn it on and off.)
+
+Yellow Crystal: !invt!Crystal+yml
+  mass: 0
+  shards: 23
+  description:
+    nouns: /yellow|oratis/
+    desc: |
+      The yellow crystal glows with a strange light, and floats around on its own. It seems to hum in your hand.
+      
+      (To begin charging the yellow crystal, type "equip yellow crystal". Discharge it by right clicking.)
+
+Blue Crystal: !invt!Crystal+yml
+  mass: 0
+  shards: 53
+  description:
+    nouns: /blue|teal|freezing|ice/
+    desc: |
+      The blue crystal is very cold, and almost transparent.
+      
+      (To begin charging the blue crystal, type "equip blue crystal". Discharge it by right clicking.)
+
+M9 Bayonet: !invt!Weapon+yml
+  cost: 20
+  mass: 1
+  description:
+    nouns: /((m9|survival|steel)\s+)?(blade|bayonet|knife|sword)/
+    desc: |
+      This is your standard-issue M9 Bayonet.
+      
+      (Type "wield knife" to ready it for combat.)
+
+Walther P4: !invt!Weapon+yml
+  cost: 23
+  mass: 0.8
+  description:
+    nouns: /walther|pistol|gun|p4/
+    desc: |
+      The Walther P4 was the most common sidearm of the German army during the Second World War. It's magazines hold eight 9mm Parabellum rounds.
+      
+      (Type "wield P4" to ready it for combat. New magazines will be loaded automatically.)
+
+Colt 45: !invt!Weapon+yml
+  cost: 34
+  mass: 0.9
+  description:
+    nouns: /colt|pistol|handgun|p4/
+    desc: |
+      This is a Colt .45 pistol.
+      
+      (Type "wield colt" to ready it for combat. New magazines will be loaded automatically.)
+
+Obelisk: !intf!Thing+yml
+  description:
+    nouns: /obelisk|rock|pillar|sign/
+    desc: |
+      This pillar was cut from solid granite, and has a small inscription across its base.
+
+...

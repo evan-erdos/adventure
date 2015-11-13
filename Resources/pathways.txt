@@ -1,0 +1,105 @@
+%YAML 1.1
+%TAG !intf! _PathwaysEngine.Adventure.
+%TAG !path! _PathwaysEngine.
+--- # pathways
+
+init: !intf!Message
+  desc: |
+    ## Observatory ##
+    © 2015, Ben Scott <bescott@andrew.cmu.edu>
+    bescott.org/observatory/
+    
+    If this is your first time playing, press **TAB** and then type **help** for more information. If you just want to explore, press **TAB** and type **hide terminal**.
+
+crystal_init: !intf!Message
+  desc: |
+    ## Among Fields of Crystal ##
+    © 2015, Ben Scott <bescott@andrew.cmu.edu>
+    bescott.org/among-fields-of-crystal/
+    
+    **Welcome!**
+    If this is your first time playing, press **TAB** and then type **help** for more information. Then, try walking near the crystals to activate them. 
+
+gedenkstatte_init: !intf!Message
+  desc: |
+    ## Gedenkstätte v1.0.3 ##
+    © 2015, Ben Scott <bescott@andrew.cmu.edu>
+    bescott.org/gedenkstatte/
+    
+    **Welcome!**
+    If this is your first time playing, press **TAB** and then type **help** for more information.
+
+dead: !intf!Message
+  formats: [ Alert, Newline ]
+  desc: |
+    ### \*\*\* YOU HAVE DIED. \*\*\* ###
+    **Would you like to Restore, Restart, or Quit?**
+    
+    (Just press **TAB** and type **restore** for now.)
+
+help_old: !intf!Message
+  desc: |
+    # Help #
+    This is an exploratory "game" which draws its inspirations from Zork, Myst & Riven, Geneforge et al., etc.
+    Even if you're a veteran game-player-person, you should probably pour over the help section, as the controls for this game are liable to differ *drastically* from what you'd expect them to be. Also, anywhere you see (*Disabled in v1.0.2*), you can read that as (*I haven't fixed this as of v1.0.2. I mean, I'm just one person, cut me some slack! It's harder than you think, all this, come on!*).
+
+
+help: !intf!Message
+  desc: |
+    # Help #
+    This is an exploratory "game" which draws its inspirations from Zork, Myst & Riven, Geneforge et al., etc. The Observatory setting was inspired in part by my visit to the Royal Greenwich Observatory, which is situated on a high peak, directly along the prime meridian. They still had a "time ball", which was a large, red ball on a wire / rod that would be dropped exactly on the hour, such that passing ships could synchronize their timekeeping devices.
+    
+    ### Getting Started ###
+    Walk with **W, A, S, and D**, and hold **SHIFT** if you don't have time to just walk. Look around with the **MOUSE**, and perform actions by **CLICKING**. Press **C** to crouch, and press **SHIFT** when you land to slide. To lean around corners and spin while you're airborne, press **Q and E**.
+    Most importantly, press **TAB** to toggle the command-line input. The terminal allows you to type commands in regular old English, e.g., **get flashlight**, **pull lever**, or **equip knife**. A full overview of the commands (and their shortcuts) can be found below.
+    
+    ## Controls & Commands ##
+    A few things about commands:
+    - Computers aren't much for small talk. When entering commands, most adjectives and small words are stripped out, so while you *can* type **I want to get the rope, please get it for me, Mr. Computer!**, most of that will be ignored, as your computer considers it a waste of time. You could just have easily typed **get rope**, and saved the both of you a lot of trouble.
+    - Synonyms work for most commands: **take lamp** and **get lamp** are usually equivalent.
+    - Commands can be entered generally, or with something specific in mind. Typing **take** or **get all** will cause the player to try to pick up everything in view, as opposed to **take the backpack**.
+    - The most common commands have single-letter shortcuts, known as aliases. These command aliases are quick commands that you can use if you're in combat, if you're strapped for time. These commands are entered directly from the game, without pressing **TAB** to open the terminal. If you want to take more specific actions, however, you will need to type them out in the terminal.
+    - You can make a command alias for each number key by typing **alias 1={{thing you want to do}}**, and then use them as you would any other quick command. (*Disabled in v0.3.6*)
+    
+    ### List of Controls ###
+    - Terminal:    ** TAB **
+    - Accept:      **ENTER**
+    - Moving:      **WASD **
+    - Looking:     **MOUSE**
+    - Use / Shoot: **CLICK**
+    - Jumping:     **SPACE**
+    - Crouching:   **  C  **
+    - Peeking:     **Q & E** (*Disabled in v1.0.2, even though it's the coolest thing ever, I mean really, you should have seen it.*)
+    
+    ### List of Commands ###
+    Listed below are just the most common words used for commands, (but synonyms usually work).
+    help / info / about {{topic}}
+    take / get / pick up {{item}}
+    drop / set / put down {{item}}
+    
+    ### Command Aliases ###
+    - **f**: Toggle your flashlight, i.e. **equip|stow flashlight**
+    - **g**: Get one nearby item (mash for best results)
+    - **i**: Inventory, i.e. **examine backpack**
+    - **l**: Look around the room, i.e. **look**
+    - **m**: Map, if you have one for the current area, i.e. **examine map**
+    (*Disabled in Pathways v0.3.6*)
+    - **o**: Open nearby thing, i.e. **open box** or **open door**, (while most doors are automatic, if a door requires a key, you can type **o** or **open door** to unlock and open it)
+    - **r**: Reload weapon, i.e. **reload pistol** or **put magazine in gun**. This will have a special effect on some items.
+    - **t**: Talk to nearby person, i.e. **talk to Jason**
+    - **x**: Examine / search something nearby, i.e. **examine rocks** will not only describe the pile of rocks, but will look through them.
+    - **z**: Wait, i.e. **wait** (*Disabled in v1.0.2*)
+
+move: !intf!Message
+  formats: [ Command ]
+  desc: You must gather your party before venturing forth.
+
+quit: !intf!Message
+  formats: [ Alert ]
+  desc: Quit the Game? (y/n)
+
+user: #!path!Player+yml
+  health: 20
+  desc: You look the same as usual.
+
+...

@@ -1,0 +1,72 @@
+%YAML 1.1
+%TAG !intf! _PathwaysEngine.Adventure.
+---
+
+# System Commands
+sudo: !intf!Command+yml
+	fn: Pathways.Sudo
+	regex: /sudo/
+
+quit: !intf!Command+yml
+	fn: Pathways.Quit
+	regex: /quit|restart/
+
+redo: !intf!Command+yml
+	fn: Pathways.Redo
+	regex: /again|redo|g/
+
+save: !intf!Command+yml
+	fn: Pathways.Save
+	regex: /save/
+
+load: !intf!Command+yml
+	fn: Pathways.Load
+	regex: /load|restore/
+
+help: !intf!Command+yml
+	fn: Pathways.Help
+	regex: /help|info|about|idk/
+
+# Player Commands
+view: !intf!Command+yml
+	fn: Player.View
+	regex: /c|diagnos(e|tic)|status/
+
+look: !intf!Command+yml
+	fn: Player.Look
+	regex: /x|examine|l(ook)?|search/
+
+goto: !intf!Command+yml
+	fn: Player.Goto
+	regex: /e|ne|n|nw|w|sw|s|se|u|d/
+
+move: !intf!Command+yml
+	fn: Player.Move
+	regex: /go|move/
+
+# Inventory Commands
+invt: !intf!Command+yml
+	fn: Pathways.Redo
+	regex: /i(nvt|nventory|tems)/
+
+take: !intf!Command+yml
+	fn: Pathways.Redo
+	regex: /take|get|pick\s+up|grab/
+
+drop: !intf!Command+yml
+	fn: Pathways.Redo
+	regex: /drop|put(\s+down)?|throw/
+
+wear: !intf!Command+yml
+	fn: Pathways.Redo
+	regex: /equip|don|wear|put\s+(on)?|sport/
+
+stow: !intf!Command+yml
+	fn: Pathways.Redo
+	regex: /stow|put(\s+away)|remove|un(equip|load)/
+
+read: !intf!Command+yml
+	fn: Pathways.Redo
+	regex: /read|watch|glance/
+
+...
