@@ -13,37 +13,13 @@ using util=PathwaysEngine.Utilities;
 
 namespace PathwaysEngine.Inventory {
 
-	/** `IItemSet` : **`interface`**
-	 *
-	 * This interface defines a collection of `Item`s, which
-	 * can be iterated over and queried for particular types of
-	 * items.
-	 **/
-	public interface IItemSet : ICollection<Item>, IEnumerable<Item> {
-
-		/** `GetItemsOfType<T>()` : **`List<Item>`**
-		 *
-		 * Gets all items in the `IItemSet` whose type is
-		 * either `<T>` or derives from `<T>`.
-		 **/
-		List<Item> GetItemsOfType<T>() where T : Item;
-
-		/** `GetItemOfType<T>()` : **`Item`**
-		 *
-		 * Gets a single `Item` of type `<T>` from the set. If
-		 * there is no `Item` of the specified type, an `Item`
-		 * of a derived type may be returned.
-		 **/
-		Item GetItemOfType<T>() where T : Item;
-	}
-
 	/** `ItemSet` : **`class`**
 	 *
 	 * This class implements the `IItemSet` interface, and
 	 * provides a way to deal with collections of items,
 	 * iterate over them, & get particular types of `Item`s.
 	 **/
-	public class ItemSet : IItemSet {
+	public class ItemSet : IItemSet, ILoggable {
 
 		/** `IsReadOnly` : **`bool`**
 		 *
@@ -57,6 +33,13 @@ namespace PathwaysEngine.Inventory {
 		 **/
 		public int Count {
 			get { return items[typeof(Item)].Count; } }
+
+		/** `Format` : **`string`**
+		 *
+		 * Formatting string, specified by `ILoggable`.
+		 **/
+		public string Format {
+			get { return "It contains: \n"; } }
 
 		/** `items` : **`Dictionary<Type,List<Item>>`**
 		 *
@@ -209,6 +192,19 @@ namespace PathwaysEngine.Inventory {
 			if (temp!=null) return temp[0];
 			else return default(Item);
 		}
+
+		/** `Log()` : **`string`**
+		 *
+		 * Specified by `ILoggable`, `Terminal` calls this
+		 * function to get a special `string` to log.
+		 **/
+		public string Log() {
+			var s = Format;
+			foreach (var item in itemSet)
+				s += string.Format("\n- {0}",item);
+			return s;
+		}
+
 
 		public List<Item> GetItemsOfType<T>() where T : Item {
 			var temp = new List<Item>();

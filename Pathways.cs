@@ -431,16 +431,6 @@ namespace PathwaysEngine {
 				.Replace("<p>","").Replace("</p>","").ToString();
 		}
 
-		/** `Log()` : **`void`**
-		 *
-		 * Deprecated, should be part of `IItemSet`.
-		 **/
-		public static void Log(this invt::IItemSet itemSet) {
-			Terminal.Log(string.Format("It contains: ",itemSet));
-			foreach (var item in itemSet)
-				Terminal.Log(string.Format("\n- {0}",item));
-		}
-
 		/** `Replace()` : **`string`**
 		 *
 		 * Adds an overload to the existing `Replace()` that

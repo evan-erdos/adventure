@@ -1,5 +1,6 @@
 /* Ben Scott * bescott@andrew.cmu.edu * 2015-11-13 * Inventory */
 
+using System.Collections.Generic;
 using intf=PathwaysEngine.Adventure;
 
 /** `PathwaysEngine.Inventory` : **`namespace`**
@@ -161,6 +162,33 @@ namespace PathwaysEngine.Inventory {
 		 **/
 		void Attack();
 	}
+
+
+	/** `IItemSet` : **`interface`**
+	 *
+	 * This interface defines a collection of `Item`s, which
+	 * can be iterated over and queried for particular types of
+	 * items.
+	 **/
+	public interface IItemSet : ICollection<Item>, IEnumerable<Item> {
+
+		/** `GetItemsOfType<T>()` : **`List<Item>`**
+		 *
+		 * Gets all items in the `IItemSet` whose type is
+		 * either `<T>` or derives from `<T>`.
+		 **/
+		List<Item> GetItemsOfType<T>() where T : Item;
+
+		/** `GetItemOfType<T>()` : **`Item`**
+		 *
+		 * Gets a single `Item` of type `<T>` from the set. If
+		 * there is no `Item` of the specified type, an `Item`
+		 * of a derived type may be returned.
+		 **/
+		Item GetItemOfType<T>() where T : Item;
+	}
+
+
 
 	public static class Items {
 		public static readonly IItemSet items;
