@@ -5,74 +5,78 @@ using System.Collections.Generic;
 
 namespace PathwaysEngine.Utilities {
 
-	/** `IActivator` : : **`interface`**
-	 *
-	 * Interface to an `Activator<T>`, which encapsulates the
-	 * oftentimes messy business of enabling and disabling
-	 * enormous numbers of `Component`s in a complex structure.
-	 **/
-	public interface IActivator {
 
-		/** `IsActivated` : **`bool`**
-		 *
-		 * Readonly value, representing if the elements in
-		 * `list` are active or not.
-		 **/
-		bool IsActivated { get; }
+    /** `IActivator` : **`interface`**
+    |*
+    |* Interface to an `Activator<T>`, which encapsulates the
+    |* oftentimes messy business of enabling and disabling
+    |* enormous numbers of `Component`s in a complex structure.
+    |**/
+    public interface IActivator {
 
 
-		/** `Initialize` : **`void`**
-		 *
-		 * Deriving classes must override this function,
-		 * which is called after creating `Activator`.
-		 **/
-		void Initialize();
-
-		/** `Activate` : **`void`**
-		 *
-		 * Enables everything in `list` and sets `IsActivated`
-		 * to true.
-		 **/
-		void Activate();
-
-		/** `Deactivate` : **`void`**
-		 *
-		 * Disables everything in `list` and sets
-		 * `IsActivated` to false.
-		 **/
-		void Deactivate();
-	}
+        /** `IsActivated` : **`bool`**
+        |*
+        |* Readonly value, representing if the elements in
+        |* `list` are active or not.
+        |**/
+        bool IsActivated { get; }
 
 
-	/** `Activator<T>` : **`abstract`**
-	 *
-	 * Abstract base for an `Activator<T>`, which encapsulates
-	 * the oftentimes messy business of enabling and disabling
-	 * enormous numbers of `Component`s and `GameObject`s in a
-	 * complex structure. Requires deriving classes to
-	 * implement `Initialize`, to add things to the list.
-	 * - `<T>` : **`Type`**
-	 *    - Type, must be `Behaviour` to use the `enable`
-	 *      property for deactivation.
-	 **/
-	public abstract class Activator<T> : IActivator
-							   where T : Behaviour {
-		protected List<T> list = new List<T>();
+        /** `Initialize` : **`function`**
+        |*
+        |* Deriving classes must override this function,
+        |* which is called after creating `Activator`.
+        |**/
+        void Initialize();
 
-		public bool IsActivated {
-			get { return isActivated; }
-		} bool isActivated = true;
 
-		public abstract void Initialize();
+        /** `Activate` : **`function`**
+        |*
+        |* Enables everything in `list` and sets `IsActivated`
+        |* to true.
+        |**/
+        void Activate();
 
-		public void Activate() { Activate(true); }
 
-		public void Deactivate() { Activate(false); }
+        /** `Deactivate` : **`function`**
+        |*
+        |* Disables everything in `list` and sets
+        |* `IsActivated` to false.
+        |**/
+        void Deactivate();
+    }
 
-		void Activate(bool t) {
-			isActivated = t;
-			foreach (var elem in list)
-				elem.enabled = t;
-		}
-	}
+
+    /** `Activator<T>` : **`abstract`**
+    |*
+    |* Abstract base for an `Activator<T>`, which encapsulates
+    |* the oftentimes messy business of enabling and disabling
+    |* enormous numbers of `Component`s and `GameObject`s in a
+    |* complex structure. Requires deriving classes to
+    |* implement `Initialize`, to add things to the list.
+    |* - `<T>` : **`Type`**
+    |*    - Type, must be `Behaviour` to use the `enable`
+    |*      property for deactivation.
+    |**/
+    public abstract class Activator<T> : IActivator
+                               where T : Behaviour {
+        protected List<T> list = new List<T>();
+
+        public bool IsActivated {
+            get { return isActivated; }
+        } bool isActivated = true;
+
+        public abstract void Initialize();
+
+        public void Activate() { Activate(true); }
+
+        public void Deactivate() { Activate(false); }
+
+        void Activate(bool t) {
+            isActivated = t;
+            foreach (var elem in list)
+                elem.enabled = t;
+        }
+    }
 }

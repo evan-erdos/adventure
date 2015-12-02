@@ -4,13 +4,13 @@ using UnityEngine;
 using System.Collections;
 
 public class PhysicControlRestore : MonoBehaviour {
-	public Transform netherReplacement;
+    public Transform netherReplacement;
 
-	public void PlayerReplace() {
-		GameObject childPlayer = gameObject.GetComponentInChildren<CharacterController>().gameObject;
-		Transform netherPlayer = Instantiate(netherReplacement, childPlayer.transform.position, childPlayer.transform.rotation) as Transform;
-	//	netherPlayer.rigidbody.velocity = gameObject.GetComponentInChildren<CharacterMotor>().velocity;
-		netherPlayer.parent = null;
-		Destroy(gameObject);
-	}
+    public void PlayerReplace() {
+        GameObject childPlayer = gameObject.GetComponentInChildren<CharacterController>().gameObject;
+        Transform netherPlayer = Instantiate(netherReplacement, childPlayer.transform.position, childPlayer.transform.rotation) as Transform;
+    //  netherPlayer.rigidbody.velocity = gameObject.GetComponentInChildren<CharacterMotor>().velocity;
+        netherPlayer.parent = null;
+        Destroy(gameObject);
+    }
 }

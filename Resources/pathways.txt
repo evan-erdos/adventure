@@ -1,7 +1,7 @@
 %YAML 1.1
 %TAG !intf! _PathwaysEngine.Adventure.
 %TAG !path! _PathwaysEngine.
---- # pathways
+---
 
 init: !intf!Message
   desc: |
@@ -35,7 +35,7 @@ dead: !intf!Message
     ### \*\*\* YOU HAVE DIED. \*\*\* ###
     **Would you like to Restore, Restart, or Quit?**
     
-    (Just press **TAB** and type **restore** for now.)
+    (Just type **restore** for now.)
 
 help_old: !intf!Message
   desc: |
@@ -47,7 +47,12 @@ help_old: !intf!Message
 help: !intf!Message
   desc: |
     # Help #
-    This is an exploratory "game" which draws its inspirations from Zork, Myst & Riven, Geneforge et al., etc. The Observatory setting was inspired in part by my visit to the Royal Greenwich Observatory, which is situated on a high peak, directly along the prime meridian. They still had a "time ball", which was a large, red ball on a wire / rod that would be dropped exactly on the hour, such that passing ships could synchronize their timekeeping devices.
+    
+    ## tl;dr
+    Telescopes, Observatories, & the stars used to be pretty heavily linked with time technology, as it was the only way to keep track of longitude when sailing. You will have to type **open door** to open that door. Don't jump off of things, you will die. When you die (or if you get stuck) type **restore**.
+    
+    ## Info ##
+    This is an exploratory "game" which draws its inspirations from Zork, Myst & Riven, Geneforge et al., etc. The Observatory setting was inspired in part by my visit to the Royal Greenwich Observatory, which is situated on a high peak, directly along the prime meridian. They still had a "time ball", which was a large, red ball on a wire that would be dropped exactly on the hour, such that passing ships could synchronize their timekeeping devices. Today, we're using the stars to determine much stranger things about time, like potentially when time itself started. 
     
     ### Getting Started ###
     Walk with **W, A, S, and D**, and hold **SHIFT** if you don't have time to just walk. Look around with the **MOUSE**, and perform actions by **CLICKING**. Press **C** to crouch, and press **SHIFT** when you land to slide. To lean around corners and spin while you're airborne, press **Q and E**.
@@ -62,14 +67,14 @@ help: !intf!Message
     - You can make a command alias for each number key by typing **alias 1={{thing you want to do}}**, and then use them as you would any other quick command. (*Disabled in v0.3.6*)
     
     ### List of Controls ###
-    - Terminal:    ** TAB **
+    
+    - Terminal:    **TAB**
     - Accept:      **ENTER**
-    - Moving:      **WASD **
+    - Moving:      **WASD**
     - Looking:     **MOUSE**
     - Use / Shoot: **CLICK**
     - Jumping:     **SPACE**
-    - Crouching:   **  C  **
-    - Peeking:     **Q & E** (*Disabled in v1.0.2, even though it's the coolest thing ever, I mean really, you should have seen it.*)
+    - Crouching:   **C**
     
     ### List of Commands ###
     Listed below are just the most common words used for commands, (but synonyms usually work).

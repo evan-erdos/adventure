@@ -1,0 +1,48 @@
+%YAML 1.1
+%TAG !intf! _PathwaysEngine.Adventure.
+%TAG !puzl! _PathwaysEngine.Puzzle.
+---
+
+Observatory Annex Building: !intf!Thing+yml &id_annex_building
+  description:
+    formats: [ Newline ]
+    nouns: /building|annex/
+    desc: |
+      This is the Annex to the main Observatory.
+
+Observatory Door: !intf!Door+yml &id_door_0
+  description:
+    nouns: /door|portal/
+    desc: |
+      This door looks pretty rough: its strong, wrought-iron construction is withering in the elements, and you can see rust beginning to form in the corners.
+
+door: !intf!Door+yml &id_door
+  description:
+    nouns: /door/
+    desc: |
+      This is a rather unremarkable door. 
+      
+      (either click on the door to slide it open, or type **open door** to open it / attempt to unlock it.)
+
+lever: !puzl!Lever+yml &id_lever
+  description:
+    nouns: /lever|crank/
+    desc: |
+      This is a rather unremarkable lever. It might cause something interesting to happen if you were to pull it.
+      
+      (either click on the lever to pull it, or type **pull lever**.)
+
+
+Metal Pathway: !intf!Thing+yml &id_metal_pathway
+  description:
+    nouns: /path(way)?|floor|metal/
+    desc: |
+      This is a rather unsteady metal pathway which bridges the gap between the Observatory and the Annex.
+
+Obelisk: !intf!Thing+yml
+  description:
+    nouns: /obelisk|rock|pillar|sign/
+    desc: |
+      This pillar was cut from solid granite, and has a small inscription across its base.
+
+...

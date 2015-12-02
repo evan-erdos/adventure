@@ -6,28 +6,28 @@ using UnityEngine;
 using System.Collections;
 
 namespace PathwaysEngine.Utilities {
-	public class LockTransform : MonoBehaviour {
-		public bool isLocked = true, useInit = true;
-		//Vector3 initT = Vector3.zero;
-		Transform src, initParent;
-		public Transform tgt;
+    public class LockTransform : MonoBehaviour {
+        public bool isLocked = true, useInit = true;
+        //Vector3 initT = Vector3.zero;
+        Transform src, initParent;
+        public Transform tgt;
 
-		void Start() {
-			src = transform;
-			initParent = src.parent;
-			src.parent = tgt;
-			//if (useInit) initT = src.localPosition;
-			src.parent = initParent;
-		}
+        void Start() {
+            src = transform;
+            initParent = src.parent;
+            src.parent = tgt;
+            //if (useInit) initT = src.localPosition;
+            src.parent = initParent;
+        }
 
-		//void FixedUpdate() { FixTransform(); }
-		void Update() { FixTransform(); }
+        //void FixedUpdate() { FixTransform(); }
+        void Update() { FixTransform(); }
 
-		void FixTransform() {
-			if (isLocked && src && tgt) {
-				src.position = tgt.position;
-				src.rotation = tgt.rotation;
-			}
-		}
-	}
+        void FixTransform() {
+            if (isLocked && src && tgt) {
+                src.position = tgt.position;
+                src.rotation = tgt.rotation;
+            }
+        }
+    }
 }

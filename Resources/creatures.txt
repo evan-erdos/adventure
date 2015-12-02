@@ -1,6 +1,7 @@
 %YAML 1.1
+%TAG !path! _PathwaysEngine.
 %TAG !intf! _PathwaysEngine.Adventure.
---- # creatures
+---  #creatures
 
 Headless_0: !intf!Creature+yml
   description:
@@ -9,10 +10,24 @@ Headless_0: !intf!Creature+yml
       It's gross. It looks like a frog, but with human legs, and a massive tongue in the place of a head.
       It also looks hungry.
 
-#Amelia: !intf!Person+yml
-#  description:
-#    desc: |
-#      You look a bit tired, and your clothes are dirty.
+Player: !path!Player+yml
+  deathMessages:
+  - "Now what did you go and do that for?"
+  - "Wait! Don't jump! Nevermind."
+  - "Plot Twist!"
+  - "Let me guess, he dies at the end! And at the beginning... and the middle... Stop jumping off of things."
+  - "Gravity, man. It's all over the place."
+  - "That right there was a solid judgement call. I have no idea why that didn't work out for you."
+  - "Oh Jeez, wow, look at this, look... look at you, right now, aren't you a tough customer?"
+  - "Jeez, man, what were you even trying to accomplish there?"
+  #- "Holy Shit!"
+  - "Nice one!"
+  - "Maybe sometimes try not doing that."
+  - "Is jumping off buildings getting any more interesting for you?"
+
+  description:
+    desc: |
+      You look a bit tired, and your clothes are dirty.
 
 ...
 

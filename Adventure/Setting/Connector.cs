@@ -5,21 +5,28 @@ using System.Collections;
 using System.Collections.Generic;
 
 namespace PathwaysEngine.Adventure.Setting {
+
+
+	/** `Connector` : **`class`**
+	|*
+	|* Used for explicit connections beween `Rooms` or `Area`s.
+	|**/
 	public class Connector : Thing {
-		public Room room_src, room_tgt;
+
+		public Room src, tgt;
 
 		public override Description description {get;set;}
 
 		public string desc_type {
-			get { return string.Format("{0} {1}",_desc_type,(room_src!=null && room_tgt!=null)
-				? string.Format("It goes between {0} and {1}.",room_src,room_tgt)
-				: "It doesn't seem to go anywhere."); }
+			get { return string.Format(
+					"{0} {1}",_desc_type,(src!=null && tgt!=null)
+						? string.Format(
+							"It goes between {0} and {1}.",src,tgt)
+						: "It doesn't seem to go anywhere."); }
 			set { _desc_type = value; }
 		} string _desc_type;
 
-		public override void Awake() { this.GetYAML(); }
-
-		public void OnTriggerEnter(Collider other) {
-			if (other.GetComponent<Player>()!=null) Terminal.Log(this); }
+		public virtual void OnTriggerEnter(Collider o) {
+			if (Player.IsCollider(o)) Terminal.Log(this); }
 	}
 }

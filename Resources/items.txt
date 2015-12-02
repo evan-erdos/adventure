@@ -3,6 +3,16 @@
 %TAG !intf! _PathwaysEngine.Adventure.
 ---
 
+knob: !invt!Item+yml
+  mass: 1
+  description: 
+    nouns: /(door\s+)?knob|handle|shiny/
+    desc: |
+      This is a weird doorknob you found at the *Observatory*.
+      
+      (Type "use knob" to use it, and "open bag" to look through your inventory.)
+
+
 Backpack: !invt!Item+yml
   mass: 2
   description:

@@ -1,0 +1,90 @@
+%YAML 1.1
+--- # Commands
+
+sudo:
+  parse: Sudo
+  regex: /sudo/
+
+quit:
+  parse: Quit
+  regex: /quit|restart/
+
+redo:
+  parse: Redo
+  regex: /again|redo/
+
+save:
+  parse: Save
+  regex: /save/
+
+load:
+  parse: Load
+  regex: /load|restore/
+
+help:
+  parse: Help
+  regex: /help|info|about|idk/
+
+# Player Commands
+view:
+  parse: View
+  regex: /x|examine|look|search/
+
+look:
+  parse: Look
+  regex: /diagnos(e|tic)|status/
+
+goto:
+  parse: Goto
+  regex: /go(to)?/
+
+#status:
+#  parse: View
+#  regex: /c|diagnos(e|tic)|status/
+
+#move:
+#  parse: Move
+#  regex: /go|move/
+
+# Inventory Commands
+invt:
+  parse: Invt
+  regex: /i(nvt|nventory|tems)/
+
+take:
+  parse: Take
+  regex: /take|get|pick\s+up|grab/
+
+drop:
+  parse: Drop
+  regex: /drop|put(\s+down)?|throw/
+
+wear:
+  parse: Wear
+  regex: /equip|don|wear|put\s+(on)?|sport/
+
+stow:
+  parse: Stow
+  regex: /stow|put(\s+away)|remove|un(equip|load)/
+
+show: 
+  parse: Show
+  regex: /show\s+(terminal|window|ui)/
+
+hide: 
+  parse: Hide
+  regex: /hide\s+(terminal|window|ui)/
+
+open:
+  parse: Open
+  regex: /open|unlock|enter|(go\s+(in|through))/
+
+shut: 
+  parse: Shut
+  regex: /close|stop|lock|shut/
+
+read:
+  parse: Read
+  regex: /read|watch|glance/
+
+...
