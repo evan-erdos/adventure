@@ -3,6 +3,7 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using lit=PathwaysEngine.Literature;
 
 namespace PathwaysEngine.Inventory {
     public partial class Weapon : Item, IWieldable {
@@ -16,12 +17,12 @@ namespace PathwaysEngine.Inventory {
 
         public uint Uses { get; set; }
 
-        public void Use() { Attack(); }
+        public override bool Use() { Attack(); return false; }
 
-        public virtual void Attack() { Terminal.Log(" ahh ohhh nooo"); }
+        public virtual void Attack() { lit::Terminal.Log(" ahh ohhh nooo"); }
 
-        public void Stow() { }
+        public bool Stow() { return false; }
 
-        public void Wear() { }
+        public bool Wear() { return false; }
     }
 }

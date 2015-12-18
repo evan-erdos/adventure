@@ -12,18 +12,27 @@ namespace PathwaysEngine.Inventory {
     |* A kind of `Item` which the `Player` can hold and use as
     |* a source of light. An instant classic! (remember Zork?)
     |**/
-    [RequireComponent(typeof(Animator))]
     public partial class Lamp : Item, IWieldable {
         bool wait = false;
         public AudioClip auSwitch;
         Animator animator;
-        mvmt::Hand hand;
         public util::key dash;
+
+        public override bool Held {
+            get { return held; }
+            set { held = value;
+                foreach (Transform child in transform)
+                    child.gameObject.SetActive(!held || Worn);
+                rigidbody.isKinematic = held;
+                rigidbody.useGravity = !held;
+            }
+        }
+
 
         bool sprint {
             get { return _sprint; }
             set { _sprint = value;
-                if (gameObject.activeInHierarchy)
+                if (gameObject.activeInHierarchy && animator)
                     StartCoroutine(LateSetBool("sprint",_sprint)); }
         } bool _sprint = false;
 
@@ -31,7 +40,7 @@ namespace PathwaysEngine.Inventory {
             get { return _on; }
             set { if (!Held) return;
                 _on = value;
-                if (gameObject.activeInHierarchy) {
+                if (gameObject.activeInHierarchy && animator) {
                     StartCoroutine(LateSetBool("on",_on));
                     StartCoroutine(On());
                 }
@@ -41,8 +50,14 @@ namespace PathwaysEngine.Inventory {
         public bool Worn {
             get { return worn; }
             set { if (worn==value) return;
-                worn=value;
-                if (hand) hand.ikActive = worn;
+                worn = value;
+                transform.parent = (worn)
+                    ? Pathways.player.left.transform
+                    : Pathways.player.transform;
+                foreach (Transform child in transform)
+                    child.gameObject.SetActive(worn);
+                transform.localPosition = Vector3.zero;
+                transform.localRotation = Quaternion.identity;
             }
         } bool worn = false;
 
@@ -56,46 +71,51 @@ namespace PathwaysEngine.Inventory {
 
         public override void Awake() { base.Awake();
             animator = GetComponent<Animator>();
-            foreach (Light elem in GetComponentsInChildren<Light>())
-                elem.enabled = false;
             GetComponent<AudioSource>().clip = auSwitch;
         }
 
         public override void Start() { base.Start();
-            hand = Player.left;
+            on = true;
         }
 
-        public void Use() {
-            if (Worn && !wait) StartCoroutine(On()); }
+        public override bool Use() {
+            if (Worn && !wait) StartCoroutine(On());
+            return false;
+        }
 
         public void Attack() { Use(); }
 
         IEnumerator On() {
             wait = true;
             yield return new WaitForSeconds(0.125f);
-            if (time>0) {
-                var l = GetComponentsInChildren<Light>()[0];
-                if (l) l.GetComponent<Light>().enabled = on;
-            } yield return new WaitForSeconds(0.25f);
+            if (time>0) //{
+                foreach (var elem in GetComponentsInChildren<Light>()) elem.enabled = on;
+                //var l = GetComponentsInChildren<Light>()[0];
+                //if (l) l.GetComponent<Light>().enabled = on;
+            //}
+            yield return new WaitForSeconds(0.25f);
             wait = false;
         }
 
         IEnumerator LateSetBool(string s, bool t) {
             yield return new WaitForEndOfFrame();
-            if (animator.enabled) animator.SetBool(s,t);
+            if (animator && animator.enabled)
+                animator.SetBool(s,t);
         }
 
-        public virtual void Wear() {
+        public virtual bool Wear() {
             gameObject.SetActive(true);
             Worn = true;
             StartCoroutine(LateSetBool("worn",worn));
             on = true;
+            return false;
         }
 
-        public virtual void Stow() {
+        public virtual bool Stow() {
             Worn = false;
             StartCoroutine(LateSetBool("worn",worn));
             gameObject.SetActive(false);
+            return false;
         }
     }
 }

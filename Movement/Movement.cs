@@ -2,7 +2,7 @@
 
 using UnityEngine;
 using System.Collections.Generic;
-using intf=PathwaysEngine.Adventure;
+using adv=PathwaysEngine.Adventure;
 
 /** `PathwaysEngine.Movement` : **`namespace`**
 |*
@@ -29,11 +29,11 @@ namespace PathwaysEngine.Movement {
     |* indexes of each category of step sound in the list.
     |**/
     public enum StepTypes : int {
-        Default = 0,   Dirt = 1,
-        Gravel = 2,    Puddle = 3,
-        Sand = 4,      Swamp = 5,
-        Water = 6,     Wood = 7,
-        Glass = 8,     Concrete = 9 }
+        Default = 0,   Dirt     = 1,
+        Gravel  = 2,   Puddle   = 3,
+        Sand    = 4,   Swamp    = 5,
+        Water   = 6,   Wood     = 7,
+        Glass   = 8,   Concrete = 9}
 
 
     /** `IMotor` : **`interface`**
@@ -104,11 +104,11 @@ namespace PathwaysEngine.Movement {
         |**/
         Vector3 Velocity { get; set; }
 
-        /** `Kill()` : **`function`**
+        /** `Kill()` : **`bool`**
         |*
         |* Kills the motor.
         |**/
-        void Kill();
+        bool Kill();
 
         /** `OnCollisionEvent()` : **`function`**
         |*

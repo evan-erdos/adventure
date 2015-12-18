@@ -1,16 +1,17 @@
 /* Ben Scott * bescott@andrew.cmu.edu * 2015-08-24 * Pathways */
 
 using UnityEngine; // Well, here we are! The main file!
-using System.Linq; // The big one! It's the Pathways Engine!
+using UnityEngine.SceneManagement; // The big one!
+using System.Linq; // It's the Pathways Engine!
 using System.Collections; // just like I pictured it!
 using System.Collections.Generic;
 using System.IO;
 using System.Text.RegularExpressions;
-using Type=System.Type;
-using Buffer=System.Text.StringBuilder;
 using DateTime=System.DateTime;
-using invt=PathwaysEngine.Inventory;
-using intf=PathwaysEngine.Adventure;
+using EventArgs=System.EventArgs;
+using inv=PathwaysEngine.Inventory;
+using adv=PathwaysEngine.Adventure;
+using lit=PathwaysEngine.Literature;
 using maps=PathwaysEngine.Adventure.Setting;
 using stat=PathwaysEngine.Statistics;
 using util=PathwaysEngine.Utilities;
@@ -69,67 +70,6 @@ namespace PathwaysEngine {
     public enum GameStates { None, Game, View, Term, Msgs, Menu }
 
 
-    /** `Formats` : **`enum`**
-    |*
-    |* This enumerates the various formatting options that the
-    |* `Terminal` can use. Most values have some meaning, which
-    |* are used by the `Terminal.Format` function. They might
-    |* be `hex` values for colors, sizes of headers, etc.
-    |*
-    |* - `Inline` : **`Formats`**
-    |*     Removes a newline, so the message is logged on the
-    |*     same line as the previous message.
-    |*
-    |* - `Newline` : **`Formats`**
-    |*     Add a newline before logging the message.
-    |*
-    |* - `Paragraph` : **`Formats`**
-    |*     Add a newline before and after logging the message.
-    |*
-    |* - `Refresh` : **`Formats`**
-    |*     Clears the buffer before printing the message.
-    |*
-    |* - `h1` : **`Formats`**
-    |*     Makes this message a <h1> header, its enum value
-    |*     being the size for the text.
-    |*
-    |* - `h2` : **`Formats`**
-    |*     Makes this message a <h2> header, its enum value
-    |*     being the size for the text.
-    |*
-    |* - `h3` : **`Formats`**
-    |*     Makes this message a <h3> header, its enum value
-    |*     being the size for the text.
-    |*
-    |* - `h4` : **`Formats`**
-    |*     Makes this message a <h4> header, its enum value
-    |*     being the size for the text.
-    |*
-    |* - `Default` : **`Formats`**
-    |*     The base color for the text, currently `0xFFFFFF`,
-    |*     for pure white text. This one doesn't need to be
-    |*     specified when formatting, but its value is used.
-    |*
-    |* - `State` : **`Formats`**
-    |*     Special color to use to represent some change in
-    |*     state, be it some game event passing, or any number
-    |*     of other changes the `Player` should be privy to.
-    |*
-    |* - `Alert` : **`Formats`**
-    |*     Usually red, this alerts the `Player` to dangerous
-    |*     or very important messages in the `Terminal`.
-    |*
-    |* - `Command` : **`Formats`**
-    |*     Color to use when the user is issuing / resolving
-    |*     commands from the parser.
-    |**/
-    public enum Formats : int {
-        Inline=0, Newline=1, Paragraph=2, Refresh=3,
-        h1=36, h2=28, h3=24, h4=16,
-        Default=0xFFFFFF, State=0x2A98AA, Change=0xFFAE10,
-        Alert=0xFC0000, Command=0xBBBBBB };
-
-
     /** `Cursors` : **`enum`**
     |*
     |* This enumerates the possible cursor graphics, e.g., the
@@ -145,21 +85,20 @@ namespace PathwaysEngine {
     |* This is a global event delegate for dealing with changes
     |* to the overall game state. Subscribers are sent the
     |* `gameState`, and do with it whatever they please.
+    |*
+    |* - `sender` : **`object`**
+    |*     reference to whatever sent the event
+    |*
+    |* - `e` : **`EventArgs`**
+    |*     default event arguments
+    |*
+    |* - `gameState` : **`GameStates`**
+    |*     game state to change to
     |**/
     delegate void StateHandler(
-        object sender,System.EventArgs e,GameStates gameState);
-
-
-    /** `CommandEvent` : **`delegate`**
-    |*
-    |* This delegate is used for creating multicast callbacks
-    |* for certain `Parser` commands. The user input is sent
-    |* directly to subscribers in the `c` struct. Returns
-    |* true if the operation was successful, such that callers
-    |* can do additional operations if they need to.
-    |**/
-    delegate bool CommandEvent(
-        object sender,System.EventArgs e,Command c);
+                    object sender,
+                    System.EventArgs e,
+                    GameStates gameState);
 
 
     /** `Pathways` : **`main`**
@@ -176,8 +115,8 @@ namespace PathwaysEngine {
         public static DateTime gameDate, finalDate;
         public static Camera mainCamera;
         public static Player player;
-        public static MessageWindow messageWindow;
-        public static Terminal terminal;
+        public static lit::Terminal terminal;
+        public static lit::Window window;
         public static CursorMode cursorMode = CursorMode.ForceSoftware;
         public static List<maps::Area> areas;
         public static Texture2D[] cursors;
@@ -202,6 +141,17 @@ namespace PathwaysEngine {
         } static GameStates gameState = GameStates.None;
 
 
+        /** `LastState` : **`GameStates`**
+        |*
+        |* Records what the state was last frame. Useful when
+        |* trying to sort out if / what actions to take when
+        |* changing between states.
+        |**/
+        public static GameStates LastState {
+            get { return lastState; }
+        } static GameStates lastState = GameStates.Game;
+
+
         /** `CursorGraphic` : **`Cursors`**
         |*
         |* This property changes the currently displayed cursor
@@ -216,17 +166,6 @@ namespace PathwaysEngine {
                 Cursor.SetCursor(cursor, Vector2.zero, cursorMode);
             }
         } static Cursors cursorGraphic;
-
-
-        /** `LastState` : **`GameStates`**
-        |*
-        |* Records what the state was last frame. Useful when
-        |* trying to sort out if / what actions to take when
-        |* changing between states.
-        |**/
-        public static GameStates LastState {
-            get { return lastState; }
-        } static GameStates lastState = GameStates.Game;
 
 
         /** `Pathways` : **`constructor`**
@@ -281,22 +220,12 @@ namespace PathwaysEngine {
             Cursor.lockState = (state==GameStates.Game)
                 ? (CursorLockMode.Locked)
                 : (CursorLockMode.Confined);
-
-            if (state==GameStates.View)
-                CursorGraphic = Cursors.Pick;
         }
 
 
-        /** `Log()` : **`function`**
-        |*
-        |* Log loads data, serialized from `yml`. This is bad
-        |* design cohesion. `Log`s the message to the terminal.
-        |*
-        |* - `s` : **`string`**
-        |*     Key to look for in serialized dictionary.
-        |**/
-        public static void Log(string s) {
-            Terminal.Log((intf::Message) yml.data[s]); }
+        public static void Reset() {
+
+        }
 
 
         /** `Sudo()` : **`Parse`**
@@ -307,7 +236,7 @@ namespace PathwaysEngine {
         |*     Default `Command` struct, sometimes unused, but
         |*     means that this function is a `Parse` delegate.
         |**/
-        public static void Sudo(Command c) { }
+        public static bool Sudo(lit::Command c) { return true; }
 
 
         /** `Redo()` : **`Parse`**
@@ -318,8 +247,8 @@ namespace PathwaysEngine {
         |*     Default `Command` struct, sometimes unused, but
         |*     means that this function is a `Parse` delegate.
         |**/
-        public static void Redo(Command c) { }
-            //intf::Parser.eval(c.input); } infinite loop!
+        public static bool Redo(lit::Command c) { return true; }
+            //adv::Parser.eval(c.input); } infinite loop!
 
 
         /** `Quit()` : **`Parse`**
@@ -330,8 +259,10 @@ namespace PathwaysEngine {
         |*     Default `command` struct, sometimes unused, but
         |*     means that this function is a `Parse` delegate.
         |**/
-        public static void Quit(Command c) {
-            Terminal.Alert((intf::Message) yml.data["quit"]); }
+        public static bool Quit(lit::Command c) {
+            lit::Terminal.Alert(messages["quit"]);
+            return true;
+        }
 
 
         /** `Load()` : **`Parse`**
@@ -342,11 +273,11 @@ namespace PathwaysEngine {
         |*     Default `Command` struct, sometimes unused, but
         |*     means that this function is a `Parse` delegate.
         |**/
-        public static void Load(Command c) {
-            Terminal.Clear();
-            Terminal.Log("I/O Disabled, restarting level.",
-                Formats.Newline);
-            Application.LoadLevel(0);
+        public static bool Load(lit::Command c) {
+            lit::Terminal.Clear();
+            lit::Terminal.LogImmediate("I/O Disabled, restarting level.");
+            SceneManager.LoadScene(0);
+            return true;
         }
 
 
@@ -358,9 +289,9 @@ namespace PathwaysEngine {
         |*     Default `Command` struct, sometimes unused, but
         |*     means that this function is a `Parse` delegate.
         |**/
-        public static void Save(Command c) {
+        public static bool Save(lit::Command c) {
             if (File.Exists(c.input))
-                Terminal.Alert("Overwriting file...");
+                lit::Terminal.Alert("Overwriting file...");
             using (StreamWriter file = new StreamWriter(c.input)) {
                 file.WriteLine("%YAML 1.1");
                 file.WriteLine("%TAG !invt! _PathwaysEngine.Inventory.");
@@ -376,12 +307,12 @@ namespace PathwaysEngine {
                 file.WriteLine(string.Format(
                     "  area: {0}",Player.area));
                 file.WriteLine(string.Format(
-                    "  room: {0}",Player.room));
-                file.WriteLine("  holdall:\n");
-                foreach (var elem in Player.holdall)
-                    file.WriteLine(string.Format("  - {0}",elem.uuid));
+                    "  room: {0}",Player.Room));
+                file.WriteLine("  items:\n");
+                foreach (var elem in Player.Items)
+                    file.WriteLine(string.Format("  - {0}",elem.Name));
                 file.WriteLine("\n...\n");
-            }
+            } return true;
         } /*(s) => (s.Length>100)?(s.Substring(0,100)+"&hellip;"):(s); */
 
 
@@ -393,119 +324,10 @@ namespace PathwaysEngine {
         |*     Default `Command` struct, sometimes unused, but
         |*     means that this function is a `Parse` delegate.
         |**/
-        public static void Help(Command c) {
-            Terminal.Display((intf::Message) yml.data["help"]); }
-    }
-
-
-    /** `Extension` : **`class`**
-    |*
-    |* Class to contain all minor extension methods added to
-    |* `string` and other `System` types I can't change myself.
-    |**/
-    static class Extension {
-
-        /** `md()` : **`string`**
-        |*
-        |* Adds support for `Markdown`, and can be called on
-        |* any `string`. Formats the `Markdown` syntax into
-        |* `HTML`. Currently removes all `<p>` tags.
-        |*
-        |* - `s` : **`string`**
-        |*    `string` to be formatted.
-        |**/
-        public static string md(this string s) {
-            var buffer = new Buffer(Markdown.Transform(s));
-            return buffer
-                .Replace("<em>","<i>").Replace("</em>","</i>")
-                .Replace("<strong>","<b>").Replace("</strong>","</b>")
-                .Replace("<h1>","<size=36>").Replace("</h1>","</size>")
-                .Replace("<h2>","<size=24>").Replace("</h2>","</size>")
-                .Replace("<h3>","<size=16>").Replace("</h3>","</size>")
-                .Replace("<ul>","").Replace("</ul>","")
-                .Replace("<li>","").Replace("</li>","")
-                .Replace("<p>","").Replace("</p>","").ToString();
+        public static bool Help(lit::Command c) {
+            lit::Window.Display(messages["help"]);
+            return true;
         }
-
-
-        /** `Replace()` : **`string`**
-        |*
-        |* Adds an overload to the existing `Replace()` that
-        |* takes a single argument, for removing things instead
-        |* of replacing them.
-        |*
-        |* - `s` : **`string`**
-        |*    `string` to be formatted.
-        |*
-        |* - `newValue` : **`string`**
-        |*    replacement `string` to insert.
-        |**/
-        public static string Replace(this string s, string newValue) {
-            return s.Replace(newValue,""); }
-
-
-        /** `Strip()` : **`string`**
-        |*
-        |* @TODO: Dumb name, should be changed.
-        |*
-        |* - `s` : **`string`**
-        |*    `string` to be processed for usage with `Parser`.
-        |**/
-        public static string Strip(this string s) {
-            return s.Trim().ToLower()
-                .Replace("\bthe\b").Replace("\ba\b"); }
-
-
-        /** `Process()` : **`List<string>`**
-        |*
-        |* - `s` : **`string`**
-        |*    `string` to be split into sentences for the
-        |*    `Parser` to do its job.
-        |**/
-        public static List<string> Process(this string s) {
-            return new List<string>(s.Strip().Split('.')); }
-
-
-        /** `DerivesFrom<T>()` : **`bool`**
-        |*
-        |* Simple extension method to determine if a `Type` is,
-        |* or derives from, the type specified.
-        |*
-        |* - `<T>` : **`Type`**
-        |*    type to check against
-        |**/
-        public static bool DerivesFrom<T>(this Type type) {
-            return (type==typeof(T) || type.IsSubclassOf(typeof(T))); }
-    }
-
-
-    /** `ILoggable` : **`interface`**
-    |*
-    |* That can be logged by the `Terminal`.
-    |**/
-    public interface ILoggable {
-
-        /** `Format` : **`string`**
-        |*
-        |* base string to be `string.Format`-ed by the
-        |* `Terminal` to render it as Markdown.
-        |* Could make the name a header, the text italic,
-        |* or any combination of other effects. There
-        |* should be a specific order of arguments, i.e.,
-        |* name first, then desc, etc.
-        |**/
-        string Format { get; }
-
-        /** `Log()` : **`string`**
-        |*
-        |* base string to be `string.Format`-ed by the
-        |* `Terminal` to render it as Markdown.
-        |* Could make the name a header, the text italic,
-        |* or any combination of other effects. There
-        |* should be a specific order of arguments, i.e.,
-        |* name first, then desc, etc.
-        |**/
-        string Log();
     }
 
     /** `P_ID` : **`struct`**
@@ -538,38 +360,19 @@ namespace PathwaysEngine {
 
         public override string ToString() { return @name; }
     }
-
-    /** `proper_name` : **`struct`**
-    |*
-    |* Attempt to formalize names for `Actor`s.
-    |*
-    |* - `name` : **`string`**
-    |*     Full name of the `P_ID` to be used when serializing.
-    |*
-    |* - `first` : **`string`** - First Name
-    |*
-    |* - `last` : **`string`** - Surname
-    |**/
-    public struct proper_name {
-        public string first, last;
-
-        public proper_name(string name) {
-            var s = name.Split(' ');
-            if (s.Count()!=2)
-                throw new System.Exception("bad name input");
-            this.first = s[0];
-            this.last = s[1];
-        }
-
-        public proper_name(string first, string last) {
-            this.first = first; this.last = last; }
-    }
 }
 
 
 
 
 namespace dev {
+
+/* quick test
+    System.Type type = typeof(adv::Door.yml);
+    Debug.Log("Full: "+type.Assembly.FullName.ToString());
+    Debug.Log("Qual: "+type.AssemblyQualifiedName.ToString());
+*/
+
     public class Point {
         public float x { get; set; }
         public float y { get; set; }

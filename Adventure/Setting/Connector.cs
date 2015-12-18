@@ -3,6 +3,7 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using lit=PathwaysEngine.Literature;
 
 namespace PathwaysEngine.Adventure.Setting {
 
@@ -15,7 +16,7 @@ namespace PathwaysEngine.Adventure.Setting {
 
 		public Room src, tgt;
 
-		public override Description description {get;set;}
+		public override lit::Description description {get;set;}
 
 		public string desc_type {
 			get { return string.Format(
@@ -26,7 +27,7 @@ namespace PathwaysEngine.Adventure.Setting {
 			set { _desc_type = value; }
 		} string _desc_type;
 
-		public virtual void OnTriggerEnter(Collider o) {
-			if (Player.IsCollider(o)) Terminal.Log(this); }
+		void OnTriggerEnter(Collider o) {
+			if (Player.IsCollider(o)) lit::Terminal.Log(this); }
 	}
 }

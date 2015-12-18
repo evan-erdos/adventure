@@ -5,7 +5,7 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-using invt=PathwaysEngine.Inventory;
+using inv=PathwaysEngine.Inventory;
 using util=PathwaysEngine.Utilities;
 
 namespace PathwaysEngine.Movement {
@@ -90,7 +90,7 @@ namespace PathwaysEngine.Movement {
         }
 
         public void PlayerReplace() {
-            var playerPack = gameObject.GetComponentInChildren<invt::Backpack>();
+            var playerPack = gameObject.GetComponentInChildren<inv::Backpack>();
             if (playerPack) playerPack.DropAll(); // bad cohesion
 #if OLD
             GameObject oldPlayer = gameObject.GetComponentInChildren<CharacterController>().gameObject;

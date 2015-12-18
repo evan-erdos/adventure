@@ -16,9 +16,7 @@ namespace PathwaysEngine.Adventure.Setting {
 
 		public Area area_src, area_tgt;
 
-		public override void OnTriggerEnter(Collider o) {
-			base.OnTriggerEnter(o);
-			if (Player.IsCollider(o)) Player.Goto(area_tgt);
-		}
+		void OnTriggerEnter(Collider o) {
+			if (Player.IsCollider(o)) Player.Goto(area_tgt); }
 	}
 }

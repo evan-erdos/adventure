@@ -5,7 +5,7 @@ using System.Collections;
 using System.Collections.Generic;
 
 namespace PathwaysEngine.Inventory {
-    public class Gun : Weapon {
+    public partial class Gun : Weapon {
         public bool isAuto, isBurst, isPrimary;
         public uint countAmmo, sizeClip, countLoaded,
             countBursts, fovDefault, fovScoped, range;
@@ -46,11 +46,11 @@ namespace PathwaysEngine.Inventory {
             mCAMR = Camera.main;
             am = GetComponent<Animation>();
             fovDefault = (uint)Camera.main.fieldOfView;
-            var tempClips = new List<string>();
-            foreach (AnimationState elem in am) {
-                tempClips.Add(elem.name);
-                elem.speed = (rate/elem.length)*1.5f;
-            } // animNames = tempClips.toArray(typeof(string));
+//            var tempClips = new List<string>();
+//            foreach (AnimationState elem in am) {
+ //               tempClips.Add(elem.name);
+   //             elem.speed = (rate/elem.length)*1.5f;
+     //       } // animNames = tempClips.toArray(typeof(string));
         }
 
         internal void Update() {

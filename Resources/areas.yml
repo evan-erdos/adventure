@@ -1,10 +1,8 @@
 %YAML 1.1
-%TAG !intf! _PathwaysEngine.Adventure.
-%TAG !maps! _PathwaysEngine.Adventure.Setting.
 ---
 
 ### Areas ###
-Diazarad: !maps!Area+yml &id_diazarad
+Diazarad: !!area &id_diazarad
   safe: false
   level: 0
   rooms:
@@ -17,12 +15,13 @@ Diazarad: !maps!Area+yml &id_diazarad
   - *id_Quarantine_Obelisk
 
   description:
-    formats: [ Refresh ]
+    styles: [ Refresh ]
     nouns: /area|diazarad/
     desc: |
       This is Diazarad.
 
-Observatory: !maps!Area+yml &id_observatory
+
+Observatory: !!area &id_observatory
   safe: false
   level: 1
   rooms:
@@ -30,95 +29,115 @@ Observatory: !maps!Area+yml &id_observatory
   - *id_Outside
 
   description:
-    formats: [ Refresh ]
+    styles: [ Refresh ]
     nouns: /area|observatory|mountain/
     desc: |
       This is the Observatory.
 
-Annex: !maps!Area+yml &id_annex
+
+Annex: !!area &id_annex
   safe: false
   level: 1
   rooms:
   - *id_Outside_Annex
 
   description:
-    formats: [ Refresh ]
+    styles: [ Refresh ]
     nouns: /area|annex|mountain/
     desc: |
       This is the Observatory's Annex.
+      What a wonderful smell you've discovered.
 
 
 
 ### Rooms ###
-Curved Path: !maps!Room+yml &id_Curved_Path
+Curved Path: !!room &id_Curved_Path
   description:
-    formats: [ Newline ]
     nouns: /path|rail|curve/
     desc: |
       You shiver as the wind coming up the ravine blows across this gently curved walkway, which runs between the main Observatory and the Annex. It always feels a bit rickety, but you're usually too cold to notice it shaking too much. 
 
-Under Curved Path: !maps!Room+yml &id_Under_Curved_Path
+
+Cave Entrance: !!room
   description:
-    formats: [ Newline ]
+    nouns: /trademark/
+    desc: |
+      ## ZORK II: The Wizard of Frobozz ##
+      Copyright © 1981, 1982, 1983 Infocom, Inc. All rights reserved.
+      ZORK is a registered trademark of Infocom, Inc.
+      Version 48 / Serial number 840904
+
+
+Inside the Barrow: !!room
+  description: 
+    nouns: /barrow|cave|entrance/
+    desc: |
+      You are incide an ancient barrow hidden deep within a dark forest. The barrow opens into a narrow tunnel at its southern end. You can see a faint glow at the far end.
+      A strangely familiar brass lantern is lying on the ground.
+      A sword of Elvish workmanship is on the ground. 
+      *Just kidding*. There's no sword.
+
+
+Under Curved Path: !!room &id_Under_Curved_Path
+  description:
     nouns: /snow|path|rail|curve/
     desc: |
       Wind whistles through the trusses of the walkway above, and the snow under your feet cracks a bit under your feet as you walk. You recall that there's an entrance to both the *Observatory* and the *Annex* that you can get to from down here.
 
-Mountains: !maps!Room+yml &id_Mountains
+
+Mountains: !!room &id_Mountains
   description: 
-    formats: [ Newline ]
     nouns: /hills|snow|mountains/
     desc: |
       You're in the mountains around the Observatory. While playing in the snow is fun, you're getting worried, as conditions can get really awful out here. Dying of exposure is easier than you think.
 
-Dome Roof: !maps!Room+yml &id_Observatory_Roof
+
+Dome Roof: !!room &id_Observatory_Roof
   description:
-    formats: [ Newline ]
     nouns: /roof|dome|top/
     desc: |
       You're standing on the top of the dome, and the wind is blowing pretty hard. It's slippery, icy, and downright dangerous to be up here like this. One wrong move, and you'll fall into the dome and ruin some expensive apparatus, or you'll fall outwards, and get impaled on something else.
 
-Outside the Observatory: !maps!Room+yml &id_Outside
+
+Outside the Observatory: !!room &id_Outside
   description:
-    formats: [ Newline ]
     nouns: /path|rail|curve/
     desc: |
       This path runs all the way around the circumference of the building. You recall that they lock all of these doors when nobody is around. You might need to find another way in.
 
-Outside the Annex: !maps!Room+yml &id_Outside_Annex
+
+Outside the Annex: !!room &id_Outside_Annex
   description:
-    formats: [ Newline ]
     nouns: /annex|outside|building/
     desc: |
       You're just outside the Annex.
 
-Balcony: !maps!Room+yml &id_Observatory_Balcony
+
+Balcony: !!room &id_Observatory_Balcony
   description:
-    formats: [ Newline ]
     nouns: /rail|balcony/
     desc: |
       You're standing on a balcony on the outside of an enormous dome. The dome curves up and away, disappearing into the snowy sky.
       
       You see a doorway here, which leads into the *Observatory*.
 
-Stairwell: !maps!Room+yml &id_Observatory_Stairwell
+
+Stairwell: !!room &id_Observatory_Stairwell
   description:
-    formats: [ Newline ]
     nouns: /stair(s|well)/
     desc: | 
       You're at one of the entrances to this large observatory. A perilous set of stairs lead upwards, to the *Control Room*, and a second set lead downwards. 
 
-Rickety Stairs: !maps!Room+yml &id_Observatory_Rickety_Stairs
+
+Rickety Stairs: !!room &id_Observatory_Rickety_Stairs
   description:
-    formats: [ Newline ]
     nouns: /stairs|shaky/
     desc: | 
       The stairs themselves seem pretty sturdy to you, but the lack of a handrail is, at best, vexing. Looking over the edge, you can see that you're almost exactly above the secondary, reflecting telescope.
 
 
-On the Telescope: !maps!Room+yml &id_Observatory_On_Telescope
+On the Telescope: !!room &id_Observatory_On_Telescope
   description:
-    formats: [ Newline ]
     nouns: /telescope|reflection|refraction|lens/
     desc: | 
       You managed to get on top of the telescopes. 
@@ -126,51 +145,50 @@ On the Telescope: !maps!Room+yml &id_Observatory_On_Telescope
       (What are you doing? Get down from there!)
 
 
-Circular Area: !maps!Room+yml &id_Observatory_Circular
+Circular Area: !!room &id_Observatory_Circular
   description:
-    formats: [ Newline ]
     nouns: /circular|catwalk/
     desc: | 
       You're standing on a circular platform, at the apex of the observatory's dome. One path leads around behind the upper room, and through a door you can see some steps leading up to the *Main Control Room*.
 
-Canopy: !maps!Room+yml &id_Observatory_Canopy
+
+Canopy: !!room &id_Observatory_Canopy
   description:
-    formats: [ Newline ]
     nouns: /outside|canopy|aperature/
     desc: | 
       You're anxious because you're standing on the section of the dome that opens and closes to protect the telescopes from weather. If it opened, you'd fall right into the telescope. You begin to look for an exit.
 
-Main Control Room: !maps!Room+yml &id_Observatory_Control
+
+Main Control Room: !!room &id_Observatory_Control
   description:
-    formats: [ Newline ]
     nouns: /main|control|observatory/
     desc: | 
       This is the primary control room, where the scientists probably would have worked. If it were less cold outside, you could easily imagine living and working up here: the view must be astounding on a clear day.
 
-Viewing Platform: !maps!Room+yml &id_Observatory_Viewing_Platform
+
+Viewing Platform: !!room &id_Observatory_Viewing_Platform
   description:
-    formats: [ Newline ]
     nouns: /lounge|view|platform/
     desc: | 
       There is a hemispherical room at the top of this Observatory. It has a high window, so the stars can be viewed, unobstructed, without fear of falling into the telescopes. Another door leads out to the roof.
 
-Ground Floor: !maps!Room+yml &id_Observatory_1
+
+Ground Floor: !!room &id_Observatory_1
   description:
-    formats: [ Newline ]
     nouns: /floor|ground|base/
     desc: | 
       You're on the ground floor of the Observatory. Two massive telescopes dominate the enclosed area, while trusses and walkways extend upwards. The Observatory is not airtight, so even inside, it's quite cold.
 
-Canyon Path: !maps!Room+yml &id_Canyon_Path
+
+Canyon Path: !!room &id_Canyon_Path
   description:
-    formats: [ Newline ]
     nouns: /cliffs|crag|path/
     desc: |
       You are along a sandy path, which weaves its way through cragged rocks. It runs along the inside edge of a canyon, and you can hear water lapping against rocks. It's breezy: while the sun feels warm on your skin, you shiver slightly when a strong gust blows into the canyon.
 
-Quarantine Gate: !maps!Room+yml &id_Quarantine_Gate
+
+Quarantine Gate: !!room &id_Quarantine_Gate
   description:
-    formats: [ Newline ]
     nouns: /quarantine|gate|stone/
     desc: |
       A brilliant white stone wall bars your passage through this area. This structure looks ancient, but seems to have held up very well over the ages. A tall, walled path runs directly through the middle of the structure. An equally ancient obelisk stands tall at the entrance.
@@ -178,40 +196,36 @@ Quarantine Gate: !maps!Room+yml &id_Quarantine_Gate
           ### **D I A Z A R A D** ###
 
 
-Quarantine Hall: !maps!Room+yml &id_Quarantine_Hall
+Quarantine Hall: !!room &id_Quarantine_Hall
   description:
-    formats: [ Newline ]
     nouns: /quarantine|hall|stone/
     desc: |
       A short corridor leads from the entrance of the Quaranatine to the Abbey, which appears to have filled with sand. A collapsed room and a marketplace can be found to either side, through thick doors.
 
 
-Quarantine Marketplace: !maps!Room+yml &id_Quarantine_Marketplace
+Quarantine Marketplace: !!room &id_Quarantine_Marketplace
   description:
-    formats: [ Newline ]
     nouns: /quarantine|hall|market|stone/
     desc: |
       This used to be a market, where traders would set up shop at granite slabs, and barter for goods coming in and out of the Quarantine. Now it's been cleared out, and only a few clay pots, and the worn counters remain.
       
 
-Quarantine Customs Office: !maps!Room+yml &id_Quarantine_Customs
+Quarantine Customs Office: !!room &id_Quarantine_Customs
   description:
-    formats: [ Newline ]
     nouns: /quarantine|hall|market|stone/
     desc: |
       This room must once have been the main administrative center for this Quarantine. Rocks have since collapsed into it, and very little else remains.
 
 
-Quarantine Abbey: !maps!Room+yml &id_Quarantine_Abbey
+Quarantine Abbey: !!room &id_Quarantine_Abbey
   description:
-    formats: [ Newline ]
     nouns: /quarantine|hall|market|stone/
     desc: |
       This Abbey would have been a rather pleasant place to relax before this area was abandoned. Now the grass has overgrown, and sand has blown into the doorway on the other side, barring all entry into this land.
 
-Quarantine Obelisk: !maps!Room+yml &id_Quarantine_Obelisk
+
+Quarantine Obelisk: !!room &id_Quarantine_Obelisk
   description:
-    formats: [ Newline ]
     nouns: /quarantine|hall|market|stone/
     desc: |
       There is another obelisk here in the sand, mostly obscured.
@@ -219,19 +233,22 @@ Quarantine Obelisk: !maps!Room+yml &id_Quarantine_Obelisk
         ### **D I A Z A R A D** ###
         These lands have been barred indefinitely by the Council.
 
-Upper Pathway: !maps!Room+yml &id_Upper_Pathway
+
+Upper Pathway: !!room &id_Upper_Pathway
   description:
     nouns: /upper|path|high/
     desc: |
       This path leads up to a rocky outcrop, which provides an astounding view of the landscape, and of the ancient monument. From up here you can almost see into the nearer rooms of the Quarantine Gate.
 
-Lower Pathway: !maps!Room+yml &id_Lower_Pathway
+
+Lower Pathway: !!room &id_Lower_Pathway
   description:
     nouns: /lower|path|low/
     desc: |
       This path leads from the Quarantine downwards, towards the waterline, and continues through jagged rocks. It looks well worn, as if many have walked this path to get to the Quarantine Gates.
 
-Canyon Arch: !maps!Room+yml &id_Canyon_Arch
+
+Canyon Arch: !!room &id_Canyon_Arch
   description:
     nouns: /arch|rock|path/
     desc: |

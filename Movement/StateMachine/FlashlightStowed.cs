@@ -2,13 +2,14 @@
 
 using UnityEngine;
 using System.Collections;
-using invt=PathwaysEngine.Inventory;
+using adv=PathwaysEngine.Adventure;
+using inv=PathwaysEngine.Inventory;
 
 namespace PathwaysEngine.Movement.StateMachine {
     public class FlashlightStowed : StateMachineBehaviour {
         override public void OnStateExit(Animator a,AnimatorStateInfo asi,int i) {
-            ((invt::Flashlight) Player.left.objHand
-                .GetComponent<invt::Flashlight>()).on = false;
+            ((inv::Flashlight) ((adv::Person) Pathways.player).left.objHand
+                .GetComponent<inv::Flashlight>()).on = false;
         }
     }
 }

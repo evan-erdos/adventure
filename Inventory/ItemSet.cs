@@ -5,9 +5,10 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using Type=System.Type;
-using invt=PathwaysEngine.Inventory;
-using intf=PathwaysEngine.Adventure;
+using inv=PathwaysEngine.Inventory;
+using adv=PathwaysEngine.Adventure;
 using maps=PathwaysEngine.Adventure.Setting;
+using lit=PathwaysEngine.Literature;
 using stat=PathwaysEngine.Statistics;
 using util=PathwaysEngine.Utilities;
 
@@ -20,37 +21,38 @@ namespace PathwaysEngine.Inventory {
     |* provides a way to deal with collections of items,
     |* iterate over them, & get particular types of `Item`s.
     |**/
-    public class ItemSet : IItemSet, ILoggable {
+    public class ItemSet : IItemSet, lit::IDescribable {
 
         public bool IsReadOnly { get { return false; } }
 
         public int Count {
-            get { return items[typeof(Item)].Count; } }
+            get { var n = 0;
+                foreach (var elem in Items.Values)
+                    n += elem.Count;
+                return n;
+            }
+        }
 
+        public string Name {
+            get { return "Jeez! An ItemSEt!/"; } }
 
-        /** `Format` : **`string`**
-        |*
-        |* Formatting string, specified by `ILoggable`.
-        |**/
-        public string Format {
-            get { return "It contains: \n"; } }
+        public lit::Description description {get;set;}
 
-
-        /** `items` : **`Dictionary<Type,List<Item>>`**
+        /** `Items` : **`Dictionary<Type,List<Item>>`**
         |*
         |* Mapping between the `Type`s of the `Item` values
         |* and the `Item`s themselves.
         |**/
-        public Dictionary<Type,List<Item>> items {
-            get { return _items; }
-        } Dictionary<Type,List<Item>> _items;
+        public Dictionary<Type,List<Item>> Items {
+            get { return items; }
+        } Dictionary<Type,List<Item>> items;
 
 
         public ICollection<Type> Keys {
-            get { return items.Keys; } }
+            get { return Items.Keys; } }
 
         public ICollection<List<Item>> Values {
-            get { return items.Values; } }
+            get { return Items.Values; } }
 
 
         /** `Indexer[Type]` : **`List<Item>`**
@@ -62,8 +64,8 @@ namespace PathwaysEngine.Inventory {
         |*     Type of the `Item`s to get from the set.
         |**/
         public List<Item> this[Type type] {
-            get { return items[type]; }
-            set { items[type] = (List<Item>) value; } }
+            get { return Items[type]; }
+            set { Items[type] = (List<Item>) value; } }
 
 
         /** `ItemSet` : **`constructor`**
@@ -71,16 +73,18 @@ namespace PathwaysEngine.Inventory {
         |* Initializes the datastructure with every `Item` in
         |* the scene.
         |**/
-        public ItemSet() {
-            _items = new Dictionary<Type,List<Item>>() {
-                {typeof(Item),new List<Item>()}};}
+        public ItemSet()
+            : this(new Dictionary<Type,List<Item>>()
+                {{typeof(Item),new List<Item>()}}) { }
+
         public ItemSet(List<Item> items) {
-            this._items = new Dictionary<Type,List<Item>>() {
+            this.items = new Dictionary<Type,List<Item>>() {
                 {typeof(Item), items}};}
+
         public ItemSet(Dictionary<Type,List<Item>> items) {
-            this._items = items;
-            if (!_items.ContainsKey(typeof(Item)))
-                _items[typeof(Item)] = new List<Item>(); }
+            this.items = items;
+            if (!this.items.ContainsKey(typeof(Item)))
+                this.items[typeof(Item)] = new List<Item>(); }
 
 
         /** `Add()` : **`function`**
@@ -91,9 +95,9 @@ namespace PathwaysEngine.Inventory {
         |*     Instance of `Item` to be added.
         |**/
         public void Add(Item item) {
-            if (!items.ContainsKey(item.GetType()))
-                items[item.GetType()] = new List<Item>();
-            items[item.GetType()].Add(item); }
+            if (!Items.ContainsKey(item.GetType()))
+                Items[item.GetType()] = new List<Item>();
+            Items[item.GetType()].Add(item); }
 
 
         /** `Add()` : **`function`**
@@ -106,7 +110,7 @@ namespace PathwaysEngine.Inventory {
         |*     Instance of `Item` to be added.
         |**/
         public void Add(Type type,List<Item> list) {
-            items[type].AddRange(list); }
+            Items[type].AddRange(list); }
 
 
         /** `Contains()` : **`bool`**
@@ -132,7 +136,7 @@ namespace PathwaysEngine.Inventory {
         |*     Instance of `Item` to be added.
         |**/
         public int IndexOf(Item item) {
-            return _items[typeof(Item)].IndexOf(item); }
+            return items[typeof(Item)].IndexOf(item); }
 
 
         /** `Remove()` : **`bool`**
@@ -143,7 +147,7 @@ namespace PathwaysEngine.Inventory {
         |*     Instance of `Item` to be added.
         |**/
         public bool Remove(Item item) {
-            return items[item.GetType()].Remove(item); }
+            return Items[item.GetType()].Remove(item); }
 
 
         /** `Remove()` : **`function`**
@@ -214,10 +218,12 @@ namespace PathwaysEngine.Inventory {
         public IEnumerator<Item> GetEnumerator() {
             return items[typeof(Item)].GetEnumerator(); }
 
-        public Item GetItemOfType<T>() where T : Item {
-            var temp = GetItemsOfType<T>();
-            if (temp!=null) return temp[0];
-            else return default(Item);
+        public T GetItem<T>() where T : Item {
+            var temp = GetItems<T>();
+            foreach (var item in temp)
+                if (item is T)
+                    return (T) item;
+            return default (T);
         }
 
 
@@ -227,26 +233,29 @@ namespace PathwaysEngine.Inventory {
         |* function to get a special `string` to log.
         |**/
         public string Log() {
-            var s = Format;
+            var s = description.Template;
             foreach (var item in this)
                 s += string.Format("\n- {0}",item);
             return s;
         }
 
-        public List<Item> GetItemsOfType<T>() where T : Item {
-            var temp = new List<Item>();
-            if (items.TryGetValue(typeof (T), out temp))
-                return items[typeof (T)];
-            return default(List<Item>);
+        public List<T> GetItems<T>() where T : Item {
+            var list = new List<T>();
+            List<Item> temp;
+            if (items.TryGetValue(typeof (T),out temp)) {
+                foreach (var elem in temp)
+                    list.Add((T) elem);
+                return list;
+            } return default (List<T>);
         }
 
         public class ItemSetEnum {
-            List<Item> _items;
+            List<Item> items;
             int position = -1;
 
             public Item Current {
                 get {
-                    try { return _items[position]; }
+                    try { return items[position]; }
                     catch (System.IndexOutOfRangeException) {
                         throw new System.Exception();
                     }
@@ -254,13 +263,13 @@ namespace PathwaysEngine.Inventory {
             }
 
             public ItemSetEnum(Item[] list) {
-                this._items = new List<Item>(list); }
+                this.items = new List<Item>(list); }
             public ItemSetEnum(List<Item> list) {
-                this._items = list; }
+                this.items = list; }
             //public ItemSetEnum(List<List<Item>> lists) {
-            //  this._items = new List<Item>(lists); }
+            //  this.items = new List<Item>(lists); }
             public bool MoveNext() {
-                position++; return (position<_items.Count); }
+                position++; return (position<items.Count); }
             public void Reset() { position = -1; }
         }
     }

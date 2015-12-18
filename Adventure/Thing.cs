@@ -3,6 +3,8 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using EventArgs=System.EventArgs;
+using lit=PathwaysEngine.Literature;
 
 namespace PathwaysEngine.Adventure {
 
@@ -14,44 +16,19 @@ namespace PathwaysEngine.Adventure {
     |* namespace, the `Parser`, or the `Statistics`namespace,
     |* or the `Terminal` or any deriving/text-based interfaces.
     |**/
-    public partial class Thing : MonoBehaviour, IDescribable {
+    partial class Thing : MonoBehaviour, IThing {
+        bool waitViewing;
+        protected internal new Rigidbody rigidbody;
+        protected internal new Collider collider;
 
+        public virtual bool Seen { get; set; }
 
-        /** `Seen` : **`bool`**
-        |*
-        |* Specifies whether or not the `Player` knows about
-        |* this item, or has any other knowledge about `this`.
-        |**/
-        public virtual bool seen { get; set; }
+        public string Name {
+            get { return gameObject.name; } }
 
+        public virtual lit::Description description {get;set;}
 
-        /** `uuid` : **`string`**
-        |*
-        |* This should be an unique identifier that the `*.yml`
-        |* `Deserializer` should look for in files.
-        |**/
-        public string uuid { get { return gameObject.name; } }
-
-
-        /** `Format` : **`string`**
-        |*
-        |* Defines how the description for `this` should be
-        |* `Log`ged by the `Terminal`. I should specify some
-        |* sort of protocol or convention for the arguments, as
-        |* deriving classes may rely on this implementation.
-        |**/
-        public virtual string Format {
-            get { return format; }
-        } string format = "{0}";
-
-
-        /** `description` : **`Description`**
-        |*
-        |* This property encapsulates a `Description` `object`
-        |* that every deriving class (e.g., half of all the
-        |* `class`es in this engine) interfaces with.
-        |**/
-        public virtual Description description { get; set; }
+        static event lit::CommandEvent ViewEvent;
 
 
         /** `Thing` : **`constructor`**
@@ -64,59 +41,94 @@ namespace PathwaysEngine.Adventure {
         public Thing() { }
 
 
-        /** `Find()` : **`function`**
+        /** `AddListener()` : **`function`**
         |*
-        |* Unimplemented. Will eventually allow the `Player` or
-        |* whoever else to use commands to find things.
+        |* Every instantiated `Thing` calls if it detects the
+        |* `Player` is nearby via `OnTriggerEnter()`. It then
+        |* subscribes itself to or unsubscribes itself from the
+        |* global/static `Thing`, acts as an event handler to
+        |* the instances. Subscribers could have any number of
+        |* functions called iff the `Player` is nearby and the
+        |* `Player` issues an appropriate command.
         |**/
-        public virtual void Find() { }
+        public static void AddListener(Thing thing) {
+            ViewEvent += thing.View;
+        }
 
 
-        /** `View()` : **`function`**
+        /** `RemoveListener()` : **`function`**
         |*
-        |* When the `Player` writes a command to **examine** or
-        |* **look at** something, the most derived function for
-        |* whatever `class` it's called on. This allows any of
-        |* the numerous subclasses to customize the way they're
-        |* displayed by the `Terminal`.
+        |* Corollary to the `AddListener()` function.
         |**/
-        public virtual void View() {
-            Terminal.Log(description); }
+        public static void RemoveListener(Thing thing) {
+            ViewEvent -= thing.View;
+        }
+
+        public virtual bool Find() { return false; }
+
+        public virtual bool View(
+                        object source,
+                        Thing target,
+                        EventArgs e,
+                        lit::Command c) {
+            lit::Terminal.Log(description);
+            return true;
+        }
+
+        public virtual bool View() {
+            return View(null,this,EventArgs.Empty,
+                new lit::Command()); }
 
 
-        /** `FormatDescription()` : **`function`**
-        |*
-        |* This externally defines the formatting `string` for
-        |* the `Description`, as the formatting `string` isn't
-        |* known until after `Awake()`.
-        |**/
-        public virtual void FormatDescription() {
-            description.SetFormat(Format); }
+        public virtual bool IsMatch(string s) {
+            return description.Nouns.IsMatch(s); }
 
 
-        /** `Log()` : **`function`**
-        |*
-        |* Returns the description object.
-        |**/
-        public virtual string Log() { return description; }
+        IEnumerator Viewing() {
+            waitViewing = true;
+            View(this,this,EventArgs.Empty,new lit::Command());
+            yield return new WaitForSeconds(1f);
+            waitViewing = false;
+        }
 
 
         public virtual void Awake() {
-            //description = new Description<Thing>();
-            GetYAML();
-            FormatDescription();
             gameObject.layer = LayerMask.NameToLayer("Thing");
-            var _rigidbody = GetComponent<Rigidbody>();
-            if (_rigidbody!=null) {
-                _rigidbody.isKinematic = true;
-                _rigidbody.useGravity = false;
+            collider = GetComponent<Collider>();
+            rigidbody = GetComponent<Rigidbody>();
+            if (rigidbody!=null) {
+                rigidbody.isKinematic = true;
+                rigidbody.useGravity = false;
             }
+            Deserialize();
+            AddListener(this);
         }
 
         public virtual void Start() { }
 
-        public override string ToString() { return uuid; }
+        //public virtual void OnMouseEnter() {
+        //    if (3f>(Player.Position-transform.position).sqrMagnitude)
+        //        Pathways.CursorGraphic = Cursors.Pick;
+        //}
 
-        public static bool operator !(Thing i) { return (i==null); }
+        public virtual IEnumerator OnMouseOver() {
+            while (5f>(Player.Position-transform.position).sqrMagnitude) {
+                Pathways.CursorGraphic = Cursors.Pick;
+                if (Input.GetButtonUp("Fire1") && !waitViewing)
+                    yield return StartCoroutine(Viewing());
+                else yield return new WaitForSeconds(0.1f);
+            } OnMouseExit();
+        }
+
+        public virtual void OnMouseExit() {
+            Pathways.CursorGraphic = Cursors.None;
+            StopAllCoroutines();
+        }
+
+
+        public override string ToString() { return Name; }
+
+        public static bool operator !(Thing o) {
+            return (o==null); }
     }
 }

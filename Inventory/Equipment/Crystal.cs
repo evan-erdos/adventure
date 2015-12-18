@@ -71,7 +71,7 @@ namespace PathwaysEngine.Inventory {
 			}
 		}
 
-		public void Use() { Attack(); }
+		public override bool Use() { Attack(); return false; }
 
 		public void Attack() {
 			if (sinceShot>rate && !am.isPlaying) {
@@ -125,9 +125,9 @@ namespace PathwaysEngine.Inventory {
 			}
 		}
 
-		public void Stow() { StartCoroutine(Holster(true)); }
+		public bool Stow() { StartCoroutine(Holster(true)); return false; }
 
-		public void Wear() { StartCoroutine(Holster(false)); }
+		public bool Wear() { StartCoroutine(Holster(false)); return false; }
 
 		internal IEnumerator Focus() {
 			float cViewField = mCAMR.fieldOfView;

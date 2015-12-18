@@ -2,15 +2,16 @@
 
 using UnityEngine;
 using System.Collections;
-using invt=PathwaysEngine.Inventory;
+using adv=PathwaysEngine.Adventure;
+using inv=PathwaysEngine.Inventory;
 
 namespace PathwaysEngine.Movement.StateMachine {
     public class FlashlightWield : StateMachineBehaviour {
-        invt::Flashlight flashlight;
+        inv::Flashlight flashlight;
 
         override public void OnStateEnter(Animator a,AnimatorStateInfo asi,int i) {
             if (!flashlight)
-                flashlight = Player.left.objHand.GetComponent<invt::Flashlight>();
+                flashlight = ((adv::Person) Pathways.player).left.objHand.GetComponent<inv::Flashlight>();
             flashlight.Worn = true;
         }
     }

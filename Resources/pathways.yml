@@ -1,9 +1,15 @@
 %YAML 1.1
-%TAG !intf! _PathwaysEngine.Adventure.
-%TAG !path! _PathwaysEngine.
 ---
 
-init: !intf!Message
+init: !!message
+  desc: |
+    ## A Change in the Weather ##
+    © 2015, Ben Scott <bescott@andrew.cmu.edu>
+    bescott.org/observatory/
+    
+    If this is your first time playing, press **TAB** and then type **help** for more information. If you just want to explore, press **TAB** and type **hide terminal**.
+
+init_Observatory: !!message
   desc: |
     ## Observatory ##
     © 2015, Ben Scott <bescott@andrew.cmu.edu>
@@ -11,7 +17,8 @@ init: !intf!Message
     
     If this is your first time playing, press **TAB** and then type **help** for more information. If you just want to explore, press **TAB** and type **hide terminal**.
 
-crystal_init: !intf!Message
+
+crystal_init: !!message
   desc: |
     ## Among Fields of Crystal ##
     © 2015, Ben Scott <bescott@andrew.cmu.edu>
@@ -20,7 +27,8 @@ crystal_init: !intf!Message
     **Welcome!**
     If this is your first time playing, press **TAB** and then type **help** for more information. Then, try walking near the crystals to activate them. 
 
-gedenkstatte_init: !intf!Message
+
+gedenkstatte_init: !!message
   desc: |
     ## Gedenkstätte v1.0.3 ##
     © 2015, Ben Scott <bescott@andrew.cmu.edu>
@@ -29,22 +37,24 @@ gedenkstatte_init: !intf!Message
     **Welcome!**
     If this is your first time playing, press **TAB** and then type **help** for more information.
 
-dead: !intf!Message
-  formats: [ Alert, Newline ]
+
+dead: !!message
+  styles: [ Alert, Newline ]
   desc: |
     ### \*\*\* YOU HAVE DIED. \*\*\* ###
     **Would you like to Restore, Restart, or Quit?**
     
     (Just type **restore** for now.)
 
-help_old: !intf!Message
+
+help_old: !!message
   desc: |
     # Help #
     This is an exploratory "game" which draws its inspirations from Zork, Myst & Riven, Geneforge et al., etc.
     Even if you're a veteran game-player-person, you should probably pour over the help section, as the controls for this game are liable to differ *drastically* from what you'd expect them to be. Also, anywhere you see (*Disabled in v1.0.2*), you can read that as (*I haven't fixed this as of v1.0.2. I mean, I'm just one person, cut me some slack! It's harder than you think, all this, come on!*).
 
 
-help: !intf!Message
+help: !!message
   desc: |
     # Help #
     
@@ -95,16 +105,20 @@ help: !intf!Message
     - **x**: Examine / search something nearby, i.e. **examine rocks** will not only describe the pile of rocks, but will look through them.
     - **z**: Wait, i.e. **wait** (*Disabled in v1.0.2*)
 
-move: !intf!Message
-  formats: [ Command ]
+move: !!message
+  styles: [ Command ]
   desc: You must gather your party before venturing forth.
 
-quit: !intf!Message
-  formats: [ Alert ]
+
+quit: !!message
+  styles: [ Alert ]
   desc: Quit the Game? (y/n)
 
-user: #!path!Player+yml
-  health: 20
-  desc: You look the same as usual.
+
+view: !!message
+  styles: [ Command ]
+  desc: |
+    (You have entered a view area. Type **return** or **esc** to exit.)
+
 
 ...

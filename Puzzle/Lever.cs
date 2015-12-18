@@ -3,7 +3,8 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-using intf=PathwaysEngine.Adventure;
+using adv=PathwaysEngine.Adventure;
+using lit=PathwaysEngine.Literature;
 
 namespace PathwaysEngine.Puzzle {
 
@@ -13,7 +14,7 @@ namespace PathwaysEngine.Puzzle {
     |* Represents an instance of a lever, which can either be
     |* `Solve`d or not, depending upon if it's pulled.
     |**/
-    partial class Lever : intf::Thing, IPiece {
+    partial class Lever : adv::Thing, IPiece {
         bool wait = false;
         public float time = 2f, dist = 2f, delay = 4f;
         float tgt, speed, handle_tgt, handle_speed;
@@ -27,10 +28,10 @@ namespace PathwaysEngine.Puzzle {
         AudioSource _audio;
         GameObject arm, handle;
 
-        public event OnSolved SolveEvent {
+        public event OnSolve SolveEvent {
             add { solveEvent += value; }
             remove { solveEvent -= value; }
-        } event OnSolved solveEvent;
+        } event OnSolve solveEvent;
 
         public bool IsSolved {
             get { return isSolved; }
@@ -94,8 +95,8 @@ namespace PathwaysEngine.Puzzle {
         }
 
 
-        void Pull(Command c) {
-            if (description.nouns.IsMatch(c.input))
+        void Pull(lit::Command c) {
+            if (description.Nouns.IsMatch(c.input))
                 StartCoroutine(Pulling(!isSolved)); }
 
         IEnumerator Solving(bool t) {
@@ -119,9 +120,9 @@ namespace PathwaysEngine.Puzzle {
             if (!wait) {
                 wait = true;
                 _audio.PlayOneShot(soundLever,0.2f);
-                Terminal.Log("You pull the lever "+
-                    ((t)?"back.":"forwards."),
-                    Formats.Command, Formats.Newline);
+                lit::Terminal.LogCommand(
+                    "You pull the lever "+
+                        ((t)?"back.":"forwards."));
                 IsSolved = t;
                 Solve();
                 yield return new WaitForSeconds(delay);
@@ -140,7 +141,7 @@ namespace PathwaysEngine.Puzzle {
             return solveEvent(this,System.EventArgs.Empty,IsSolved);
         }
 
-        IEnumerator OnMouseOver() {
+        public override IEnumerator OnMouseOver() {
             if (Vector3.Distance(transform.position,Player.Position)>dist) {
                 Pathways.CursorGraphic = Cursors.None; yield break; }
             if (Pathways.CursorGraphic==Cursors.Grab) yield break;
@@ -166,10 +167,9 @@ namespace PathwaysEngine.Puzzle {
             }
         }
 
-        void OnMouseExit() {
+        public override void OnMouseExit() {
+            base.OnMouseExit();
             handle_tgt = handleRange.x;
-            Pathways.CursorGraphic = Cursors.None;
-            StopAllCoroutines();
         }
     }
 }

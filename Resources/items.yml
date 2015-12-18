@@ -1,0 +1,131 @@
+%YAML 1.1
+---
+
+
+knob: !!key
+  mass: 1
+  description: 
+    nouns: /(door\s+)?knob|handle|shiny/
+    help: |
+      (Type **use knob** to use it.)
+
+    desc: |
+      This is a weird doorknob you found at the *Observatory*.
+      
+
+Brass Lantern: !!lamp
+  time: 3600
+
+  description: 
+    nouns: /lamp|lantern|brass|light|bulb/
+    help: |
+      (Hit the "F" key, or type **wield lamp** or **light the lantern** to use this lamp. Just kidding, this is disabled.)
+
+    desc: |
+      This is more like it. This is an ordinary brass lantern. It's dented, scratched, and ready for adventure.
+
+
+Backpack: !!item
+  mass: 2
+  description:
+    nouns: /bag|(back)?[ps]ack|container/
+    random descriptions:
+    - "It's flaps twirl in the breeze."
+    - "You stare at it, wistfully, but not too long. You feel enriched."
+    help: |
+      (Type **wear bag** to equip it, and **open bag** to look through your inventory.)
+
+    desc: |
+      Your backpack is only slightly worn, and has taken you on many an adventure. You typically don't leave home without it.
+      
+
+MagLite LR05: !!lamp
+  cost: 56
+  mass: 2
+  time: 5760
+  description:
+    nouns: /(flash)?light|maglite|lr05/
+    help: |
+      (Type "light" to turn it on and off.)
+
+    desc: |
+      On the side of this flashlight is a label promising the batteries will last of six days of constant operation. The label is peeling off in a few corners, and you have doubts.
+
+
+Yellow Crystal: !!crystal
+  mass: 0
+  shards: 23
+  description:
+    nouns: /yellow|oratis/
+    help: |
+      (To begin charging the yellow crystal, type **equip yellow crystal**. Discharge it by right clicking.)
+
+    desc: |
+      The yellow crystal glows with a strange light, and floats around on its own. It seems to hum in your hand.
+
+
+Blue Crystal: !!crystal
+  mass: 0
+  shards: 53
+
+  description:
+    nouns: /blue|teal|freezing|ice/
+    help: |
+      (To begin charging the blue crystal, type **equip blue crystal**. Discharge it by right clicking.)    
+
+    desc: |
+      The blue crystal is very cold, and almost transparent.
+      
+
+M9 Bayonet: !!weapon
+  cost: 20
+  mass: 1
+
+  description:
+    nouns: /((m9|survival|steel)\s+)?(blade|bayonet|knife|sword)/
+    help: |
+      (Type **wield knife** to ready it for combat.)
+
+    desc: |
+      This is your standard-issue M9 Bayonet.
+
+
+Courting Candle: !!item
+  cost: 4
+  mass: 0.5
+
+  description:
+    nouns: /cork|courting|candle|iron|wax/
+
+    desc: |
+      You never really understood why Noel began carrying this thing around.
+      
+      It's a courting candle: a father would give his daughter one candle, and would allow suitors to speak with her until the flame reached the spiral. If the father approved of the suitor, he would turn the wooden knob to give him more time. If not, he would snuff the light.
+
+
+Walther P4: !!weapon
+  cost: 23
+  mass: 0.8
+
+  description:
+    nouns: /walther|pistol|gun|p4/
+    help: |
+      (Type **wield P4** to ready it for combat. New magazines will be loaded automatically.)
+
+    desc: |
+      The Walther P4 was the most common sidearm of the German army during the Second World War. It's magazines hold eight 9mm Parabellum rounds.
+
+
+Colt 45: !!weapon
+  cost: 34
+  mass: 0.9
+
+  description:
+    nouns: /colt|pistol|handgun|p4/
+    help: |
+      (Type **wield colt** to ready it for combat. New magazines will be loaded automatically.)
+
+    desc: |
+      This is a Colt .45 pistol.
+
+...

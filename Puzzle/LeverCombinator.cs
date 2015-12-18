@@ -1,21 +1,23 @@
-/* Ben Scott * bescott@andrew.cmu.edu * 2015-11-30 * LeverCombinator */
+/* Ben Scott * bescott@andrew.cmu.edu * 2015-11-30 * Lever Combinator */
 
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using lit=PathwaysEngine.Literature;
 
 namespace PathwaysEngine.Puzzle {
 
 
-    /** `Combinator<Lever>` : **`Piece`**
+    /** `LeverCombinator` : **`class`**
     |*
     |* Represents an instance of a puzzle piece, which must be
     |* `Solve`d to finish a puzzle.
     |**/
     class LeverCombinator : Combinator<Lever> {
 
-        [SerializeField] public bool[] flags;
-        [SerializeField] public string message;
+        [SerializeField] bool[] flags;
+        [SerializeField] LightResponder responder;
+
 
         public override bool IsSolved {
             get { if (flags==null || flags.Length<=0) return false;
@@ -42,7 +44,8 @@ namespace PathwaysEngine.Puzzle {
 
         public override bool Solve() {
             if (IsSolved) {
-                Terminal.Log(message,Formats.Command,Formats.Newline);
+                if (responder!=null)
+                    responder.WhenSolved(this);
                 return true;
             } else return false;
         }

@@ -1,7 +1,7 @@
 /* Ben Scott * bescott@andrew.cmu.edu * 2015-11-13 * Inventory */
 
 using System.Collections.Generic;
-using intf=PathwaysEngine.Adventure;
+using adv=PathwaysEngine.Adventure;
 
 
 /** `PathwaysEngine.Inventory` : **`namespace`**
@@ -12,7 +12,22 @@ using intf=PathwaysEngine.Adventure;
 namespace PathwaysEngine.Inventory {
 
 
-    public enum ItemStates : byte { Unused, Tarnished, Damaged, Broken }
+    /** `Keys` : **`enum`**
+    |*
+    |* Represents broad kinds of `LockKey` that can be used to
+    |* open things via `ILockable.Unlock()`.
+    |**/
+    public enum Keys : int {
+        Default  = 0,
+        Breaker  = 1,
+        Radial   = 2,
+        Master   = 3,
+        Skeleton = 4,
+        Unique   = 5}
+
+
+    public enum ItemStates : byte {
+        Unused, Tarnished, Damaged, Broken }
 
 
     /** `IItem` : **`interface`**
@@ -29,20 +44,20 @@ namespace PathwaysEngine.Inventory {
         bool Held { get; set; }
 
 
-        /** `Take()` : **`function`**
+        /** `Take()` : **`bool`**
         |*
         |* Called to inform the `IItem` that it's been
         |* taken. Sets `Rigidbody.isKinematic`, etc.
         |**/
-        void Take();
+        bool Take();
 
 
-        /** `Drop()` : **`function`**
+        /** `Drop()` : **`bool`**
         |*
         |* Called to inform the `IItem` that it's been
         |* dropped. Sets `Rigidbody.isKinematic`, etc.
         |**/
-        void Drop();
+        bool Drop();
     }
 
 
@@ -92,11 +107,11 @@ namespace PathwaysEngine.Inventory {
         uint Uses { get; set; }
 
 
-        /** `Use()` : **`function`**
+        /** `Use()` : **`bool`**
         |*
         |* Use the `IItem`.
         |**/
-        void Use();
+        bool Use();
     }
 
 
@@ -115,18 +130,18 @@ namespace PathwaysEngine.Inventory {
         int Cost { get; set; }
 
 
-        /** `Buy()` : **`function`**
+        /** `Buy()` : **`bool`**
         |*
         |* Purchases an `IItem`.
         |**/
-        void Buy();
+        bool Buy();
 
 
-        /** `Sell()` : **`function`**
+        /** `Sell()` : **`bool`**
         |*
         |* Sells this `IItem`.
         |**/
-        void Sell();
+        bool Sell();
     }
 
 
@@ -144,18 +159,18 @@ namespace PathwaysEngine.Inventory {
         bool Worn { get; set; }
 
 
-        /** `Wear` : **`function`**
+        /** `Wear` : **`bool`**
         |*
         |* Equip this `IItem`.
         |**/
-        void Wear();
+        bool Wear();
 
 
-        /** `Stow` : **`function`**
+        /** `Stow` : **`bool`**
         |*
         |* Put away this `IItem`.
         |**/
-        void Stow();
+        bool Stow();
     }
 
 
@@ -184,21 +199,21 @@ namespace PathwaysEngine.Inventory {
     public interface IItemSet : ICollection<Item>, IEnumerable<Item> {
 
 
-        /** `GetItemsOfType<T>()` : **`List<Item>`**
+        /** `GetItems<T>()` : **`<T>[]`**
         |*
         |* Gets all items in the `IItemSet` whose type is
         |* either `<T>` or derives from `<T>`.
         |**/
-        List<Item> GetItemsOfType<T>() where T : Item;
+        List<T> GetItems<T>() where T : Item;
 
 
-        /** `GetItemOfType<T>()` : **`Item`**
+        /** `GetItem<T>()` : **`<T>`**
         |*
         |* Gets a single `Item` of type `<T>` from the set. If
         |* there is no `Item` of the specified type, an `Item`
         |* of a derived type may be returned.
         |**/
-        Item GetItemOfType<T>() where T : Item;
+        T GetItem<T>() where T : Item;
     }
 
 
@@ -212,7 +227,7 @@ namespace PathwaysEngine.Inventory {
                 {typeof(Item),Object.FindObjectsOfType<Item>() as Item[]}};
             foreach (var elem in dict[typeof(Item)]) {
                 if (elem.GetType()!=typeof(Item))
-                    dict[elem.GetType()] = GetItemsOfType(
+                    dict[elem.GetType()] = GetItems(
                         elem.GetType(),dict);
             } items=dict; // readonlys must be constructed here
 #endif
@@ -229,8 +244,8 @@ namespace PathwaysEngine.Inventory {
             else return default (Item);
         }
 
-        public static List<Item> GetItemsOfType<T>() where T : Item {
-            return GetItemsOfType(typeof(T),items); }
+        public static List<Item> GetItems<T>() where T : Item {
+            return GetItems(typeof(T),items); }
 
         public static List<Item> GetItems<T>(IItemSet dict) {
             List<Item> temp = new List<Item>();
@@ -245,7 +260,7 @@ namespace PathwaysEngine.Inventory {
             return temp;
         }
 
-        static List<Item> GetItemsOfType(type T, IItemSet dict) {
+        static List<Item> GetItems(type T, IItemSet dict) {
             List<Item> temp = new List<Item>();
             if (T==typeof(Item) && dict.ContainsKey(T))
                 return dict[typeof(Item)];
@@ -256,8 +271,8 @@ namespace PathwaysEngine.Inventory {
             return temp;
         }
 
-        static List<Item> GetItemsOfType(type T) {
-            return GetItemsOfType(T,items); }
+        static List<Item> GetItems(type T) {
+            return GetItems(T,items); }
 #endif
     }
 }

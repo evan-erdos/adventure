@@ -1,9 +1,13 @@
 /* Ben Scott * bescott@andrew.cmu.edu * 2014-07-06 * Door */
 
-using UnityEngine;
+using UnityEngine; // “Help, Help, Snark in MTS!”
 using System.Collections;
+using EventArgs=System.EventArgs;
+using lit=PathwaysEngine.Literature;
+using inv=PathwaysEngine.Inventory;
 
-namespace PathwaysEngine.Adventure { // “Help, Help, Snark in MTS!”
+namespace PathwaysEngine.Adventure.Setting {
+
 
     /** `Door` : **`class`**
     |*
@@ -13,23 +17,21 @@ namespace PathwaysEngine.Adventure { // “Help, Help, Snark in MTS!”
     [RequireComponent(typeof(AudioSource))]
     [RequireComponent(typeof(Collider))]
     [RequireComponent(typeof(Rigidbody))]
-    public partial class Door : Thing, IOpenable {
-        bool wait = false, wait_open = false;
-        bool isNearToPlayer = false;
+    public partial class Door : Thing, IOpenable, ILockable {
+        bool wait, wait_open;
         byte frameOpen;
-        float time = 4f, dist = 4f, after_delay = 16f;
-        internal float delay, speedDelta;
+        float time = 4f;
+        protected float dist = 4f;
+        internal float speedDelta, delay = 0.2f;
         public bool isSwitching, isStuck, isMoving,
-            isReverse, isAutomatic, isInitOnly;
-        AudioSource _audio;
-        Collider _collider;
+            isReverse, isAutomatic, isInitOnly, autoClose;
         Vector3 dirInit, dirOpen, dirFrame, dirTarget, dirDelta;
-        public AudioClip soundClick;
-        public AudioClip soundOpen;
+        protected new AudioSource audio;
+        public AudioClip soundClick, soundOpen;
         public GameObject door;
         public Transform tgt;
 
-        static event CommandEvent OpenEvent, ShutEvent;
+        static event lit::CommandEvent OpenEvent, ShutEvent;
 
 
         /** `IsOpen` : **`bool`**
@@ -46,7 +48,7 @@ namespace PathwaysEngine.Adventure { // “Help, Help, Snark in MTS!”
                 if (!value) Shut();
                 else Open();
             }
-        } bool isOpen = false;
+        } bool isOpen;
 
 
         /** `IsLocked` : **`bool`**
@@ -69,6 +71,16 @@ namespace PathwaysEngine.Adventure { // “Help, Help, Snark in MTS!”
             set { isInitOpened = value; }
         } [SerializeField] bool isInitOpened;
 
+        public bool Near {get;set;}
+
+
+        /** `LockMessage` : **`string`**
+        |*
+        |* An optional message to print out when the `Player`
+        |* tries to open a locked door.
+        |**/
+        public string LockMessage {get;set;}
+
 
         /** `Position` : **`<real,real,real>`**
         |*
@@ -86,21 +98,21 @@ namespace PathwaysEngine.Adventure { // “Help, Help, Snark in MTS!”
                 door.transform.localPosition = new Vector3(x,0f,0f);
                 if (x>=(3f*tgt.localPosition.x)/4f && IsOpen) Shut();
                 else if (x<=tgt.localPosition.x/4f && !IsOpen)
-                    OpenOnly();
+                    Open(); //only?
             }
         }
 
 
-        /** `Door` : **`constructor`**
+        /** `LockKey` : **`Key`**
         |*
-        |* Defaults for the local fields.
+        |* The `Key` object which can unlock this `Door`. Can
+        |* be either a `Key` with a `Keys`value higher than the
+        |* `Door`'s security, or a unique object.
         |**/
-        public Door() {
-            isAutomatic = false;    isReverse   = false;
-            isSwitching = false;    isInitOnly  = false;
-            isStuck     = false;    isMoving    = false;
-            frameOpen   = 0x0;      delay       = 0.2f;
-        }
+        public inv::Key LockKey {
+            get { return lockKey; }
+            set { lockKey = value; }
+        } [SerializeField] inv::Key lockKey;
 
 
         /** `Open()` : **`function`**
@@ -111,9 +123,9 @@ namespace PathwaysEngine.Adventure { // “Help, Help, Snark in MTS!”
         |* function, `Open()`, when the `Player` or anyone else
         |* enters a command to open doors.
         |**/
-        public static void Open(Command c) {
+        public static void Open(lit::Command c) {
             if (OpenEvent==null) return;
-            OpenEvent(null,System.EventArgs.Empty,c);
+            OpenEvent(null,null,EventArgs.Empty,c);
         }
 
 
@@ -123,30 +135,14 @@ namespace PathwaysEngine.Adventure { // “Help, Help, Snark in MTS!”
         |* other event, & does the same thing that `Open()`
         |* does, but instead closes the `Door`.
         |**/
-        public static void Shut(Command c) {
+        public static void Shut(lit::Command c) {
             if (ShutEvent==null) return;
-            ShutEvent(null,System.EventArgs.Empty,c);
-        }
-
-
-        /** `AddListener()` : **`function`**
-        |*
-        |* Every "instantiated" `Door` calls this on the static
-        |* class to register themselves to the global `Door`,
-        |* which acts as an event handler to the instances.
-        |* Subscribers have their `Open` & `Shut` functions
-        |* called when the `Player` issues such a command.
-        |**/
-        public static void AddListener(Door door) {
-            OpenEvent += door.Open;
-            ShutEvent += door.Shut;
+            ShutEvent(null,null,EventArgs.Empty,c);
         }
 
         public override void Awake() { base.Awake();
-            Door.AddListener(this);
-            _audio = GetComponent<AudioSource>();
-            _audio.clip = soundOpen;
-            _collider = GetComponent<Collider>();
+            audio = GetComponent<AudioSource>();
+            audio.clip = soundOpen;
             if (!door) throw new System.Exception("No door!");
         }
 
@@ -163,7 +159,7 @@ namespace PathwaysEngine.Adventure { // “Help, Help, Snark in MTS!”
             }
         }
 
-        internal void Update() {
+        void Update() {
             if (isAutomatic)
                 IsOpen = (frameOpen>0xFE);
             delay = Mathf.SmoothDamp(
@@ -175,19 +171,18 @@ namespace PathwaysEngine.Adventure { // “Help, Help, Snark in MTS!”
                     dirTarget,ref dirDelta,0.8f,
                     delay,Time.deltaTime);
         }
-
-        internal void OnTriggerStay(Collider o) {
+#if SLOW
+        public void OnTriggerStay(Collider o) {
             //Debug.Log(System.Convert.ToString(frameOpen,2));
-            if (Player.IsCollider(o)) isNearToPlayer = true;
-            if (!isNearToPlayer) return;
+            if (!Near) return;
             if (isAutomatic && frameOpen<128)
                 frameOpen = unchecked ((byte)((frameOpen<<0x1)|0x1));
             if (IsOpen && isInitOnly)
-                _collider.enabled = false;
+                collider.enabled = false;
         }
+#endif
 
         public void OnTriggerExit(Collider o) {
-            if (Player.IsCollider(o)) isNearToPlayer = false;
             if (isAutomatic && frameOpen>0
             && o.gameObject.layer==LayerMask.NameToLayer("Player"))
                 frameOpen = 0x0;
@@ -206,14 +201,18 @@ namespace PathwaysEngine.Adventure { // “Help, Help, Snark in MTS!”
         IEnumerator Opening(bool t) {
             if (!wait) {
                 wait = true;
-                isNearToPlayer = false;
+                Near = false;
+                collider.enabled = false;
                 dirTarget = (t)?(dirOpen):(dirInit);
-                Terminal.Log(
+                lit::Terminal.LogCommand(
                     (t) ? "You open the door."
-                        : "You close the door.",
-                    Formats.Command, Formats.Paragraph);
-                _audio.PlayOneShot(soundOpen,0.8f);
+                        : "The door clicks closed.");
+                audio.PlayOneShot(soundOpen,0.8f);
                 yield return new WaitForSeconds(time);
+                if (autoClose && t) {
+                    yield return new WaitForSeconds(time);
+                    Shut();
+                }
                 wait = false;
             }
         }
@@ -228,30 +227,17 @@ namespace PathwaysEngine.Adventure { // “Help, Help, Snark in MTS!”
         |* command, `Open`.
         |**/
         public bool Open(
-                        object sender,
-                        System.EventArgs e,
-                        Command c) {
-            if (!isNearToPlayer) return false;
+                        object source,
+                        Thing target,
+                        EventArgs e,
+                        lit::Command c) {
             if (IsOpen) {
-                Terminal.Log("It's already opened.",
-                    Formats.Command, Formats.Newline);
+                lit::Terminal.LogCommand(
+                    "It's already opened.");
                 return true;
-            } else if (IsLocked && !Player.Unlock(this)) {
-                Terminal.Log("You try to open it, but it's locked.",
-                    Formats.Command, Formats.Newline);
-                return false;
-            } else return this.Open();
-        }
-
-
-        IEnumerator OpeningOnly() {
-            if (!wait) {
-                yield return StartCoroutine(Opening(true));
-                _collider.enabled = false;
-                yield return new WaitForSeconds(after_delay);
-                yield return StartCoroutine(Opening(false));
-                _collider.enabled = true;
-            }
+            } else if (IsLocked)
+                return Player.Unlock(this);
+            else return this.Open();
         }
 
 
@@ -260,10 +246,10 @@ namespace PathwaysEngine.Adventure { // “Help, Help, Snark in MTS!”
         |* This does exactly what open does, but locks the door
         |* afterwords.
         |**/
-        public bool OpenOnly() {
-            StartCoroutine(OpeningOnly());
-            return true;
-        }
+        //public bool OpenOnly() {
+        //    StartCoroutine(OpeningOnly());
+        //    return true;
+        //}
 
 
         /** `Shut()` : **`bool`**
@@ -271,40 +257,53 @@ namespace PathwaysEngine.Adventure { // “Help, Help, Snark in MTS!”
         |* Closes the door, the higher-level command.
         |**/
         public bool Shut(
-                        object sender,
-                        System.EventArgs e,
-                        Command c) {
-            if (!isNearToPlayer) return false;
-            if (dirTarget==dirInit) {
-                Terminal.Log("It's already closed.",
-                    Formats.Command, Formats.Newline);
-                return true;
-            }
-#if TEMP
-            else if (!description.nouns.IsMatch(c.input))
-                Terminal.Log("I only understood you insofar as wanting to close something.",
-                    Formats.Command, Formats.Newline);
-#endif
-            else return this.Shut();
+                        object source,
+                        Thing target,
+                        EventArgs e,
+                        lit::Command c) {
+            if (dirTarget!=dirInit)
+                return this.Shut();
+            lit::Terminal.LogCommand(
+                "It's already closed.");
+            return true;
         }
 
-        public bool Shut() { StartCoroutine(Opening(false)); return true; }
+        public bool Shut() {
+            StartCoroutine(Opening(false));
+            return true;
+        }
+
+
+        public bool Lock(inv::Key key) {
+            if (key==LockKey) return true;
+            if (!key) return false;
+            if (key.Kind!=LockKey.Kind) return false;
+            return (key.Value==LockKey.Value);
+        }
+
+
+        public bool Unlock(inv::Key key) {
+            if (key==LockKey) return true;
+            if (!key) return false;
+            if (key.Kind!=LockKey.Kind) return false;
+            return (key.Value==LockKey.Value);
+        }
 
 
         IEnumerator Unlocking() {
-            if (!wait_open) {
+            if (!wait_open && !IsLocked) {
                 wait_open = true;
-                _audio.PlayOneShot(soundClick,0.8f);
+                audio.PlayOneShot(soundClick,0.8f);
                 yield break;
             }
         }
 
-        IEnumerator OnMouseOver() {
+        public override IEnumerator OnMouseOver() {
             var d = Vector3.Distance(transform.position,Player.Position);
-            if (d>dist) {
+            if (d>dist || IsOpen) {
                 Pathways.CursorGraphic = Cursors.None; yield break; }
             Pathways.CursorGraphic = Cursors.Hand;
-            if (Input.GetButton("Fire1") && !IsLocked)
+            if (Input.GetButton("Fire1") && !IsLocked && !IsOpen)
                 yield return StartCoroutine(Unlocking());
             while (Input.GetButton("Fire1") && d<dist && !IsLocked) {
                 d = Vector3.Distance(transform.position,Player.Position);
@@ -318,11 +317,6 @@ namespace PathwaysEngine.Adventure { // “Help, Help, Snark in MTS!”
                 Position = Camera.main.ScreenToWorldPoint(v0);
                 yield return new WaitForEndOfFrame();
             } wait_open = false;
-        }
-
-        void OnMouseExit() {
-            Pathways.CursorGraphic = Cursors.None;
-            StopAllCoroutines();
         }
     }
 }

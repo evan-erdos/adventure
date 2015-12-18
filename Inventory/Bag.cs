@@ -7,7 +7,7 @@ using System.Collections.Generic;
 namespace PathwaysEngine.Inventory {
 
 
-    public class Bag : ItemCollection {
+    public partial class Bag : ItemCollection {
         public void DropAll() {
             foreach (var item in this) item.Drop(); }
 

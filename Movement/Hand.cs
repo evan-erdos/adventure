@@ -3,17 +3,17 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-using invt=PathwaysEngine.Inventory;
+using inv=PathwaysEngine.Inventory;
 using util=PathwaysEngine.Utilities;
 
 namespace PathwaysEngine.Movement {
     public class Hand : MonoBehaviour {
-        public bool ikActive = false;
-        public Transform objHand = null;
+        public bool ikActive;
+        public Transform objHand;
         public Animator animator;
         public AvatarIKGoal handGoal;
         public Hands hand = Hands.Left;
-        public invt::IWieldable heldItem;
+        public inv::IWieldable heldItem;
         public util::key fire, lamp;
 
         public Hand() {
@@ -21,15 +21,16 @@ namespace PathwaysEngine.Movement {
             lamp = new util::key((n)=>lamp.input=n);
         }
 
-        public void SwitchItem(invt::IWieldable item) {
+        public void SwitchItem(inv::IWieldable item) {
         //  if (backpack && (heldItem!=null)) heldItem.Stow();
         //  else heldItem.Drop();
             heldItem = item;
+
         }
 
         void Awake() {
-            if (hand==Hands.Right) Player.right = this;
-            else if (hand==Hands.Left) Player.left = this;
+            //if (hand==Hands.Right) Player.right = this;
+            //else if (hand==Hands.Left) Player.left = this;
         }
 
         void Start() {

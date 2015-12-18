@@ -3,6 +3,7 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using lit=PathwaysEngine.Literature;
 
 namespace PathwaysEngine.Movement {
 
@@ -56,9 +57,7 @@ namespace PathwaysEngine.Movement {
 			if (!wait) {
 				wait = true;
 				IsActive = t;
-				Terminal.Log(
-					"(You have entered a special view area. Press **return** or **esc** to exit.)",
-					Formats.Command, Formats.Paragraph);
+				lit::Terminal.Log(Pathways.messages["view"]);
 				yield return new WaitForSeconds(time);
 				wait = false;
 			}

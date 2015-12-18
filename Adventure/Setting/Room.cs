@@ -4,7 +4,8 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
-using invt=PathwaysEngine.Inventory;
+using inv=PathwaysEngine.Inventory;
+using lit=PathwaysEngine.Literature;
 using Buffer=System.Text.StringBuilder;
 
 namespace PathwaysEngine.Adventure.Setting {
@@ -18,11 +19,10 @@ namespace PathwaysEngine.Adventure.Setting {
     |* where the `Player` is, and what they're doing.
     |**/
     public partial class Room : Thing {
-        bool wait = false;
-        public List<Room> nearbyRooms;
+        bool wait;
+        public byte hack = 0x0;
 
-        public override string Format {
-            get { return "## {0} ##\n{{0}}\n\n{1}"; } }
+        public List<Room> nearbyRooms;
 
 
         /** `Depth` : **`int`**
@@ -31,7 +31,10 @@ namespace PathwaysEngine.Adventure.Setting {
         |* colliders intersect. Higher values represent more
         |* deeply nested rooms.
         |**/
-        public int Depth { get; set; }
+        public int Depth {
+            get { return depth; }
+            set { depth = value; }
+        } [SerializeField] int depth = 0;
 
 
 
@@ -44,16 +47,10 @@ namespace PathwaysEngine.Adventure.Setting {
         } List<Thing> things;
 
 
-        public override Description description { get; set; }
+        public override lit::Description description {get;set;}
 
 
-        public override void FormatDescription() {
-            description.SetFormat(string.Format(
-                Format,uuid,descThings()));
-        }
-
-
-        /** `LogRoom` : **`coroutine`**
+        /** `LoggingRoom` : **`coroutine`**
         |*
         |* Locks the `Terminal` for a bit while the description
         |* of this `Room` is `Log`ged. Can be called from all
@@ -61,22 +58,27 @@ namespace PathwaysEngine.Adventure.Setting {
         |* every frame, because it will take at least `4s` for
         |* the next `Description` to be logged.
         |**/
-        IEnumerator LogRoom() {
+        IEnumerator LoggingRoom() {
             if (!wait) {
                 wait = true;
+                collider.enabled = false;
                 yield return new WaitForSeconds(1f);
-                seen = true;
-                Terminal.Log(this);
-                Player.room = this;
-                yield return new WaitForSeconds(3f);
-                wait = false;
+                Seen = true; //if (hack>0x7F) {
+                lit::Terminal.LogCommand(
+                    "Now Entering: "+Name);
+                Player.Room = this;
+                // now rooms are one time use
+                //yield return new WaitForSeconds(10f);
+                //collider.enabled = true;
+                //wait = false;
             }
         }
 
         public string descThings() {
             if (things==null || things.Count<1) return "";
             if (things.Count==1)
-                return string.Format("You see a {0} here.",things[0]);
+                return string.Format(
+                    "You see a {0} here.",things[0]);
             var buffer = new Buffer("You see a ");
             foreach (var thing in things)
                 buffer.Append(thing.name+", ");
@@ -89,25 +91,40 @@ namespace PathwaysEngine.Adventure.Setting {
         |* Checks if the `Player`'s current room can switch to
         |* this room, and if it already is the current room.
         |**/
-        bool IsValidRoom(Room room) {
-            if (!room) return true;
-            if (wait || room==this) return false;
-            if (Player.room && Player.room==this) return false;
-            return (room.Depth<=this.Depth);
+        static bool IsValidRoom(Room room) {
+            if (!room || room==Player.Room) return false;
+            if (!Player.Room) return true;
+            return (room.Depth>Player.Room.Depth);
         }
+
+        void LogRoom() {
+            if (Seen)
+                lit::Terminal.LogCommand(string.Format(
+                    "Now Entering: {0}",Name));
+            else lit::Terminal.Log(description);
+            Seen = true;
+            Player.Room = this;
+        }
+
 
         public override void Awake() { base.Awake();
-            FormatDescription();
-        }
+            gameObject.layer = LayerMask.NameToLayer("Room"); }
+
 
         public void OnTriggerEnter(Collider o) {
-            if (Player.IsCollider(o) && IsValidRoom(Player.room))
-                StartCoroutine(LogRoom());
+            if (Player.IsCollider(o) && IsValidRoom(this)) {
+                //if (hack>0x7E && !wait)
+                StartCoroutine(LoggingRoom());
+                if (hack<=0x80)
+                    hack = unchecked ((byte)((hack<<0x1)|0x1));
+            }
         }
 
         public void OnTriggerExit(Collider o) {
-            if (Player.IsCollider(o) && Player.room==this)
-                Player.room = null;
+            if (Player.IsCollider(o)) {
+                hack = 0x0; wait = false;
+                if (Player.Room==this) Player.Room = null;
+            }
         }
     }
 }

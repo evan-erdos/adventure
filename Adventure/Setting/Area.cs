@@ -4,6 +4,7 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using lit=PathwaysEngine.Literature;
 
 namespace PathwaysEngine.Adventure.Setting {
 
@@ -52,7 +53,7 @@ namespace PathwaysEngine.Adventure.Setting {
 		|**/
 		public int level;
 
-		public override Description description {get;set;}
+		public override lit::Description description {get;set;}
 
 		public void OnTriggerEnter(Collider o) {
 			if (Player.IsCollider(o)) Player.area = this; }

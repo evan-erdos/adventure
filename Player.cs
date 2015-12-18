@@ -1,17 +1,20 @@
 /* Ben Scott * bescott@andrew.cmu.edu * 2015-07-12 * Player */
 
 using UnityEngine;
-using type=System.Type;
+using EventArgs=System.EventArgs;
 using System.Collections;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using PathwaysEngine.Adventure;
-using invt=PathwaysEngine.Inventory;
-using intf=PathwaysEngine.Adventure;
-using maps=PathwaysEngine.Adventure.Setting;
-using mvmt=PathwaysEngine.Movement;
+using adv=PathwaysEngine.Adventure;
+using map=PathwaysEngine.Adventure.Setting;
+using inv=PathwaysEngine.Inventory;
+using lit=PathwaysEngine.Literature;
+using mv=PathwaysEngine.Movement;
 using stat=PathwaysEngine.Statistics;
-using util=PathwaysEngine.Utilities;
+using u=PathwaysEngine.Utilities;
+
+using System.Reflection;
 
 namespace PathwaysEngine {
 
@@ -31,15 +34,17 @@ namespace PathwaysEngine {
     |**/
     public partial class Player : Person {
         public bool wait = false;
-        static public List<invt::Item> wornItems;
-        static public new string uuid = "Amelia Earhart";
-        static public mvmt::Hand right, left;
-        static public mvmt::Feet feet;
-        static internal mvmt::IMotor motor;
+        static Regex regex = new Regex(
+            @"Player(Gimbal|Graphics)?");
+        static public List<inv::Item> wornItems;
+        static public new string Name = "Amelia Earhart";
         static public new stat::Set stats;
-        static public util::key menu, term, lamp;
-        static public new maps::Room room;
-        static public new maps::Area area;
+        static public u::key menu, term, lamp;
+        static public new map::Area area;
+
+        static public map::Room Room {
+            get { return ((Person) Pathways.player).room; }
+            set { ((Person) Pathways.player).room = value; } }
 
         static public bool IsGrounded { get; set; }
         static public bool WasGrounded { get; set; }
@@ -47,39 +52,42 @@ namespace PathwaysEngine {
         static public bool WasJumping { get; set; }
 
         static public bool IsSliding {
-            get { return motor.IsSliding; } }
+            get { return ((Person) Pathways.player).motor.IsSliding; } }
 
         static public new bool IsDead {
-            get { return motor.IsDead; }
+            get { return ((Person) Pathways.player).motor.IsDead; }
             set { __isDead = value;
-                if (__isDead) Pathways.Log("dead");
+                if (__isDead)
+                    lit::Terminal.Log(
+                        Pathways.messages["dead"]);
             }
         } static bool __isDead = false;
 
         public uint massLimit { get; set; }
 
+        static public float Saturation {
+            get { return Pathways.mainCamera.GetComponent<ColorCorrectionCurves>().saturation; }
+            set { Pathways.mainCamera.GetComponent<ColorCorrectionCurves>().saturation = value; }}
+
         public RandList<string> deathMessages { get; set; }
 
         static public new Vector3 Position {
-            get { return motor.Position; } }
+            get { return ((Person) Pathways.player).motor.Position; } }
 
-        static public new invt::IItemSet holdall {
-            get { if (_holdall==null)
-                    _holdall = new Player.Holdall();
-                return _holdall; }
-            set { _holdall = value; }
-        } static invt::IItemSet _holdall;
+        static public new inv::IItemSet Items {
+            get { return ((Person) Pathways.player).Items; }
+            set { ((Person) Pathways.player).Items = value; } }
 
-        static public new List<invt::Item> nearbyItems {
+        static public new List<inv::Item> nearbyItems {
             get { return ((Person) Pathways.player).nearbyItems; } }
 
-        static public new List<intf::Thing> NearbyThings {
+        static public new List<adv::Thing> NearbyThings {
             get { return ((Person) Pathways.player).NearbyThings; } }
 
         public Player() {
-            menu = new util::key((n)=>menu.input=n);
-            term = new util::key((n)=>term.input=n);
-            lamp = new util::key((n)=>{lamp.input=n;
+            menu = new u::key((n)=>menu.input=n);
+            term = new u::key((n)=>term.input=n);
+            lamp = new u::key((n)=>{lamp.input=n;
                 if (n && left.heldItem!=null && left.heldItem.Held)
                     left.heldItem.Use(); });
         }
@@ -87,234 +95,209 @@ namespace PathwaysEngine {
         public override void Awake() { base.Awake();
             Pathways.player = this;
             Pathways.mainCamera = Camera.main;
-            feet = GetComponentInChildren<mvmt::Feet>();
-            motor = GetComponentInChildren<mvmt::IMotor>();
+            gameObject.layer = LayerMask.NameToLayer("Player");
         }
 
         public override void Start() {
+            //Player.Saturation = 0f;
             Pathways.GameState = GameStates.Game; }
 
         public void Update() {
-            Player.IsGrounded = motor.IsGrounded;
-            Player.IsJumping = motor.IsJumping;
+            Player.IsGrounded = ((Person) Pathways.player).motor.IsGrounded;
+            Player.IsJumping = ((Person) Pathways.player).motor.IsJumping;
         }
 
         public void LateUpdate() {
-            Player.WasGrounded = motor.WasGrounded;
-            Player.WasJumping = motor.WasJumping;
+            Player.WasGrounded = ((Person) Pathways.player).motor.WasGrounded;
+            Player.WasJumping = ((Person) Pathways.player).motor.WasJumping;
+            Cursor.visible = (Pathways.CursorGraphic!=Cursors.None);
         }
 
-        public static void OnCollisionEnter(Collider collider) {
-            feet.OnFootstep(collider.material); }
+        public static void OnCollisionEnter(Collider c) {
+            ((Person) Pathways.player).feet.OnFootstep(c.material); }
 
-        public static void OnCollisionEnter(Collision collision) {
-            feet.OnFootstep(collision.collider.material); }
+        public static void OnCollisionEnter(Collision c) {
+            ((Person) Pathways.player).feet.OnFootstep(c.collider.material); }
 
         public static bool IsCollider(Collider c) {
-            return (c.tag=="Player" || c.tag=="PlayerGraphics"); }
+            return (regex.IsMatch(c.tag)); }
 
         public void ResetPlayerLocalPosition() {
-            motor.LocalPosition = Vector3.zero; }
+            ((Person) Pathways.player).motor.LocalPosition = Vector3.zero; }
 
-        IEnumerator DelayToggle(float t) {
-            wait = true;
-            yield return new WaitForSeconds(t);
-            wait = false;
-        }
-
-        public static void Drop(Command c) {
-            var temp = new List<invt::Item>();
-            if ((new Regex(@"\ball\b")).IsMatch(c.input))
-                Player.Drop();
-            else foreach (var item in holdall)
-                if (item.description.IsMatch(c.input))
-                    temp.Add(item);
-            if (temp.Count==1) Player.Drop(temp[0]);
-            else if (temp.Count!=0) Terminal.Resolve(c,temp);
-        }
-
-        public static void Take(Command c) {
-            if (nearbyItems.Count==0) return;
-            var temp = new List<invt::Item>();
+        public static bool Wear(lit::Command c) {
+            if (Items.Count==0) return false;
+            var temp = new List<inv::IWearable>();
             if ((new Regex(@"\b(all)\b")).IsMatch(c.input))
-                Player.Take();
-            else foreach (var item in nearbyItems)
-                if (item.description.IsMatch(c.input))
-                    temp.Add(item);
+                return Player.Wear();
+            else foreach (var item in Items)
+                if (item is inv::IWearable
+                && item.IsMatch(c.input))
+                    temp.Add((inv::IWearable) item);
             if (temp.Count==1)
-                Player.Take(temp[0]);
-            else if (temp.Count!=0)
-                Terminal.Resolve(c,temp);
+                return Player.Wear(temp[0]);
+            //else if (temp.Count!=0) lit::Terminal.Resolve(c,temp);
+            return false;
         }
 
-        public static void Wear(Command c) {
-            if (holdall.Count==0) {
-                Terminal.Log("You have nothing to wear!",
-                    Formats.Command); return; }
-            var temp = new List<invt::IWearable>();
+        public static bool Stow(lit::Command c) {
+            if (Items.Count==0) return false;
+            var temp = new List<inv::IWearable>();
             if ((new Regex(@"\b(all)\b")).IsMatch(c.input))
-                Player.Wear();
-            else foreach (var item in holdall)
-                if (item is invt::IWearable
+                return Player.Stow();
+            else foreach (var item in Items)
+                if (item is inv::IWearable
                 && item.description.IsMatch(c.input))
-                    temp.Add((invt::IWearable) item);
-            if (temp.Count==1) Player.Wear(temp[0]);
-            else if (temp.Count!=0) Terminal.Resolve(c,temp);
-        }
-
-        public static void Stow(Command c) {
-            if (holdall.Count==0) {
-                Terminal.Log("You have nothing to stow!",
-                    Formats.Command); return; }
-            var temp = new List<invt::IWearable>();
-            if ((new Regex(@"\b(all)\b")).IsMatch(c.input))
-                Player.Stow();
-            else foreach (var item in holdall)
-                if (item is invt::IWearable
-                && item.description.IsMatch(c.input))
-                    temp.Add((invt::IWearable) item);
+                    temp.Add((inv::IWearable) item);
             if (temp.Count==1)
-                Player.Stow(temp[0]);
-            else if (temp.Count!=0)
-                Terminal.Resolve(c,temp);
-            else Terminal.Log("You don't have anything you can stow.",
-                Formats.Command);
+                return Player.Stow(temp[0]);
+            //else if (temp.Count!=0)
+            //    lit::Terminal.Resolve(c,temp);
+            return false;
         }
 
-        public static List<T> DoForNearby<T>(Command c)
-                        where T : intf::Thing {
+        public static List<T> DoForNearby<T>(lit::Command c)
+                        where T : adv::Thing {
             var list = new List<T>();
-            foreach (var elem in NearbyThings)
-                if (elem.description.nouns.IsMatch(c.input))
-                    if (elem is T) list.Add((T) elem);
+            foreach (var thing in NearbyThings)
+                if (thing.IsMatch(c.input))
+                    if (thing is T) list.Add((T) thing);
             return list;
         }
 
-        public static void View(Command c) {
-            foreach (var elem in NearbyThings)
-                if (elem.description.nouns.IsMatch(c.input)) {
-                    Terminal.Log(string.Format(
-                        " > {0}: ", c.input), Formats.Command);
-                    Terminal.Log(elem.description);
-                    return;
-                }
+        public static bool View(lit::Command c) {
+            var list = DoForNearby<Thing>(c);
+            if (list.Count<1)
+                return Player.View();
+            if (list.Count>1)
+                throw new lit::AmbiguityException<Thing>(
+                    "Which did you want to view:",list);
+            return list[0].View(
+                Pathways.player,list[0],EventArgs.Empty,c);
         }
 
-        public static void Read(Command c) {
+        public static bool Read(lit::Command c) {
             var list = DoForNearby<Thing>(c);
             foreach (var elem in list)
-                if (elem is intf::IReadable)
-                    ((intf::IReadable) elem).Read();
+                if (elem is lit::IReadable)
+                    ((lit::IReadable) elem).Read();
+            return true;
         }
 
-        public static void Open(Command c) {
-            foreach (var elem in NearbyThings) {
-                if (elem.description.nouns.IsMatch(c.input)) {
-                    if (elem is IOpenable)
-                        ((IOpenable) elem).Open();
+        public static bool Open(lit::Command c) {
+            foreach (var thing in NearbyThings) {
+                if (thing.IsMatch(c.input)) {
+                    if (thing is IOpenable)
+                        ((IOpenable) thing).Open();
+                }
+            } return true;
+        }
+
+        public static bool Shut(lit::Command c) {
+            foreach (var thing in NearbyThings) {
+                if (thing.IsMatch(c.input)) {
+                    if (thing is IOpenable)
+                        ((IOpenable) thing).Shut();
                 }
             }
+            return true;
         }
 
-        public static void Shut(Command c) {
-            foreach (var elem in NearbyThings) {
-                if (elem.description.nouns.IsMatch(c.input)) {
-                    if (elem is IOpenable)
-                        ((IOpenable) elem).Shut();
+        public static bool Push(lit::Command c) {
+            foreach (var thing in NearbyThings) {
+                if (thing.IsMatch(c.input)) {
+                    if (thing is IOpenable)
+                        ((IOpenable) thing).Shut();
                 }
             }
+            return true;
         }
 
-        public static void Push(Command c) {
-            foreach (var elem in NearbyThings) {
-                if (elem.description.nouns.IsMatch(c.input)) {
-                    if (elem is IOpenable)
-                        ((IOpenable) elem).Shut();
-                }
-            }
-        }
+        public static bool Pull(lit::Command c) { return true; }
 
-        public static void Pull(Command c) { }
-
-        public static void Read(IReadable item) { item.Read(); }
+        public static bool Read(lit::IReadable o) { return o.Read(); }
 
         //@TODO: fix error when !areas
-        public static void Goto(Command c) {
+        public static bool Goto(lit::Command c) {
             foreach (var elem in Pathways.areas)
                 if (c.regex.IsMatch(elem.name))
-                    Player.Goto(elem);
+                    return Player.Goto(elem);
+            return false;
         }
 
-        public static new void Kill() {
-            Player.Kill(Pathways.player.deathMessages.Next()); }
+        public static new bool Kill() {
+            return Player.Kill(Pathways.player.deathMessages.Next()); }
 
-        public static void Kill(string s) {
-            if (Player.IsDead) return;
-            Terminal.Show(new Command());
-            Terminal.Clear();
-            Terminal.Alert(s,Formats.Alert,Formats.Newline);
+        public static bool Kill(string s) {
+            if (Player.IsDead) return false;
+            lit::Terminal.Show(new lit::Command());
+            lit::Terminal.Clear();
+            lit::Terminal.LogImmediate(new lit::Message(s,lit::Styles.Alert));
             Player.IsDead = true;
-            motor.Kill();
+            return ((Person) Pathways.player).motor.Kill();
         }
 
-        public static bool Unlock(Command c) {
-            return Unlock(null); } //@TODO: UGLY FIX THIS NOW
 
-        public static new void Drop() {
-            ((Person) Pathways.player).Drop(); }
-        public static new void Drop(invt::Item item) {
-            ((Person) Pathways.player).Drop(item); }
-        public static new void Take() {
-            ((Person) Pathways.player).Take(nearbyItems); }
-        public static new void Take(invt::Item item) {
-            ((Person) Pathways.player).Take(item); }
-        public static new void Wear() {
-            ((Person) Pathways.player).Wear(); }
-        public static new void Wear(invt::IWearable item) {
-            ((Person) Pathways.player).Wear(item); }
-        public static new void Stow() {
-            ((Person) Pathways.player).Stow(); }
-        public static new void Stow(invt::IWearable item) {
-            ((Person) Pathways.player).Stow(item); }
-        public static new void Goto(maps::Area tgt) {
-            ((Person) Pathways.player).Goto(tgt); }
-        public static new bool Unlock(intf::Door door) {
-            return ((Person) Pathways.player).Unlock(door); }
-        public static new void Open(intf::IOpenable tgt) {
-            ((Person) Pathways.player).Open(tgt); }
-        public static new void Shut(intf::IOpenable tgt) {
-            ((Person) Pathways.player).Shut(tgt); }
-        public static new void Push(intf::IPushable tgt) {
-            ((Person) Pathways.player).Push(tgt); }
-        public static new void Pull(intf::IPullable tgt) {
-            ((Person) Pathways.player).Pull(tgt); }
+        public static new bool Use(lit::Command c) {
+            return ((Person) Pathways.player).Use(c); }
+        public static new bool Unlock(lit::Command c) {
+            return ((Person) Pathways.player).Unlock(c); }
+        public static new bool View() {
+            return ((Person) Pathways.player).View(); }
+        public static new bool Drop(lit::Command c) {
+            return ((Person) Pathways.player).Drop(c); }
+        public static new bool Drop() {
+            return ((Person) Pathways.player).Drop(); }
+        public static new bool Drop(inv::Item item) {
+            return ((Person) Pathways.player).Drop(item); }
+        public static new bool Take(lit::Command c) {
+            return ((Person) Pathways.player).Take(c); }
+        public static new bool Take() {
+            return ((Person) Pathways.player).Take(); }
+        public static new bool Take(inv::Item item) {
+            return ((Person) Pathways.player).Take(item); }
+        public static new bool Wear() {
+            return ((Person) Pathways.player).Wear(); }
+        public static new bool Wear(inv::IWearable item) {
+            return ((Person) Pathways.player).Wear(item); }
+        public static new bool Stow() {
+            return ((Person) Pathways.player).Stow(); }
+        public static new bool Stow(inv::IWearable item) {
+            return ((Person) Pathways.player).Stow(item); }
+        public static new bool Goto(map::Area o) {
+            return ((Person) Pathways.player).Goto(o); }
+        public static new bool Unlock(adv::ILockable o) {
+            return ((Person) Pathways.player).Unlock(o); }
+        public static new bool Lock(adv::ILockable o) {
+            return ((Person) Pathways.player).Lock(o); }
+        public static new bool Open(adv::IOpenable o) {
+            return ((Person) Pathways.player).Open(o); }
+        public static new bool Shut(adv::IOpenable o) {
+            return ((Person) Pathways.player).Shut(o); }
+        public static new bool Push(adv::IPushable o) {
+            return ((Person) Pathways.player).Push(o); }
+        public static new bool Pull(adv::IPullable o) {
+            return ((Person) Pathways.player).Pull(o); }
 
-        public class Holdall : invt::ItemSet {
-            public new List<invt::Item> items;
+        public class Holdall : inv::ItemSet {
+            public new List<inv::Item> Items;
 
             public uint lim { get { return 4; } }
 
-            public new void Add(invt::Item item) {
-                if (item.GetType().IsSubclassOf(typeof(invt::Backpack)))
-                    Player.holdall = (invt::IItemSet) item;
-                else if (items.Count>=lim)
-                    Terminal.Log("Your hands are full.",Formats.Command);
+            public new void Add(inv::Item item) {
+                if (item.GetType().IsSubclassOf(typeof(inv::Backpack)))
+                    Player.Items = (inv::IItemSet) item;
+                else if (Items.Count>=lim)
+                    lit::Terminal.LogCommand(
+                        "Your hands are full.");
                 else base.Add(item);
             }
 
-            public invt::Item GetItem<T>() where T : invt::Item {
-                if (items.Count>1) return items[0];
-                return default(invt::Item);
-            }
-
-            public invt::Item GetItem<T>(string s) where T : invt::Item {
+            public T GetItem<T>(string s) where T : inv::Item {
                 foreach (var elem in GetItems<T>())
-                    if (elem.name==s) return elem;
-                return default(invt::Item);
+                    if (elem.name==s) return (T) elem;
+                return default (T);
             }
-
-            public List<invt::Item> GetItems<T>() where T : invt::Item {
-                return new List<invt::Item>(items); }
         }
     }
 }

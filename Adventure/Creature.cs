@@ -3,6 +3,7 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using lit=PathwaysEngine.Literature;
 using stat=PathwaysEngine.Statistics;
 
 namespace PathwaysEngine.Adventure {
@@ -48,7 +49,7 @@ namespace PathwaysEngine.Adventure {
         |**/
         public virtual void Kill() {
             IsDead = true;
-            Terminal.Log(uuid+" has died.",Formats.Alert);
+            lit::Terminal.LogCommand(Name+" has died.");
         }
     }
 }

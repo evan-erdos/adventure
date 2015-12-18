@@ -1,0 +1,164 @@
+%YAML 1.1
+--- # Defaults
+
+
+Adventure:
+  Thing: !!thing
+    seen: false
+    description:
+      name: thing
+      styles: [ Paragraph ]
+      template: "### {name} ###\n{init}{desc}\n\n{help}"
+      nouns: /thing|object/
+      help: |
+        (You can click on this, or type **examine thing** or **search object**.)
+
+      desc: |
+        This is a completely unremarkable thing. It has no special features or inherent value of its own.
+
+
+  Creature: !!creature
+    description:
+      name: creature
+      template: "*{name}* [{health},{level}]"
+      styles: [ Paragraph, Alert ]
+      desc: |
+        This is a living, breathing creature. 
+
+
+  Person: !!person
+    description:
+      name: person
+      template: "*{first},{last}* [{health},{level}]"
+      styles: [ Paragraph ]
+      nouns: /person|(hu|wo)?man|guy|girl|dude/
+
+      help: |
+        (To talk to this person, type **talk to him** or **warn her about the rabid ostrich**.)
+
+      desc: |
+        This person doesn't seem to have anything to say to you. Dressed in nondescript clothing, you suspect this person does not live a very interesting life.
+
+
+Adventure.Setting:
+  Room: !!room
+    description:
+      name: room
+      template: "## {name} ##\n{{desc}}\n\n{other}"
+      styles: [ Paragraph ]
+      nouns: /room|place/
+      help: |
+        (To get a description of the room, type **examine room** or simply **look**. To get to a particular room, type **goto that room over there**.)
+
+      desc: |
+        You find yourself in a room. In many ways, it's very similar to other rooms that you have been in, except for it's the one you're currently in.
+
+
+  Area: !!area
+    description:
+      name: area
+      styles: [ Refresh ]
+      nouns: /area|level|setting|zone/
+      template: |
+        # {name} #
+        {{desc}}
+
+      help: |
+        (To get a description of the surrounding area, type **examine area**. To travel to a new area, type **goto area** or **travel to someplace**.)
+
+      desc: |
+        You're in the area!
+
+
+  Door: !!door
+    description:
+      name: door
+      template: "**{name}** (*{state}*)"
+      styles: [ Paragraph ]
+      nouns: /door|portal/
+
+      help: |
+        (To use this door, drag the handle with the mouse, or type **open door** or **lock door**.)
+
+      desc: |
+        This is a door. Like other doors, it's probably pretty likely that this one opens and closes. Additionally, just like other doors, it certainly could be locked. 
+
+
+Inventory:
+  Item: !!item
+    description:
+      name: item
+      styles: [ Inline ]
+      nouns: /item|thing/
+      template: |
+        **{name}** : |{mass}kg|
+        
+        {{desc}}
+
+      help: |
+        (Items can be bought, sold, taken, dropped, and support all sorts of other actions as well. Type **take item** or **sell weird widget to the funny-looking barkeep**.)
+
+      desc: |
+        This is an item. You can take it with you wherever you go, or you can drop it.
+
+
+  Lamp: !!lamp
+    description: 
+      name: lamp
+      styles: [ Inline ]
+      nouns: /lamp|lantern|brass|light|bulb/
+      help: |
+        (Hit the "F" key, or type **wield lamp** or **light the lantern** to use this lamp.)
+
+      desc: |
+        This is an ordinary brass lantern. It's dented, scratched, and ready for adventure.
+
+
+  Book: !!book
+    passage : |
+      This is one of the most boring pieces of literature you have ever come across. It is so dry that you cannot bear to look at the pages for another moment before putting it down. You ignore it, and go about your travels with a fresh taste of disgust for people who wear suits.
+
+    description:
+      name: book
+      styles: [ Paragraph ]
+      nouns: /book|paper|page|reading|writing/
+      template: |
+        **{name}** : {seen}
+
+      help: |
+        (books and other sorts of writing can be read. Type **read book** to read this book.)
+
+      desc: |
+        This is a completely nondescript book. It reeks of boredom.
+
+
+  Key: !!key
+    key type: Default
+    lock number: 0
+
+    description: 
+      name: key
+      template: "*{name}* ({type})"
+      styles: [ Newline ]
+      nouns: /key|lock/
+
+      help: |
+        (To use this key, simply walk up to a door and try to open it. If you have the key, it will automatically find it.)
+
+      desc: |
+        This is a pretty bland key, and you're not sure where you found it. It could unlock almost anything, and probably doesn't unlock anything nearby.
+
+
+Puzzle:
+  Lever: !!lever
+    description:
+      nouns: /lever|crank/
+      help: |  
+        (either click on the lever to pull it, or type **pull lever**.)
+
+      desc: |
+        This is a rather unremarkable lever. It might cause something interesting to happen if you were to pull it.
+
+
+#template: "The **{name}** contains: {list}\n"
+

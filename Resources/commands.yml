@@ -1,40 +1,40 @@
 %YAML 1.1
 --- # Commands
 
-sudo:
+sudo: !!command
   parse: Sudo
   regex: /sudo/
 
-quit:
+quit: !!command
   parse: Quit
   regex: /quit|restart/
 
-redo:
+redo: !!command
   parse: Redo
   regex: /again|redo/
 
-save:
+save: !!command
   parse: Save
   regex: /save/
 
-load:
+load: !!command
   parse: Load
   regex: /load|restore/
 
-help:
+help: !!command
   parse: Help
   regex: /help|info|about|idk/
 
 # Player Commands
-view:
+view: !!command
   parse: View
-  regex: /x|examine|look|search/
+  regex: /x|examine|look(\s+at)?|search|view/
 
-look:
+look: !!command
   parse: Look
   regex: /diagnos(e|tic)|status/
 
-goto:
+goto: !!command
   parse: Goto
   regex: /go(to)?/
 
@@ -47,43 +47,47 @@ goto:
 #  regex: /go|move/
 
 # Inventory Commands
-invt:
+invt: !!command
   parse: Invt
   regex: /i(nvt|nventory|tems)/
 
-take:
+take: !!command
   parse: Take
   regex: /take|get|pick\s+up|grab/
 
-drop:
+drop: !!command
   parse: Drop
   regex: /drop|put(\s+down)?|throw/
 
-wear:
+use: !!command
+  parse: Use
+  regex: /use|enable|make/
+
+wear: !!command
   parse: Wear
   regex: /equip|don|wear|put\s+(on)?|sport/
 
-stow:
+stow: !!command
   parse: Stow
   regex: /stow|put(\s+away)|remove|un(equip|load)/
 
-show: 
+show: !!command
   parse: Show
   regex: /show\s+(terminal|window|ui)/
 
-hide: 
+hide: !!command
   parse: Hide
   regex: /hide\s+(terminal|window|ui)/
 
-open:
+open: !!command
   parse: Open
   regex: /open|unlock|enter|(go\s+(in|through))/
 
-shut: 
+shut: !!command
   parse: Shut
   regex: /close|stop|lock|shut/
 
-read:
+read: !!command
   parse: Read
   regex: /read|watch|glance/
 

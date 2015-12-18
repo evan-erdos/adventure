@@ -4,7 +4,8 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
-using intf=PathwaysEngine.Adventure;
+using adv=PathwaysEngine.Adventure;
+using lit=PathwaysEngine.Literature;
 
 namespace PathwaysEngine.Inventory {
 
@@ -16,15 +17,10 @@ namespace PathwaysEngine.Inventory {
     |* entities that the `Player` can't take with them.
     |**/
     [RequireComponent(typeof(Rigidbody))]
-    [RequireComponent(typeof(AudioSource))]
-    [RequireComponent(typeof(SphereCollider))]
-    public partial class Item : intf::Thing, IGainful {
-        float dist = 3f;
+    public partial class Item : adv::Thing, IGainful {
+        float volume = 0.9f, dist = 4f;
         public AudioClip sound;
-        public Texture2D icon;
-        AudioSource _audio;
-        Rigidbody _rigidbody;
-        SphereCollider _collider;
+        public Sprite Icon;
 
 
         /** `Held` : **`bool`**
@@ -33,16 +29,17 @@ namespace PathwaysEngine.Inventory {
         |* `Player` is holding it, but does need to know, and
         |* will disable its components on this basis.
         |**/
-        public bool Held {
+        public virtual bool Held {
             get { return held; }
             set { held = value;
-                _collider.enabled = !held;
-                _rigidbody.isKinematic = held;
-                _rigidbody.useGravity = !held;
-                _audio.enabled = !held;
+                foreach (Transform child in transform)
+                    child.gameObject.SetActive(!held);
+                rigidbody.isKinematic = held;
+                rigidbody.useGravity = !held;
             }
-        } bool held = false;
+        } protected bool held = false;
 
+        //public uint Uses {get;set;}
 
         /** `Cost` : **`int`**
         |*
@@ -53,93 +50,93 @@ namespace PathwaysEngine.Inventory {
 
         /** `Mass` : **`real`**
         |*
-        |* This basically just extends the `mass` field from
-        |* `UnityEngine.Rigidbody`.
+        |* This simply extends `Rigidbody.mass`.
         |**/
         public float Mass {
-            get { return _rigidbody.mass; }
-            set { _rigidbody.mass = value; } }
+            get { return rigidbody.mass; }
+            set { rigidbody.mass = value; } }
 
 
-        /** `Take()` : **`function`**
+        public virtual bool Use() { return Drop(); }
+
+
+        /** `Take()` : **`bool`**
         |*
-        |* Local function for the global command for `Take`-ing
-        |* `Items`. Currently, this does a bunch of nonsense
-        |* specific to `Unity3D`, such as reparenting this
-        |* `Item` to the `Player`.
+        |* Local callback for the global command, `Take()`.
+        |* Currently, this does a bunch of nonsense specific
+        |* to `Unity3D`, such as reparenting to the `Player`.
         |**/
-        public virtual void Take() {
-            if (gameObject.activeInHierarchy && _audio.enabled)
-                _audio.PlayOneShot(sound);
-            Terminal.Log(string.Format("You take the {0}.", name),
-                Formats.Command, Formats.Newline);
+        public virtual bool Take() {
+            lit::Terminal.LogCommand(string.Format(
+                "You take the {0}.", name));
             transform.localPosition = Vector3.zero;
             transform.localRotation = Quaternion.identity;
             Held = true;
             gameObject.SetActive(false);
+            return true;
         }
 
-
-        /** `Drop()` : **`function`**
+        /** `Drop()` : **`bool`**
         |*
         |* Inverse of `Take()`, which drops the object, and
         |* reparents it to `root`, or the global transform in
         |* Unity. Also prints a `Terminal` message.
         |**/
-        public virtual void Drop() {
+        public virtual bool Drop() {
             gameObject.SetActive(true);
-            Terminal.Log(string.Format("You drop the {0}.", name),
-                Formats.Command, Formats.Newline);
+            if (sound)
+                AudioSource.PlayClipAtPoint(
+                    sound,transform.position,volume);
+            lit::Terminal.LogCommand(string.Format(
+                "You drop the {0}.", name));
             Held = false;
+            //transform.localPosition = new Vector3(0f,1f,0.5f);
             transform.parent = null;
             transform.position = Player.Position;
-            if (_audio.enabled) _audio.PlayOneShot(sound);
-            _rigidbody.AddForce(
+            rigidbody.AddForce(
                 Quaternion.identity.eulerAngles*4,
                 ForceMode.VelocityChange);
+            return true;
         }
 
-        public virtual void Buy() { }
+        public virtual bool Buy() { return false; }
 
-        public virtual void Sell() { }
+        public virtual bool Sell() { return false; }
 
-        public override void Awake() {
-            _collider = GetComponent<SphereCollider>();
-            _rigidbody = GetComponent<Rigidbody>();
-            _audio = GetComponent<AudioSource>();
-            _collider.isTrigger = true;
-            base.Awake();
+        public override void Awake() { base.Awake();
             gameObject.layer = LayerMask.NameToLayer("Item");
+            var wasKinematic = rigidbody.isKinematic;
             Held = false;
+            if (wasKinematic)
+                rigidbody.isKinematic = true;
         }
 
-        IEnumerator OnMouseOver() {
-            if (Vector3.Distance(transform.position,Player.Position)>dist) {
-                Pathways.CursorGraphic = Cursors.None; yield break; }
+        public override IEnumerator OnMouseOver() {
+            while ((transform.position-Player.Position).sqrMagnitude<dist) {
+            //if (Vector3.Distance(transform.position,Player.Position)>dist) {
+                //Pathways.CursorGraphic = Cursors.None;
+                //yield break;
+            //}
             Pathways.CursorGraphic = Cursors.Hand;
             if (Input.GetButton("Fire1")) {
                 Pathways.CursorGraphic = Cursors.Grab;
                 yield return new WaitForSeconds(0.1f);
                 OnMouseExit();
                 Player.Take(this);
-            }
+            } else yield return new WaitForSeconds(0.05f);
+
+            } OnMouseExit();
         }
 
-        void OnMouseExit() {
-            Pathways.CursorGraphic = Cursors.None;
-            StopAllCoroutines();
-        }
-
+#if HACK
 
         public override bool Equals(object obj) { return (base.Equals(obj)); }
 
         public override int GetHashCode() { return (base.GetHashCode()); }
-
-        public override string ToString() { return uuid; }
-
         public static bool operator ==(Item a, Item b) {
-            return (!(a.GetType()!=b.GetType() || a.uuid!=b.uuid)); }
+            return ((a==null && b==null) || !(a.GetType()!=b.GetType() || a.Name!=b.Name)); }
 
         public static bool operator !=(Item a, Item b) { return (!(a==b)); }
+#endif
     }
 }

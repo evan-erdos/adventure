@@ -32,15 +32,15 @@ namespace PathwaysEngine.Inventory {
         public object SyncRoot {
             get { return default (object); } }
 
-        public ItemSet items {
+        public IItemSet items {
             get { return _items; }
-        } ItemSet _items;
+        } IItemSet _items;
 
         public ItemCollection() {
-            this._items = new ItemSet(); }
+            this._items = new ItemList(); }
 
         public ItemCollection(List<Item> items) {
-            this._items = new ItemSet(items); }
+            this._items = new ItemList(items); }
 
         IEnumerator IEnumerable.GetEnumerator() {
             return (IEnumerator) GetEnumerator(); }
@@ -49,7 +49,7 @@ namespace PathwaysEngine.Inventory {
 
         public void Clear() {
             foreach (var item in items) item.Drop();
-            _items = new ItemSet();
+            _items = new ItemList();
         }
 
         public IEnumerator<Item> GetEnumerator() {
@@ -64,10 +64,10 @@ namespace PathwaysEngine.Inventory {
         public bool Remove(Item item) {
             return items.Remove(item); }
 
-        public Item GetItemOfType<T>() where T : Item {
-            return items.GetItemOfType<T>(); }
+        public T GetItem<T>() where T : Item {
+            return items.GetItem<T>(); }
 
-        public List<Item> GetItemsOfType<T>() where T : Item {
-            return items.GetItemsOfType<T>(); }
+        public List<T> GetItems<T>() where T : Item {
+            return items.GetItems<T>(); }
     }
 }

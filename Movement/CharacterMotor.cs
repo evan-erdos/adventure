@@ -147,7 +147,7 @@ namespace PathwaysEngine.Movement {
             }
         }
 
-        public void Kill() {
+        public bool Kill() {
             StartCoroutine(Killing());
             IsDead = true;
             var rb = GetComponent<Rigidbody>();
@@ -158,7 +158,7 @@ namespace PathwaysEngine.Movement {
             GetComponent<Look>().enabled = false;
             cr.enabled = false;
             this.enabled = false;
-
+            return true;
         }
 
         public void OnJump() { }

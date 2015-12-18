@@ -2,7 +2,7 @@
 
 using UnityEngine;
 using System.Collections.Generic;
-using intf=PathwaysEngine.Adventure;
+using adv=PathwaysEngine.Adventure;
 
 namespace PathwaysEngine.Puzzle {
 
@@ -12,7 +12,7 @@ namespace PathwaysEngine.Puzzle {
     |* Represents an instance of a puzzle piece, which must be
     |* `Solve`d to finish a puzzle.
     |**/
-    partial class Piece : intf::Thing, IPiece {
+    partial class Piece : adv::Thing, IPiece {
 
 
         /** `SolveEvent` : **`event`**
@@ -20,14 +20,15 @@ namespace PathwaysEngine.Puzzle {
         |* This property wraps the inherited `solveEvent` event
         |*
         |**/
-        public virtual event OnSolved SolveEvent {
-            add {
-                lock(solveEvent)
-                    solveEvent += value; }
+        public virtual event OnSolve SolveEvent {
+            add { solveEvent += value; }
             remove { solveEvent -= value; }
-        } event OnSolved solveEvent;
+        } event OnSolve solveEvent;
 
-        public virtual bool IsSolved { get; set; }
+        public virtual bool IsSolved {
+            get { return isSolved; }
+            set { isSolved = value; }
+        } protected bool isSolved;
 
         public virtual bool Solve() {
             return OnSolve(this,System.EventArgs.Empty,IsSolved);

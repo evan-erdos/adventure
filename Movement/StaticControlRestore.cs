@@ -9,7 +9,9 @@ namespace PathwaysEngine.Movement {
         public void Start () {
             Camera newCamera = gameObject.GetComponentInChildren<Camera>();
             if (newCamera) newCamera.backgroundColor = RenderSettings.fogColor;
-            util::CameraFade.StartAlphaFade(RenderSettings.fogColor,false,2f,2f, ()=>{Application.LoadLevel(1);});
+            util::CameraFade.StartAlphaFade(
+            	RenderSettings.fogColor,false,2f,2f);
+            //, //()=>{Application.LoadLevel(1);});
         }
     }
 }

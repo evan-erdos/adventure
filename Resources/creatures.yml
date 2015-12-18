@@ -1,16 +1,15 @@
 %YAML 1.1
-%TAG !path! _PathwaysEngine.
-%TAG !intf! _PathwaysEngine.Adventure.
 ---  #creatures
 
-Headless_0: !intf!Creature+yml
+Headless_0: !!creature
   description:
-    formats: [ Alert ]
+    styles: [ Alert ]
     desc: |
       It's gross. It looks like a frog, but with human legs, and a massive tongue in the place of a head.
       It also looks hungry.
 
-Player: !path!Player+yml
+
+Player: !!player
   deathMessages:
   - "Now what did you go and do that for?"
   - "Wait! Don't jump! Nevermind."
@@ -26,6 +25,7 @@ Player: !path!Player+yml
   - "Is jumping off buildings getting any more interesting for you?"
 
   description:
+    nouns: /me|self|player|(l)?user/
     desc: |
       You look a bit tired, and your clothes are dirty.
 

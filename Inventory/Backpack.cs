@@ -3,6 +3,7 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using lit=PathwaysEngine.Literature;
 
 namespace PathwaysEngine.Inventory {
 
@@ -31,18 +32,24 @@ namespace PathwaysEngine.Inventory {
         |**/
         ~Backpack() { DropAll(); }
 
-        public override void Take() { base.Take(); Player.Wear(this); }
+        public override bool Take() { base.Take();
+            return Player.Wear(this); }
 
-        public override void Drop() { base.Drop(); Player.Stow(this); }
+        public override bool Drop() { base.Drop();
+            return Player.Stow(this); }
 
-        public void Wear() {
+        public bool Wear() {
             gameObject.SetActive(true);
-            Terminal.Log("You put on the backpack.\n",Formats.Command);
+            lit::Terminal.LogCommand(
+                "You put on the backpack.\n");
+            return false;
         }
 
-        public void Stow() {
-            Terminal.Log("You take off the backpack.\n",Formats.Command);
+        public bool Stow() {
+            lit::Terminal.LogCommand(
+                "You take off the backpack.\n");
             gameObject.SetActive(false);
+            return false;
         }
     }
 }

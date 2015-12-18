@@ -4,11 +4,15 @@ using System.IO; // Well, here we are! The other main file!
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using Buffer=System.Text.StringBuilder;
+using DateTime=System.DateTime;
+using Type=System.Type;
 using YamlDotNet.Serialization;
 using UnityEngine;
-using invt=PathwaysEngine.Inventory;
-using intf=PathwaysEngine.Adventure;
-using maps=PathwaysEngine.Adventure.Setting;
+using adv=PathwaysEngine.Adventure;
+using map=PathwaysEngine.Adventure.Setting;
+using inv=PathwaysEngine.Inventory;
+using lit=PathwaysEngine.Literature;
+using puzl=PathwaysEngine.Puzzle;
 using stat=PathwaysEngine.Statistics;
 using util=PathwaysEngine.Utilities;
 
@@ -23,40 +27,47 @@ using util=PathwaysEngine.Utilities;
 namespace PathwaysEngine {
 
 
+    /** `YAML`
+    |*
+    |* These classes act as adapters for the `MonoBehaviour`-
+    |* derived classes, which `YamlDotNet` cannot instantiate.
+    |* Instances of these classes are instantiated instead, and
+    |* then populate the main classes on `Awake()`.
+    |**/
     public static partial class Pathways {
 
+        public static Dictionary<string,object> data =
+            new Dictionary<string,object>();
 
-        /** `GetYAML<T,U>()` : **`function`**
+        public static Dictionary<Type,object> defaults =
+            new Dictionary<Type,object>();
+
+        public static Dictionary<string,lit::Command> commands =
+        new Dictionary<string,lit::Command>();
+
+        public static Dictionary<string,lit::Message> messages =
+        new Dictionary<string,lit::Message>();
+
+
+        /** `Deserialize<T,U>()` : **`function`**
         |*
-        |* GetYAML loads data, serialized from `yml`, into an
-        |* instance of `Thing`. Should probably make use of
+        |* Deserialize loads data, serialized from `yml`, into
+        |* an instance of `Thing`. Should probably make use of
         |* type contravariance, but hey, what can you do?
         |*
-        |* - `T` : **`<T>`**
+        |* - `<T>` : **`Type`**
         |*     real type, usually derives from `Monobehaviour`
         |*
-        |* - `U` : **`<T>`**
+        |* - `<U>` : **`Type`**
         |*     nested type, usually named `yml`
         |*
         |* - `o` : **`<T>`**
-        |*     object to look for
+        |*     object of type `T` to look for
         |**/
-        public static void GetYAML<T,U>(T o)
+        public static void Deserialize<T,U>(T o)
                         where T : IStorable
                         where U : ISerializable<T> {
-            Pathways.yml.GetYAML<U>(o.uuid).Deserialize(o); }
-
-
-        /** `GetYamlFile<T>()` : **`<T>`**
-        |*
-        |* Representative method for the nested method of the
-        |* same name.
-        |*
-        |* - `s` : **`string`**
-        |*     filename to look for
-        |**/
-        public static T GetYamlFile<T>(string s) {
-            return yml.GetYamlFile<T>(s); }
+            Pathways.yml.Deserialize<U>(o.Name).Deserialize(o); }
 
 
         /** `yml` : **`class`**
@@ -65,243 +76,204 @@ namespace PathwaysEngine {
         |* deserializing data from `*.yml` files.
         |**/
         public static class yml {
-            public static readonly string tag = "tag:yaml.org,2002:";
-            public static Dictionary<string,object> data;
-            public static Dictionary<string,intf::Thing.yml> things;
-            static Deserializer deserializer;
-            public static string ext = "*.txt", yaml_ext = ".yml";
-            public static string dir =
-#if UNITY_EDITOR
-                Directory.GetCurrentDirectory()
-                    +"/Assets/PathwaysEngine/Resources/";
-#else
-                Application.dataPath+"/Resources/";
-#endif
+
+            static Deserializer deserializer =
+                new Deserializer();
 
 
             /** `yml` : **`constructor`**
             |*
             |* Instantiates a `Deserializer`, registers tags, &
-            |* reads data from the specified files.
+            |* reads data from the specified files. While the
+            |* usage of `static`s *and*  `constructor`s aren't
+            |* kosher in `Unity`, but in this case, it's ok, as
+            |* this has nothing to do with the `MonoBehaviour`
+            |* loading / instantiation process.
             |**/
             static yml() {
-                data = new Dictionary<string,object>();
-                deserializer = new Deserializer();
-                deserializer.RegisterTagMapping(
-                    tag+"regex", typeof(Regex));
-                deserializer.RegisterTagMapping(
-                    tag+"thing", typeof(intf::Thing.yml));
-                deserializer.RegisterTagMapping(
-                    tag+"door", typeof(intf::Door.yml));
+                string  pre = "tag:yaml.org,2002:",
+                        ext = ".yml",
+                        dir =
+#if UNITY_EDITOR
+                        Directory.GetCurrentDirectory()
+                            +"/Assets/PathwaysEngine/Resources/";
+#else
+                        Application.dataPath+"/Resources/";
+#endif
+
+                // mapping of all the tags to their types
+                var tags = new Dictionary<string,Type> {
+                    { "regex", typeof(Regex) },
+                    { "date", typeof(DateTime) },
+
+                    // Adventure Tags
+                    { "thing", typeof(adv::Thing.yml) },
+                    { "creature", typeof(adv::Creature.yml) },
+                    { "person", typeof(adv::Person.yml) },
+                    { "player", typeof(Player.yml) },
+
+                    // Setting Tags
+                    { "area", typeof(map::Area.yml) },
+                    { "room", typeof(map::Room.yml) },
+                    { "door", typeof(map::Door.yml) },
+
+                    // Literature Tags
+                    { "message", typeof(lit::Message) },
+                    { "encounter", typeof(lit::Encounter.yml) },
+
+                    // Inventory Tags
+                    { "item", typeof(inv::Item.yml) },
+                    { "lamp", typeof(inv::Lamp.yml) },
+                    { "items", typeof(inv::ItemSet) },
+                    { "book", typeof(inv::Book.yml) },
+                    { "bag", typeof(inv::Bag.yml) },
+                    { "backpack", typeof(inv::Backpack.yml) },
+                    { "key", typeof(inv::Key.yml) },
+                    { "crystal", typeof(inv::Crystal.yml) },
+                    { "weapon", typeof(inv::Weapon.yml) },
+                    { "gun", typeof(inv::Gun.yml) },
+
+                    // Puzzle Tags
+                    { "piece", typeof(puzl::Piece.yml) },
+                    { "button", typeof(puzl::Button.yml) },
+                    { "lever", typeof(puzl::Lever.yml) }};
+
+                foreach (var tag in tags)
+                    deserializer.RegisterTagMapping(
+                        pre+tag.Key, tag.Value);
+
                 deserializer.RegisterTypeConverter(
                     new RegexYamlConverter());
-                foreach (var elem in Directory.GetFiles(dir,ext)) {
-                    if (!File.Exists(elem))
-                        throw new System.Exception("YAML: 404");
 
-#if DUMB
-                    var filename = Path.GetFileName(elem);
-                    if (filename=="things.txt") {
-                        var buffer0 = new Buffer();
-                        foreach (var line0 in File.ReadAllLines(elem))
-                            buffer0.AppendLine(line0);
-                        foreach (var asdf in deserializer
-                                .Deserialize<Dictionary<string,intf::Thing.yml>>(
-                                    new StringReader(buffer0.ToString())))
+                var files = new[] { // special files
+                    "commands", // list of commands
+                    "defaults", // base descriptions & values
+                    "pathways", // system-wide messages
+                    "settings"}; // project settings
 
-                            things[asdf.Key] = (intf::Thing.yml) asdf.Value;
+                foreach (var file in files) {
+                    var sr = GetReader(Path.Combine(dir,file)+ext);
+                    switch (file) {
+                        case "commands" :
+                            foreach (var kvp in deserializer.Deserialize<Dictionary<string,lit::Command_yml>>(sr))
+                                Pathways.commands[kvp.Key] = kvp.Value.Deserialize(kvp.Key);
+                            break;
+                        case "defaults" :
+                            foreach (var elem in deserializer.Deserialize<Dictionary<string,Dictionary<string,object>>>(sr))
+                                foreach (var kvp in elem.Value)
+                                    Pathways.defaults[GetTypeYAML(elem.Key,kvp.Key)] = kvp.Value;
+                            break;
+                        case "pathways" :
+                            foreach (var kvp in deserializer.Deserialize<Dictionary<string,lit::Message>>(sr))
+                                Pathways.messages[kvp.Key] = kvp.Value;
+                            break;
                     }
-#endif
-                    var buffer = new Buffer();
-                    foreach (var line in File.ReadAllLines(elem))
-                        buffer.AppendLine(line);
-                    foreach (var kvp in deserializer
-                            .Deserialize<Dictionary<string,object>>(
-                                new StringReader(buffer.ToString())))
-                        data[kvp.Key] = kvp.Value;
+                }
+
+                foreach (var elem in Directory.GetFiles(dir,'*'+ext)) {
+                    foreach (var file in files)
+                        if (elem.Contains(file)) continue;
+                    Deserialize(elem);
                 }
             }
 
 
-            /** `GetYamlFile<T>(string)` : **`<T>`**
+            /** `GetReader()` : **`StringReader`**
             |*
-            |* Returns the entire deserialized content of a
-            |* file, which is usually a `Dictionary` or `List`.
+            |* Gets the `*.yml` file in the main directory only
+            |* if it exists and has the proper extension.
             |*
-            |* - `file` : **`string`**
-            |*     Filename to look for
-            |* - `throws` : **`IOException`**
-            |*     404 on filename
+            |* - `throw` : **`Exception`**
+            |*     if the file does not exist
             |**/
-            public static T GetYamlFile<T>(string s) {
+            static StringReader GetReader(string file) {
+                if (!File.Exists(file))
+                    throw new System.Exception("YAML 404: "+file);
                 var buffer = new Buffer();
-                if (!File.Exists(dir+s+yaml_ext))
-                    throw new System.Exception("YAML: 404");
-
-                foreach (var line in File.ReadAllLines(dir+s+yaml_ext))
+                foreach (var line in File.ReadAllLines(file))
                     buffer.AppendLine(line);
-                return deserializer.Deserialize<T>(
-                    new StringReader(buffer.ToString()));
+                return new StringReader(buffer.ToString());
             }
 
 
-            /** `GetYAML<T>()` : **`<T>`**
+            /** `GetTypeYAML()` : **`Type`**
+            |*
+            |* Tries to find a `Type` in `PathwaysEngine` which
+            |* is a match for the supplied `string`.
+            |*
+            |* - `ns` : **`string`**
+            |*     `string`ified namespace to look in
+            |*
+            |* - `s` : **`string`**
+            |*     `string`ified name of a `Type` to look for
+            |**/
+            public static Type GetTypeYAML(string ns, string s) {
+                //Debug.Log("type: "+type+"  string: "+ns+s+"+yml");
+                return Type.GetType("PathwaysEngine."+ns+"."+s+"+yml"); }
+
+
+            /** `Deserialize()` : **`function`**
+            |*
+            |* Called without type arguments, this will simply
+            |* deserialize into the `data` object. This is used
+            |* only by the `static` constructor to get data out
+            |* of the rest of the files (skipping the few files
+            |* which are specified above).
+            |*
+            |* - `file` : **`string`**
+            |*     filename to look for
+            |*
+            |* - `throw` : **`IOException`**
+            |**/
+            static void Deserialize(string file) {
+                foreach (var kvp in deserializer.Deserialize<Dictionary<string,object>>(GetReader(file))) data[kvp.Key] = kvp.Value; }
+
+
+            /** `Deserialize<T>()` : **`<T>`**
             |*
             |* Returns an object of type `<T>` from the
             |* dictionary if it exists.
             |*
+            |* - `<T>` : **`Type`**
+            |*      type to look for, and then to cast to, when
+            |*      deserializing the data from the file.
+            |*
             |* - `s` : **`string`**
-            |*     Key to look for.
-            |* - `throws` : **`Exception`**
-            |*     There is no key at `data[s]`.
+            |*     key to look for
+            |*
+            |* - `throw` : **`Exception`**
+            |*     There is no key at `data[s]`, or some other
+            |*     problem occurs when attempting to cast the
+            |*     object to `<T>`.
             |**/
-            public static T GetYAML<T>(string s) {
-                object temp; // fix instance issues
-                if (!data.TryGetValue(s,out temp))
-                    throw new System.Exception("404 : "+s);
-                if (!(temp is T))
+            public static T Deserialize<T>(string s) {
+                object o;
+                if (!data.TryGetValue(s,out o))
+                    o = DeserializeDefault<T>();
+                if (!(o is T))
                     throw new System.Exception(string.Format(
                         "Bad cast: {0} as {1}",typeof(T),s));
-                return ((T) temp);
+                return ((T) o);
             }
-        }
-    }
 
-
-
-    public class Command_yml : IStorable {
-        public string uuid { get; set; }
-        public Regex regex { get; set; }
-        public ParserEvents parse { get; set; }
-
-
-        /** `ParserEvents` : **`enum`**
-        |*
-        |* This local `enum` defines the `Parse` delegates that
-        |* the `Parser` needs to call for each verb and command
-        |* entered. This is sloppy and should be removed/fixed.
-        |*
-        |* - `Sudo` : **`ParserEvents`**
-        |*     `Pathways.Sudo` deals with overriding commands
-        |*
-        |* - `Quit` : **`ParserEvents`**
-        |*     `Pathways.Quit` begins the quitting routine
-        |*
-        |* - `Redo` : **`ParserEvents`**
-        |*     `Pathways.Redo` repeats the last command
-        |*
-        |* - `Save` : **`ParserEvents`**
-        |*     `Pathways.Save` saves the game
-        |*
-        |* - `Load` : **`ParserEvents`**
-        |*     `Pathways.Load` loads from a `*.yml` file
-        |*
-        |* - `Help` : **`ParserEvents`**
-        |*     `Pathways.Help` displays a simple help text
-        |*
-        |* - `View` : **`ParserEvents`**
-        |*     `Player.View` examines some object
-        |*
-        |* - `Look` : **`ParserEvents`**
-        |*     `Player.Look` looks around a room / examines
-        |*
-        |* - `Goto` : **`ParserEvents`**
-        |*     `Player.Goto` travels the player to a new place
-        |*
-        |* - `Move` : **`ParserEvents`**
-        |*     `Player.Goto` can be called to move objects
-        |*
-        |* - `Invt` : **`ParserEvents`**
-        |*     `Player.Invt` opens the inventory menu
-        |*
-        |* - `Take` : **`ParserEvents`**
-        |*     `Player.Take` takes an item
-        |*
-        |* - `Drop` : **`ParserEvents`**
-        |*     `Player.Drop` drops an item
-        |*
-        |* - `Wear` : **`ParserEvents`**
-        |*     `Player.Wear` has the player put something on
-        |*
-        |* - `Stow` : **`ParserEvents`**
-        |*     `Player.Stow` has the player take something off
-        |*
-        |* - `Read` : **`ParserEvents`**
-        |*     `Player.Read` reads an `IReadable` thing
-        |*
-        |* - `Open` : **`ParserEvents`**
-        |*     `Player.Open` opens something
-        |*
-        |* - `Shut` : **`ParserEvents`**
-        |*     `Player.Shut` closes something
-        |*
-        |* - `Push` : **`ParserEvents`**
-        |*     `Player.Push` pushes something
-        |*
-        |* - `Pull` : **`ParserEvents`**
-        |*     `Player.Pull` pulls something
-        |**/
-        public enum ParserEvents {
-            Sudo, Quit, Redo, Save, Load, Help,
-            View, Look, Goto, Move, Invt, Take,
-            Drop, Wear, Stow, Read, Open, Shut,
-            Push, Pull, Show, Hide }
-
-        public Command Deserialize(string s) {
-            this.uuid = s;
-            return new Command(
-                this.uuid,
-                this.regex,
-                SelectParse(this.parse));
-        }
-
-        public void Deserialize(Command o) {
-            o = new Command(
-                this.uuid,
-                this.regex,
-                SelectParse(this.parse));
-        }
-
-        intf::Parse SelectParse(ParserEvents e) {
-            switch (e) {
-                case ParserEvents.Sudo : return Pathways.Sudo;
-                case ParserEvents.Quit : return Pathways.Quit;
-                case ParserEvents.Redo : return Pathways.Redo;
-                case ParserEvents.Save : return Pathways.Save;
-                case ParserEvents.Load : return Pathways.Load;
-                case ParserEvents.Help : return Pathways.Help;
-                case ParserEvents.View : return Player.View;
-                //case ParserEvents.Look : return Player.Look;
-                case ParserEvents.Goto : return Player.Goto;
-                //case ParserEvents.Move : return Player.Move;
-                //case ParserEvents.Invt : return Player.Invt;
-                case ParserEvents.Take : return Player.Take;
-                case ParserEvents.Drop : return Player.Drop;
-                case ParserEvents.Wear : return Player.Wear;
-                case ParserEvents.Stow : return Player.Stow;
-                case ParserEvents.Read : return Player.Read;
-                case ParserEvents.Open : return Player.Open;
-                case ParserEvents.Shut : return Player.Shut;
-                case ParserEvents.Push : return Player.Push;
-                case ParserEvents.Pull : return Player.Pull;
-                case ParserEvents.Show : return Terminal.Show;
-                case ParserEvents.Hide : return Terminal.Hide;
-                default : return null;
+            /** `DeserializeDefault<T>()` : **`<T>`**
+            |*
+            |* Returns the default object of type `<T>`.
+            |**/
+            public static T DeserializeDefault<T>() {
+                object o;
+                if (!defaults.TryGetValue(typeof(T),out o))
+                    throw new System.Exception(string.Format(
+                        "Type {0} not found in defaults",typeof (T)));
+                return ((T) o);
             }
-        }
-    }
 
-    public partial class Player : intf::Person {
-        public override void GetYAML() {
-            Pathways.GetYAML<Player,Player.yml>(this); }
-
-        public new class yml : intf::Person.yml, ISerializable<Player> {
-            public List<string> deathMessages { get; set; }
-
-            public virtual void Deserialize(Player o) {
-                Deserialize((intf::Person) o);
-                o.deathMessages = new RandList<string>();
-                o.deathMessages.AddRange(this.deathMessages);
+            public static object DeserializeDefault(Type type) {
+                object o;
+                if (!defaults.TryGetValue(type,out o))
+                    throw new System.Exception(
+                        type+" not found.");
+                return o;
             }
         }
     }
@@ -315,15 +287,12 @@ namespace PathwaysEngine {
     public interface IStorable {
 
 
-        /** `uuid` : **`string`**
+        /** `Name` : **`string`**
         |*
-        |* Unique ID for any serialized value in the `yml`
-        |* dictionary.
-        |*
-        |* @TODO: Make them only need to be unique for the
-        |* local file, and only for particular types.
+        |* This should be an unique identifier that the `*.yml`
+        |* `Deserializer` should look for in files.
         |**/
-        string uuid { get; }
+        string Name { get; }
     }
 
 
@@ -338,72 +307,82 @@ namespace PathwaysEngine {
     |*    the type of object to deserialize to, usually just
     |*    the class that this is nested in.
     |**/
-    public interface ISerializable<T> where T : IStorable {
+    public interface ISerializable<T>
+                    where T : IStorable {
+
         void Deserialize(T o);
     }
 
 
+    public partial class Player {
+        public override void Deserialize() {
+            Pathways.Deserialize<Player,Player.yml>(this); }
+
+        public new class yml : adv::Person.yml, ISerializable<Player> {
+            public List<string> deathMessages {get;set;}
+
+            public void Deserialize(Player o) {
+                Deserialize((adv::Person) o);
+                o.deathMessages = new RandList<string>();
+                o.deathMessages.AddRange(this.deathMessages);
+            }
+        }
+    }
+
     namespace Adventure {
 
-        public partial class Thing : MonoBehaviour, IDescribable {
+        public partial class Thing {
 
-            public virtual void GetYAML() {
-                Pathways.GetYAML<Thing,Thing.yml>(this); }
+            public virtual void Deserialize() {
+                Pathways.Deserialize<Thing,Thing.yml>(this); }
 
             public class yml : ISerializable<Thing> {
-                public string uuid { get; set; }
-                public Description description { get; set; }
+                public bool seen {get;set;}
+                public string Name {get;set;}
+                public lit::Description description {get;set;}
 
-                public virtual void Deserialize(Thing o) {
-                    o.description = this.description;
+                public void ApplyDefaults<T>(Thing o) {
+                    var d = Pathways.yml.DeserializeDefault<Thing.yml>();
+                    o.Seen = d.seen;
+                    o.description = d.description;
+                }
+
+                public void Deserialize(Thing o) {
+                    ApplyDefaults<Thing>(o);
+                    o.Seen = this.seen;
+                    o.description.Name = o.Name;
+                    o.description = lit::Description.Merge(
+                        this.description, o.description);
                 }
             }
         }
 
-        public partial class Door : Thing, IOpenable {
 
-            public override void GetYAML() {
-                Pathways.GetYAML<Door,Door.yml>(this); }
+        public partial class Creature {
 
-            public new class yml : Thing.yml, ISerializable<Door> {
-                public bool IsOpen { get; set; }
-                public bool IsInitOpen { get; set; }
-                public bool IsLocked { get; set; }
-
-                public virtual void Deserialize(Door o) {
-                    Deserialize((Thing) o);
-                    o.IsOpen = this.IsOpen;
-                    o.IsLocked = this.IsLocked;
-                    o.IsInitOpen = this.IsInitOpen;
-                }
-            }
-        }
-
-        public partial class Creature : Thing, ILiving {
-
-            public override void GetYAML() {
-                Pathways.GetYAML<Creature,Creature.yml>(this); }
+            public override void Deserialize() {
+                Pathways.Deserialize<Creature,Creature.yml>(this); }
 
             public new class yml : Thing.yml, ISerializable<Creature> {
-                public bool isDead { get; set; }
+                public bool isDead {get;set;}
 
-                public virtual void Deserialize(Creature o) {
+                public void Deserialize(Creature o) {
                     Deserialize((Thing) o);
                     o.isDead = isDead;
                 }
             }
         }
 
-        public partial class Person : Creature {
+        public partial class Person {
 
-            public override void GetYAML() {
-                Pathways.GetYAML<Person,Person.yml>(this); }
+            public override void Deserialize() {
+                Pathways.Deserialize<Person,Person.yml>(this); }
 
             public new class yml : Creature.yml, ISerializable<Person> {
-                public maps::Area area { get; set; }
-                public maps::Room room { get; set; }
+                public map::Area area {get;set;}
+                public map::Room room {get;set;}
 
-                public virtual void Deserialize(Person o) {
+                public void Deserialize(Person o) {
                     Deserialize((Creature) o);
                     o.area = this.area;
                     o.room = this.room;
@@ -411,38 +390,18 @@ namespace PathwaysEngine {
             }
         }
 
-
-        public partial class Encounter : Thing {
-
-            public override void GetYAML() {
-                Pathways.GetYAML<Encounter,Encounter.yml>(this); }
-
-            public new class yml : Thing.yml, ISerializable<Encounter> {
-                public bool reuse { get; set; }
-                public float time { get; set; }
-                public Inputs input { get; set; }
-
-                public virtual void Deserialize(Encounter o) {
-                    Deserialize((Thing) o);
-                    o.reuse = this.reuse;
-                    o.time = this.time;
-                    o.input = this.input;
-                }
-            }
-        }
-
         namespace Setting {
-            public partial class Room : Thing {
+            public partial class Room {
 
-                public override void GetYAML() {
-                    Pathways.GetYAML<Room,Room.yml>(this); }
+                public override void Deserialize() {
+                    Pathways.Deserialize<Room,Room.yml>(this); }
 
                 public new class yml : Thing.yml, ISerializable<Room> {
-                    public int depth { get; set; }
-                    public List<Thing> things { get; set; }
-                    public List<Room> nearbyRooms { get; set; }
+                    public int depth {get;set;}
+                    public List<Thing> things {get;set;}
+                    public List<Room> nearbyRooms {get;set;}
 
-                    public virtual void Deserialize(Room o) {
+                    public void Deserialize(Room o) {
                         Deserialize((Thing) o);
                         o.things = this.things;
                         o.nearbyRooms = this.nearbyRooms;
@@ -450,18 +409,18 @@ namespace PathwaysEngine {
                 }
             }
 
-            public partial class Area : Thing {
+            public partial class Area {
 
-                public override void GetYAML() {
-                    Pathways.GetYAML<Area,Area.yml>(this); }
+                public override void Deserialize() {
+                    Pathways.Deserialize<Area,Area.yml>(this); }
 
                 public new class yml : Thing.yml, ISerializable<Area> {
-                    public bool safe { get; set; }
-                    public int level { get; set; }
-                    public List<Room.yml> rooms { get; set; }
-                    public List<Area.yml> areas { get; set; }
+                    public bool safe {get;set;}
+                    public int level {get;set;}
+                    public List<Room.yml> rooms {get;set;}
+                    public List<Area.yml> areas {get;set;}
 
-                    public virtual void Deserialize(Area o) {
+                    public void Deserialize(Area o) {
                         Deserialize((Thing) o);
                         o.safe = this.safe;
                         o.level = this.level;
@@ -470,67 +429,324 @@ namespace PathwaysEngine {
                     }
                 }
             }
+
+            public partial class Door {
+
+                public override void Deserialize() {
+                    Pathways.Deserialize<Door,Door.yml>(this); }
+
+                public new class yml : Thing.yml, ISerializable<Door> {
+
+                    [YamlMember(Alias="opened")]
+                    public bool IsOpen {get;set;}
+
+                    [YamlMember(Alias="initially opened")]
+                    public bool IsInitOpen {get;set;}
+
+                    [YamlMember(Alias="locked")]
+                    public bool IsLocked {get;set;}
+
+                    [YamlMember(Alias="lock message")]
+                    public string LockMessage {get;set;}
+
+                    public void ApplyDefaults(Door o) {
+                        ApplyDefaults<Door>((Thing) o);
+                        var d = Pathways.yml.DeserializeDefault<Door.yml>();
+                        o.IsOpen = d.IsOpen;
+                        o.IsInitOpen = d.IsInitOpen;
+                        o.IsLocked = d.IsLocked;
+                        o.LockMessage = d.LockMessage;
+                    }
+
+                    public void Deserialize(Door o) {
+                        Deserialize((Thing) o);
+                        o.IsOpen = this.IsOpen;
+                        o.IsLocked = this.IsLocked;
+                        o.IsInitOpen = this.IsInitOpen;
+                        o.LockMessage = this.LockMessage;
+                    }
+                }
+            }
         }
     }
 
     namespace Inventory {
-        public partial class Item : intf::Thing, IGainful {
+        public partial class Item {
 
-            public override void GetYAML() {
-                Pathways.GetYAML<Item,Item.yml>(this); }
+            public override void Deserialize() {
+                Pathways.Deserialize<Item,Item.yml>(this); }
 
-            public new class yml : intf::Thing.yml, ISerializable<Item> {
-                public int cost { get; set; }
-                public float mass { get; set; }
+            public new class yml : adv::Thing.yml, ISerializable<Item> {
+                public int cost {get;set;}
+                public float mass {get;set;}
 
-                public virtual void Deserialize(Item o) {
-                    Deserialize((intf::Thing) o);
-                    o.Mass = this.mass;  o.Cost = this.cost;
+                public void Deserialize(Item o) {
+                    Deserialize((adv::Thing) o);
+                    o.Mass = this.mass;
+                    o.Cost = this.cost;
                 }
             }
         }
 
-        public partial class Lamp : Item, IWearable {
+        partial class Lamp {
 
-            public override void GetYAML() {
-                Pathways.GetYAML<Lamp,Lamp.yml>(this); }
+            public override void Deserialize() {
+                Pathways.Deserialize<Lamp,Lamp.yml>(this); }
 
             public new class yml : Item.yml, ISerializable<Lamp> {
-                public float time { get; set; }
+                public float time {get;set;}
 
-                public virtual void Deserialize(Lamp o) {
+                public void Deserialize(Lamp o) {
                     Deserialize((Item) o);
                     o.time = time;
                 }
             }
         }
 
-        public partial class Crystal : Item, IWieldable {
 
-            public override void GetYAML() {
-                Pathways.GetYAML<Crystal,Crystal.yml>(this); }
+        public partial class Key {
+
+            public override void Deserialize() {
+                Pathways.Deserialize<Key,Key.yml>(this); }
+
+            public new class yml : Item.yml, ISerializable<Key> {
+                [YamlMember(Alias="key type")]
+                public Keys Kind {get;set;}
+
+                [YamlMember(Alias="lock number")]
+                public int Value {get;set;}
+
+                public void Deserialize(Key o) {
+                    Deserialize((Item) o);
+                    o.Kind = this.Kind;
+                    o.Value = this.Value;
+                }
+            }
+        }
+
+        partial class Book {
+
+            public override void Deserialize() {
+                Pathways.Deserialize<Book,Book.yml>(this); }
+
+            public new class yml : adv::Thing.yml, ISerializable<Book> {
+                public string passage {get;set;}
+
+                public void ApplyDefaults(Book o) {
+                    ApplyDefaults<Book>(o);
+                    var d = Pathways.yml.DeserializeDefault<Book.yml>();
+                    o.description = lit::Description.Merge(
+                        o.description, d.description);
+
+                }
+
+
+
+                public void Deserialize(Book o) {
+                    ApplyDefaults(o);
+                    Deserialize((adv::Thing) o);
+                    o.Passage = this.passage;
+                }
+            }
+        }
+
+
+        partial class Crystal {
+
+            public override void Deserialize() {
+                Pathways.Deserialize<Crystal,Crystal.yml>(this); }
 
             public new class yml : Item.yml, ISerializable<Crystal> {
-                public uint shards { get; set; }
+                public uint shards {get;set;}
 
-                public virtual void Deserialize(Crystal o) {
+                public void Deserialize(Crystal o) {
                     Deserialize((Item) o);
                     o.Shards = this.shards;
                 }
             }
         }
 
-        public partial class Weapon : Item, IWieldable {
+        public partial class Weapon {
 
-            public override void GetYAML() {
-                Pathways.GetYAML<Weapon,Weapon.yml>(this); }
+            public override void Deserialize() {
+                Pathways.Deserialize<Weapon,Weapon.yml>(this); }
 
             public new class yml : Item.yml, ISerializable<Weapon> {
-                public float rate { get; set; }
+                public float rate {get;set;}
 
-                public virtual void Deserialize(Weapon o) {
+                public void Deserialize(Weapon o) {
                     Deserialize((Item) o);
                     o.rate = rate;
+                }
+            }
+        }
+    }
+
+    namespace Literature {
+
+        public class Command_yml : IStorable {
+            public string Name {get;set;}
+            public Regex regex {get;set;}
+            public ParserEvents parse {get;set;}
+
+
+            /** `ParserEvents` : **`enum`**
+            |*
+            |* This local `enum` defines the `Parse` delegates
+            |* that the `Parser` should call for each verb and
+            |* command entered. This is awful.
+            |*
+            |* - `Sudo` : **`ParserEvents`**
+            |*     `Pathways.Sudo` overrides commands
+            |*
+            |* - `Quit` : **`ParserEvents`**
+            |*     `Pathways.Quit` begins the quitting routine
+            |*
+            |* - `Redo` : **`ParserEvents`**
+            |*     `Pathways.Redo` repeats the last command
+            |*
+            |* - `Save` : **`ParserEvents`**
+            |*     `Pathways.Save` saves the game
+            |*
+            |* - `Load` : **`ParserEvents`**
+            |*     `Pathways.Load` loads from a `*.yml` file
+            |*
+            |* - `Help` : **`ParserEvents`**
+            |*     `Pathways.Help` displays a simple help text
+            |*
+            |* - `View` : **`ParserEvents`**
+            |*     `Player.View` examines some object
+            |*
+            |* - `Look` : **`ParserEvents`**
+            |*     `Player.Look` looks around/examines a room
+            |*
+            |* - `Goto` : **`ParserEvents`**
+            |*     `Player.Goto` sends the `Player` somewhere
+            |*
+            |* - `Move` : **`ParserEvents`**
+            |*     `Player.Goto` can be called to move objects
+            |*
+            |* - `Invt` : **`ParserEvents`**
+            |*     `Player.Invt` opens the inventory menu
+            |*
+            |* - `Take` : **`ParserEvents`**
+            |*     `Player.Take` takes an item
+            |*
+            |* - `Drop` : **`ParserEvents`**
+            |*     `Player.Drop` drops an item
+            |*
+            |* - `Wear` : **`ParserEvents`**
+            |*     `Player.Wear` has the player wear something
+            |*
+            |* - `Stow` : **`ParserEvents`**
+            |*     `Player.Stow` has the player stow something
+            |*
+            |* - `Read` : **`ParserEvents`**
+            |*     `Player.Read` reads an `IReadable` thing
+            |*
+            |* - `Open` : **`ParserEvents`**
+            |*     `Player.Open` opens something
+            |*
+            |* - `Shut` : **`ParserEvents`**
+            |*     `Player.Shut` closes something
+            |*
+            |* - `Push` : **`ParserEvents`**
+            |*     `Player.Push` pushes something
+            |*
+            |* - `Pull` : **`ParserEvents`**
+            |*     `Player.Pull` pulls something
+            |**/
+            public enum ParserEvents {
+                Sudo, Quit, Redo, Save, Load, Help,
+                View, Look, Goto, Move, Invt, Take,
+                Drop, Wear, Stow, Read, Open, Shut,
+                Push, Pull, Show, Hide, Use }
+
+            public Command Deserialize(string s) {
+                this.Name = s;
+                return new Command(
+                    this.Name,
+                    this.regex,
+                    SelectParse(this.parse));
+            }
+
+            public void Deserialize(Command o) {
+                o = new Command(
+                    this.Name,
+                    this.regex,
+                    SelectParse(this.parse));
+            }
+
+            Parse SelectParse(ParserEvents e) {
+                switch (e) {
+                    case ParserEvents.Sudo :
+                        return Pathways.Sudo;
+                    case ParserEvents.Quit :
+                        return Pathways.Quit;
+                    case ParserEvents.Redo :
+                        return Pathways.Redo;
+                    case ParserEvents.Save :
+                        return Pathways.Save;
+                    case ParserEvents.Load :
+                        return Pathways.Load;
+                    case ParserEvents.Help :
+                        return Pathways.Help;
+                    case ParserEvents.View :
+                        return Player.View;
+                    //case ParserEvents.Look :
+                    //    return Player.Look;
+                    case ParserEvents.Goto :
+                        return Player.Goto;
+                    //case ParserEvents.Move :
+                    //    return Player.Move;
+                    //case ParserEvents.Invt :
+                    //    return Player.Invt;
+                    case ParserEvents.Take :
+                        return Player.Take;
+                    case ParserEvents.Drop :
+                        return Player.Drop;
+                    case ParserEvents.Use  :
+                        return Player.Use;
+                    case ParserEvents.Wear :
+                        return Player.Wear;
+                    case ParserEvents.Stow :
+                        return Player.Stow;
+                    case ParserEvents.Read :
+                        return Player.Read;
+                    case ParserEvents.Open :
+                        return Player.Open;
+                    case ParserEvents.Shut :
+                        return Player.Shut;
+                    case ParserEvents.Push :
+                        return Player.Push;
+                    case ParserEvents.Pull :
+                        return Player.Pull;
+                    case ParserEvents.Show :
+                        return lit::Terminal.Show;
+                    case ParserEvents.Hide :
+                        return lit::Terminal.Hide;
+                    default : return null;
+                }
+            }
+        }
+
+
+
+        public partial class Encounter {
+
+            public override void Deserialize() {
+                Pathways.Deserialize<Encounter,Encounter.yml>(this); }
+
+            public new class yml : adv::Thing.yml, ISerializable<Encounter> {
+                public bool reuse {get;set;}
+                public float time {get;set;}
+                public Inputs input {get;set;}
+
+                public void Deserialize(Encounter o) {
+                    base.Deserialize((adv::Thing) o);
+                    o.reuse = this.reuse;
+                    o.time = this.time;
+                    o.input = this.input;
                 }
             }
         }
@@ -539,31 +755,47 @@ namespace PathwaysEngine {
 
     namespace Puzzle {
 
-        public partial class Piece : intf::Thing, IPiece {
+        public partial class Piece : adv::Thing, IPiece {
 
-            public override void GetYAML() {
-                Pathways.GetYAML<Piece,Piece.yml>(this); }
+            public override void Deserialize() {
+                Pathways.Deserialize<Piece,Piece.yml>(this); }
 
-            public new class yml : intf::Thing.yml, ISerializable<Piece> {
-                public bool IsSolved { get; set; }
+            public new class yml : adv::Thing.yml, ISerializable<Piece> {
+                public bool IsSolved {get;set;}
 
                 public void Deserialize(Piece o) {
-                    Deserialize((intf::Thing) o);
+                    Deserialize((adv::Thing) o);
                     o.IsSolved = this.IsSolved;
                 }
             }
         }
 
-        partial class Lever : intf::Thing, IPiece {
+        partial class Button : Piece {
 
-            public override void GetYAML() {
-                Pathways.GetYAML<Lever,Lever.yml>(this); }
+            public override void Deserialize() {
+                Pathways.Deserialize<Button,Button.yml>(this); }
 
-            public new class yml : intf::Thing.yml, ISerializable<Lever> {
-                public bool IsSolved { get; set; }
+            public new class yml : Piece.yml, ISerializable<Button> {
+                [YamlMember(Alias="pressed")]
+                public bool IsPressed {get;set;}
+
+                public void Deserialize(Button o) {
+                    Deserialize((Piece) o);
+                    o.IsPressed = this.IsPressed;
+                }
+            }
+         }
+
+        partial class Lever : adv::Thing, IPiece {
+
+            public override void Deserialize() {
+                Pathways.Deserialize<Lever,Lever.yml>(this); }
+
+            public new class yml : adv::Thing.yml, ISerializable<Lever> {
+                public bool IsSolved {get;set;}
 
                 public void Deserialize(Lever o) {
-                    Deserialize((intf::Thing) o);
+                    Deserialize((adv::Thing) o);
                     o.IsSolved = this.IsSolved;
                 }
             }

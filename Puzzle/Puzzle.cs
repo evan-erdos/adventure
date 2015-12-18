@@ -15,7 +15,7 @@ using System.Collections.Generic;
 namespace PathwaysEngine.Puzzle {
 
 
-    /** `OnSolved()` : **`event`**
+    /** `OnSolve` : **`event`**
     |*
     |* Multicast delegate for the transfer of control from the
     |* lowest level `Piece` to the highest level structures.
@@ -31,7 +31,7 @@ namespace PathwaysEngine.Puzzle {
     |* - `wasSolved` : **`bool`**
     |*     was the base `IPiece` solved when this was sent?
     |**/
-    delegate bool OnSolved(
+    delegate bool OnSolve(
                     object sender,
                     System.EventArgs e,
                     bool wasSolved);
@@ -48,12 +48,12 @@ namespace PathwaysEngine.Puzzle {
     interface IPiece {
 
 
-        /** `OnSolved()` : **`event`**
+        /** `OnSolve` : **`event`**
         |*
         |* Event callback for inversion of control when solving
         |* puzzles via `Solve`ing `Piece`s in this namespace.
         |**/
-        event OnSolved SolveEvent;
+        event OnSolve SolveEvent;
 
 
         /** `IsSolved` : **`bool`**
@@ -84,6 +84,31 @@ namespace PathwaysEngine.Puzzle {
         bool Solve();
 
     }
+
+
+    /** `IResponder` : **`interface`**
+    |*
+    |* For any given state change, an `IPiece` or any deriving
+    |* class may want to take some action as a direct result of
+    |* their being solved or unsolved. Such an action might be
+    |* to activate some components, check if there's some other
+    |* precondition to then solve some higher state, etc.
+    |**/
+    interface IResponder : IPiece {
+
+
+        /** `WhenSolved` : **`bool`**
+        |*
+        |* When any attached `IPiece` is solved, it can
+        |* optionally check against this object's solved state,
+        |* and act accordingly, (ideally with side effects.)
+        |*
+        |* - `piece` : **`IPiece`**
+        |*     whose `IsSolved` should be checked against
+        |**/
+        bool WhenSolved(IPiece piece);
+    }
+
 
 
     /** `IPieceIterator` : **`interface`**

@@ -4,7 +4,8 @@
 
 using UnityEngine;
 using System.Collections;
-using invt=PathwaysEngine.Inventory;
+using adv=PathwaysEngine.Adventure;
+using inv=PathwaysEngine.Inventory;
 using util=PathwaysEngine.Utilities;
 
 namespace PathwaysEngine.Movement {
@@ -243,18 +244,20 @@ namespace PathwaysEngine.Movement {
             if (lookTarget!=null) currentLookPos = lookTarget.position;
             animator.SetLookAtPosition(currentLookPos); // used for the head look feature
             animator.FootPlacement(onGround,offsetHeel,offsetFoot);
-            if (Player.left.ikActive) {
-                if (Player.left.objHand!=null) { // Set the target position and rotation
-                    animator.SetIKPositionWeight(Player.left.handGoal,1);
-                    animator.SetIKRotationWeight(Player.left.handGoal,1);
+            var left = ((adv::Person) Pathways.player).left;
+            if (!left) return;
+            if (left.ikActive) {
+                if (left.objHand!=null) { // Set the target position and rotation
+                    animator.SetIKPositionWeight(left.handGoal,1);
+                    animator.SetIKRotationWeight(left.handGoal,1);
                     animator.SetIKPosition(
-                        Player.left.handGoal,Player.left.objHand.position);
+                        left.handGoal,left.objHand.position);
                     animator.SetIKRotation(
-                        Player.left.handGoal,Player.left.objHand.rotation);
+                        left.handGoal,left.objHand.rotation);
                 }
             } else {
-                animator.SetIKPositionWeight(Player.left.handGoal,0);
-                animator.SetIKRotationWeight(Player.left.handGoal,0);
+                animator.SetIKPositionWeight(left.handGoal,0);
+                animator.SetIKRotationWeight(left.handGoal,0);
                 //animator.SetLookAtWeight(0);
             }
         }

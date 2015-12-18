@@ -1,14 +1,19 @@
 /* Ben Scott * bescott@andrew.cmu.edu * 2015-08-04 * Person */
 
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using System.Collections;
 using System.Collections.Generic;
-using type=System.Type;
-using invt=PathwaysEngine.Inventory;
-using mvmt=PathwaysEngine.Movement;
-using util=PathwaysEngine.Utilities;
-using maps=PathwaysEngine.Adventure.Setting;
+using System.Text.RegularExpressions;
+using Type=System.Type;
+using EventArgs=System.EventArgs;
+using map=PathwaysEngine.Adventure.Setting;
+using inv=PathwaysEngine.Inventory;
+using lit=PathwaysEngine.Literature;
+using mv=PathwaysEngine.Movement;
 using stat=PathwaysEngine.Statistics;
+using util=PathwaysEngine.Utilities;
+
 
 namespace PathwaysEngine.Adventure {
 
@@ -19,15 +24,14 @@ namespace PathwaysEngine.Adventure {
     |* the most important behaviours that apply to `Person`s.
     |**/
     partial class Person : Creature {
-
-        public bool sloppyIFHASKEY = false;
-
-        public float radius = 25f;
+        public float radius = 25f, dist = 4f;
         Body body;
-        public proper_name fullName;
-        public maps::Area area;
-        public maps::Room room;
-        mvmt::IMotor motor;
+        public mv::Hand right, left;
+        public mv::Feet feet;
+        internal mv::IMotor motor;
+        public lit::proper_name fullName;
+        public map::Area area;
+        public map::Room room;
 
         public LayerMask layerMask;
 
@@ -40,32 +44,42 @@ namespace PathwaysEngine.Adventure {
 
         public override stat::Set stats { get; set; }
 
-        public List<invt::Item> nearbyItems {
+        public List<inv::Item> nearbyItems {
             get {
                 _nearbyItems = GetNearbyItems();
                 return _nearbyItems;
             }
-        } List<invt::Item> _nearbyItems;
+        } List<inv::Item> _nearbyItems;
 
         public List<Thing> NearbyThings {
-            get { return GetNearbyThings(); } }
+            get { return GetNearby<Thing>(dist); } }
 
-        public invt::ItemSet holdall {
-            get { if (_holdall==null)
-                _holdall = new invt::ItemSet();
-                return _holdall;
+        public inv::IItemSet Items {
+            get { if (items==null)
+                items = new inv::ItemList();
+                return items;
             } set {
-                foreach (var item in _holdall)
+                foreach (var item in items)
                     value.Add(item);
-                _holdall = value;
+                items = value;
             }
-        } invt::ItemSet _holdall;
+        } inv::IItemSet items;
 
         public override void Awake() { base.Awake();
             var temp = new util::Anchor[(int) Corpus.All];
-            layerMask = LayerMask.NameToLayer("Thing")|
-                        LayerMask.NameToLayer("Item");
-            motor = GetComponentInChildren<mvmt::IMotor>();
+            layerMask = ~(LayerMask.NameToLayer("Thing")
+                & LayerMask.NameToLayer("Room")
+                & LayerMask.NameToLayer("Item"));
+            motor = GetComponent<mv::IMotor>();
+            if (motor==null)
+                motor = GetComponentInChildren<mv::IMotor>();
+            if (motor==null)
+                throw new System.Exception("!motor");
+            feet = GetComponentInChildren<mv::Feet>();
+            var hands = GetComponentsInChildren<mv::Hand>();
+            foreach (var hand in hands)
+                if (hand.hand==mv::Hands.Left) left = hand;
+                else right = hand;
             foreach (var elem in GetComponentsInChildren<util::Anchor>())
                 temp[(int) elem.bodyPart] = elem;
             body = new Person.Body(temp);
@@ -76,99 +90,190 @@ namespace PathwaysEngine.Adventure {
             if (stats!=null) return; // set dead to true
         }
 
-        public virtual void Take() { Take(nearbyItems); }
 
-        public virtual void Take(List<invt::Item> list) {
-            foreach (var item in list) Take(item); }
-
-        public virtual void Take(invt::Item item) {
-            if (holdall.Contains(item))
-                throw new System.Exception("Person already has item.");
-            item.transform.parent = transform;
-            holdall.Add(item);
-            item.Take();
+        public virtual bool Take(lit::Command c) {
+            if (nearbyItems.Count==0) return false;
+            var temp = new List<inv::Item>();
+            if ((new Regex(@"\b(all)\b")).IsMatch(c.input))
+                return Player.Take();
+            else foreach (var item in nearbyItems)
+                if (item.IsMatch(c.input))
+                    temp.Add(item);
+            if (temp.Count==1)
+                return Player.Take(temp[0]);
+            return false;
+            //else if (temp.Count!=0)
+            //    lit::Terminal.Resolve(c,temp);
         }
 
-        public virtual void Drop() { // Drop(holdall);
-            var temp = new List<invt::Item>();
-            foreach (var item in holdall) temp.Add(item);
-            foreach (var item in temp) Drop(item);
-        }
-
-        public virtual void Drop(invt::Item item) {
-            if (!holdall.Contains(item))
-                throw new System.Exception("Person does not have item to drop!");
-            item.transform.parent = null;
-            holdall.Remove(item);
-            item.Drop();
-        }
-
-        public virtual void Wear() {
-            foreach (var item in holdall)
-                if (item is invt::IWearable)
-                    Wear((invt::IWearable) item);
-        }
-
-        public virtual void Stow() {
-            foreach (var item in holdall)
-                if (item is invt::IWearable)
-                    Stow((invt::IWearable) item);
-        }
-
-        public virtual void Wear(invt::IWearable item) {
-            body[item.GetType()] = item; item.Wear(); }
-
-        public virtual void Stow(invt::IWearable item) { item.Stow(); }
-
-        public virtual void Push(IPushable o) { o.Push(); }
-
-        public virtual void Pull(IPullable o) { o.Pull(); }
-
-        public virtual bool Open(IOpenable o) { return o.Open(); }
-
-        public virtual bool Shut(IOpenable o) { return o.Shut(); }
-
-        public void Goto(maps::Area tgt) {
-            StartCoroutine(Goto(tgt.level)); }
-
-        IEnumerator Goto(int n) {
-            util::CameraFade.StartAlphaFade(Color.black,false,1f);
-            yield return new WaitForSeconds(1.1f);
-            Application.LoadLevel(n);
-        }
-
-        public bool Unlock(Door door) {
-            if (!door) return false;
-            if (!door.IsLocked) return true;
-            if (sloppyIFHASKEY) return true;
+        public virtual bool Take(List<inv::Item> list) {
+            foreach (var item in list) Take(item);
             return false;
         }
 
-        public virtual List<T> GetNearby<T>(float r) where T : Thing {
+        public virtual bool Take(inv::Item item) {
+            if (Items.Contains(item)) return false;
+            item.transform.parent = transform;
+            Items.Add(item);
+            return item.Take();
+        }
+
+        public virtual bool Take() {
+            return Take(nearbyItems); }
+
+
+
+        public virtual bool Drop(lit::Command c) {
+            var temp = new List<inv::Item>();
+            if (Items.Count==0) return false;
+            if ((new Regex(@"\ball\b")).IsMatch(c.input))
+                return Drop();
+            else foreach (var item in Items)
+                if (item.description.IsMatch(c.input))
+                    temp.Add(item);
+            if (temp.Count==1)
+                return Drop(temp[0]);
+            return false;
+        }
+
+        public virtual bool Drop(inv::Item item) {
+            if (!Items.Contains(item)) return false;
+            item.transform.parent = null;
+            Items.Remove(item);
+            return item.Drop();
+        }
+
+        public virtual bool Drop() {
+            var temp = new List<inv::Item>();
+            foreach (var item in Items) temp.Add(item);
+            foreach (var item in temp) Drop(item);
+            return false;
+        }
+
+
+        public virtual bool Wear() {
+            foreach (var item in Items)
+                if (item is inv::IWearable)
+                    Wear((inv::IWearable) item);
+            return false;
+        }
+
+        public virtual bool Stow() {
+            foreach (var item in Items)
+                if (item is inv::IWearable)
+                    Stow((inv::IWearable) item);
+            return false;
+        }
+
+        public virtual bool Wear(inv::IWearable item) {
+            if ((Corpus) Body.Type_Index(item.GetType())==Corpus.HandL)
+                left.SwitchItem((inv::IWieldable) item);
+            else body[item.GetType()] = item;
+            return item.Wear();
+        }
+
+        public virtual bool Stow(inv::IWearable o) {
+            return o.Stow(); }
+
+        public virtual bool Push(IPushable o) {
+            return o.Push(); }
+
+        public virtual bool Pull(IPullable o) {
+            return o.Pull(); }
+
+        public virtual bool Open(IOpenable o) {
+            return o.Open(); }
+
+        public virtual bool Shut(IOpenable o) {
+            return o.Shut(); }
+
+        public bool Goto(map::Area tgt) {
+            //StartCoroutine(Goto(tgt.level));
+            return false;
+        }
+
+        IEnumerator Goto(int n) {
+            util::CameraFade.StartAlphaFade(
+                Color.black,false,1f);
+            yield return new WaitForSeconds(1.1f);
+            SceneManager.LoadScene(n);
+        }
+
+
+        public bool Use(lit::Command c) {
+            foreach (var elem in GetNearby<Thing>(dist))
+                if (elem is inv::IUsable && c.Fits(elem))
+                    return ((inv::IUsable) elem).Use();
+            return false;
+        }
+
+        public bool Unlock(lit::Command c) {
+            foreach (var door in GetNearby<map::Door>(dist))
+                if (door.IsMatch(c.input))
+                    return Unlock(door);
+            return false;
+        }
+
+        public bool Lock(ILockable o) {
+            if (o==null) return false;
+            if (o.IsLocked) return true;
+            foreach (var key in Items.GetItems<inv::Key>())
+                if (o.LockKey==key) return true;
+            return false;
+        }
+
+        public bool Unlock(ILockable o) {
+            if (o==null) return false;
+            if (!o.IsLocked) return true;
+            foreach (var key in Items.GetItems<inv::Key>())
+                if (o.LockKey==key) return true;
+            return false;
+        }
+
+
+        public override bool View(
+                        object source,
+                        Thing target,
+                        EventArgs e,
+                        lit::Command c) {
+            if (target==this) return View();
+            foreach (var thing in GetNearby<Thing>(dist))
+                if (c.Fits(thing))
+                    return thing.View(this,thing,e,c);
+            if (room) return room.View(this,room,e,c);
+            throw new lit::TextException(
+                "You can't see anything like that here.");
+        }
+
+        public override bool View() {
+            lit::Terminal.Log(description);
+            return true;
+        }
+
+
+        public virtual List<T> GetNearby<T>(float r)
+                        where T : Thing {
             var temp = Physics.OverlapSphere(
-                motor.Position,r,layerMask,
+                Position,r,layerMask,
                 QueryTriggerInteraction.Collide);
             var list = new List<T>();
             foreach (var elem in temp) {
                 var thing = (elem.attachedRigidbody==null)
                     ? elem.gameObject.GetComponent<T>()
                     : elem.attachedRigidbody.GetComponent<T>();
-                if (thing && !list.Contains(thing)) list.Add(thing);
+                if (thing && !list.Contains(thing))
+                    list.Add(thing);
             } return list;
         }
 
-        public virtual List<Thing> GetNearbyThings() {
-            return GetNearby<Thing>(8f); // radius
-        }
-
-        public virtual List<invt::Item> GetNearbyItems() {
+        public virtual List<inv::Item> GetNearbyItems() {
             var temp = Physics.OverlapSphere(
                 motor.Position,
                 4f,LayerMask.NameToLayer("Items"));
-            var list = new List<invt::Item>();
+            var list = new List<inv::Item>();
             foreach (var elem in temp) {
                 if (elem.attachedRigidbody==null) continue;
-                var item = elem.attachedRigidbody.GetComponent<invt::Item>();
+                var item = elem.attachedRigidbody.GetComponent<inv::Item>();
                 if (item && !list.Contains(item) && !item.Held) list.Add(item);
             } return list;
         }
@@ -178,19 +283,19 @@ namespace PathwaysEngine.Adventure {
         public void AddCondition(stat::Condition cond,stat::Severity svrt) { }
 
         class Body {
-            invt::IWearable[] list;
+            inv::IWearable[] list;
             util::Anchor[] anchors;
 
             public Body(util::Anchor[] anchors) {
-                this.list = new invt::IWearable[(int) Corpus.All];
+                this.list = new inv::IWearable[(int) Corpus.All];
                 this.anchors = anchors;
             }
 
-            public invt::IWearable this[Corpus n] {
+            public inv::IWearable this[Corpus n] {
                 get { return list[(int) n]; }
-                set { var temp = (invt::IWearable) list[(int) n];
+                set { var temp = (inv::IWearable) list[(int) n];
                     if (temp!=null && temp!=value) Player.Stow(temp);
-                    var item = (invt::Item) value;
+                    var item = (inv::Item) value;
                     item.transform.parent = anchors[(int) n].transform;
                     item.transform.localPosition = Vector3.zero;
                     item.transform.localRotation = Quaternion.identity;
@@ -198,11 +303,11 @@ namespace PathwaysEngine.Adventure {
                 }
             }
 
-            public invt::IWearable this[type T] {
+            public inv::IWearable this[Type T] {
                 get { return list[Type_Index(T)]; }
                 set { var temp = list[Type_Index(T)];
                     if (temp!=null && temp!=value) Player.Stow(temp);
-                    var item = (invt::Item) value;
+                    var item = (inv::Item) value;
                     item.transform.parent =
                         anchors[(int) Type_Index(T)].transform;
                     item.transform.localPosition = Vector3.zero;
@@ -211,34 +316,34 @@ namespace PathwaysEngine.Adventure {
                 }
             }
 
-            static public int Type_Index(type T) {
-                if (T.DerivesFrom<invt::Helmet>())
+            static public int Type_Index(Type T) {
+                if (T.DerivesFrom<inv::Helmet>())
                     return (int) Corpus.Head;
-                if (T.DerivesFrom<invt::Necklace>())
+                if (T.DerivesFrom<inv::Necklace>())
                     return (int) Corpus.Neck;
-                if (T.DerivesFrom<invt::Armor>())
+                if (T.DerivesFrom<inv::Armor>())
                     return (int) Corpus.Chest;
-                if (T.DerivesFrom<invt::Cloak>())
+                if (T.DerivesFrom<inv::Cloak>())
                     return (int) Corpus.Back;
-                if (T.DerivesFrom<invt::Backpack>())
+                if (T.DerivesFrom<inv::Backpack>())
                     return (int) Corpus.Back;
-                if (T.DerivesFrom<invt::Belt>())
+                if (T.DerivesFrom<inv::Belt>())
                     return (int) Corpus.Waist;
-                if (T.DerivesFrom<invt::Clothes>())
+                if (T.DerivesFrom<inv::Clothes>())
                     return (int) Corpus.Frock;
-                if (T.DerivesFrom<invt::Bracers>())
+                if (T.DerivesFrom<inv::Bracers>())
                     return (int) Corpus.Arms;
-                if (T.DerivesFrom<invt::Pants>())
+                if (T.DerivesFrom<inv::Pants>())
                     return (int) Corpus.Legs;
-                if (T.DerivesFrom<invt::Gloves>())
+                if (T.DerivesFrom<inv::Gloves>())
                     return (int) Corpus.Hands;
-                if (T.DerivesFrom<invt::Shoes>())
+                if (T.DerivesFrom<inv::Shoes>())
                     return (int) Corpus.Feet;
-                if (T.DerivesFrom<invt::Flashlight>())
+                if (T.DerivesFrom<inv::Flashlight>())
                     return (int) Corpus.Other;
-                if (T.DerivesFrom<invt::Lamp>())
+                if (T.DerivesFrom<inv::Lamp>())
                     return (int) Corpus.HandL;
-                if (T.DerivesFrom<invt::Weapon>())
+                if (T.DerivesFrom<inv::Weapon>())
                     return (int) Corpus.HandR;
                 return (int) Corpus.All;
             }

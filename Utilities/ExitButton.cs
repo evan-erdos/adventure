@@ -6,7 +6,7 @@ namespace PathwaysEngine.Utilities {
 	public class ExitButton : MonoBehaviour {
 		public Cursors cursor = Cursors.Back;
 
-		void OnMouseOver() {
+		void OnMouseEnter() {
 			Pathways.CursorGraphic = cursor; }
 
 		void OnMouseExit() {

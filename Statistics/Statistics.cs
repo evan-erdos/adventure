@@ -98,7 +98,9 @@ namespace PathwaysEngine.Statistics {
             foreach (var cond in conds) AddCondition(cond); }
     }
 
-    public enum Hits : byte { Miss=0, Graze=1, Hit=2, Crit=3 }
+    public enum Hits : byte {
+        Miss = 0, Graze = 1,
+        Hit  = 2, Crit  = 3}
 
     /** `Damages` : **`enum`**
     |*
@@ -147,22 +149,22 @@ namespace PathwaysEngine.Statistics {
         Health     = 0x00, Endurance  = 0x01,
         Strength   = 0x02, Agility    = 0x03,
         Dexterity  = 0x04, Perception = 0x05,
-        Intellect  = 0x06, Memory     = 0x07};
+        Intellect  = 0x06, Memory     = 0x07}
 
     public enum Severity : byte {
         None     = 0x00, Mild   = 0x01,
-        Moderate = 0x02, Severe = 0x03};
+        Moderate = 0x02, Severe = 0x03}
 
     [Flags] public enum Faculties : byte {
         Thinking = 0x00, Breathing = 0x04,
         Moving   = 0x08, Seeing    = 0x0C,
-        Walking  = 0x10, Jumping   = 0x14};
+        Walking  = 0x10, Jumping   = 0x14}
 
     [Flags] public enum Condition : byte {
         Dead      = 0x00, Wounded  = 0x04,
         Shocked   = 0x08, Poisoned = 0x0C,
         Psychotic = 0x10, Stunned  = 0x14,
-        Injured   = 0x18, Healthy  = 0x1C};
+        Injured   = 0x18, Healthy  = 0x1C}
 
     [Flags] public enum Diagnosis : byte {
         None         = 0x00, Unknown      = 0x04,
@@ -174,13 +176,13 @@ namespace PathwaysEngine.Statistics {
         Frostbite    = 0x30, Thermosis    = 0x34,
         Hypothermia  = 0x38, Hyperthermia = 0x3C,
         Hypohydratia = 0x40, Inanition    = 0x44,
-        Psychosis    = 0x48, Depression   = 0x4C};
+        Psychosis    = 0x48, Depression   = 0x4C}
 
     public enum Prognosis : byte {
         None       = 0x00, Unknown  = 0x04,
         Fatal      = 0x08, Mortal   = 0x0C,
         Grievous   = 0x10, Critical = 0x14,
-        Survivable = 0x18, Livable  = 0x1C};
+        Survivable = 0x18, Livable  = 0x1C}
 }
 
 

@@ -2,11 +2,12 @@
 
 using UnityEngine;
 using System.Collections;
+using adv=PathwaysEngine.Adventure;
 using util=PathwaysEngine.Utilities;
 
-namespace PathwaysEngine.Adventure {
+namespace PathwaysEngine.Literature {
     [RequireComponent(typeof(Collider))]
-    public partial class Encounter : Thing, IStorable {
+    public partial class Encounter : adv::Thing, IStorable {
         public enum Inputs : byte { Trigger, Click, Elapsed, Sight };
         Inputs input;
         bool reuse;
@@ -27,7 +28,7 @@ namespace PathwaysEngine.Adventure {
                 StartCoroutine(TimedEncounter(time));
         }
 
-        void OnTriggerEnter(Collider o) {
+        public void OnTriggerEnter(Collider o) {
             if (input==Inputs.Trigger && Player.IsCollider(o))
                 StartCoroutine(BeginEncounter());
         }

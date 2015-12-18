@@ -16,15 +16,23 @@ namespace PathwaysEngine.Inventory {
 				else Stow(); }
 		} bool worn;
 
-		public void Use() { Worn = !Worn; }
+		public override bool Use() {
+			Worn = !Worn; return false; }
 
-		public override void Take() { base.Take(); Worn = true; }
+		public override bool Take() { base.Take();
+			Worn = true; return false; }
 
-		public override void Drop() { base.Drop(); Worn = false; }
+		public override bool Drop() { base.Drop();
+			Worn = false; return false; }
 
-		public void Wear() {
-			if (gameObject) gameObject.SetActive(true); }
+		public bool Wear() {
+			if (gameObject) gameObject.SetActive(true);
+			return false;
+		}
 
-		public void Stow() { gameObject.SetActive(false); }
+		public bool Stow() {
+			gameObject.SetActive(false);
+			return false;
+		}
 	}
 }

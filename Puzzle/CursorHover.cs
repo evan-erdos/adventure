@@ -3,6 +3,7 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using lit=PathwaysEngine.Literature;
 
 namespace PathwaysEngine.Puzzle {
 
@@ -31,7 +32,8 @@ namespace PathwaysEngine.Puzzle {
                 Pathways.CursorGraphic = Cursors.None; yield break; }
             Pathways.CursorGraphic = cursor;
             if (Input.GetButton("Fire1") && !first) {
-                Terminal.Log("Nothing special happens. ", Formats.Command);
+                lit::Terminal.LogCommand(
+                    "Nothing special happens.");
                 first = true;
             }
         }
