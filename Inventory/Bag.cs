@@ -8,6 +8,7 @@ namespace PathwaysEngine.Inventory {
 
 
     public partial class Bag : ItemCollection {
+
         public void DropAll() {
             foreach (var item in this) item.Drop(); }
 

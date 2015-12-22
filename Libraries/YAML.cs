@@ -95,10 +95,10 @@ namespace PathwaysEngine {
                         ext = ".yml",
                         dir =
 #if UNITY_EDITOR
-                        Directory.GetCurrentDirectory()
-                            +"/Assets/PathwaysEngine/Resources/";
+                            Directory.GetCurrentDirectory()
+                                +"/Assets/PathwaysEngine/Resources/";
 #else
-                        Application.dataPath+"/Resources/";
+                            Application.dataPath+"/Resources/";
 #endif
 
                 // mapping of all the tags to their types

@@ -82,7 +82,6 @@ namespace PathwaysEngine.Puzzle {
         |* it has been solved or not.
         |**/
         bool Solve();
-
     }
 
 
@@ -110,8 +109,7 @@ namespace PathwaysEngine.Puzzle {
     }
 
 
-
-    /** `IPieceIterator` : **`interface`**
+    /** `IIterator` : **`interface`**
     |*
     |* For puzzles where there are sub-groups of `IPiece`s who
     |* need to have their state changed on the basis of higher-
@@ -124,11 +122,11 @@ namespace PathwaysEngine.Puzzle {
     |* deriving type of `IPiece` should be the type constraint)
     |* then this iterates through those `IPiece`s.
     |**/
-    interface IPieceIterator<T> : IPiece, ICollection<T>
-                        where T : IPiece {
+    interface IIterator<T> : IPiece, ICollection<T>
+                   where T : IPiece {
 
 
-        /** `Current` : **`IPiece`**
+        /** `Current` : **`<T>`**
         |*
         |* Represents the next `IPiece` in this collection.
         |* has no setter, as this state shouldn't be changed
@@ -153,7 +151,7 @@ namespace PathwaysEngine.Puzzle {
     }
 
 
-    /** `IPieceCombinator` : **`interface`**
+    /** `ICombinator` : **`interface`**
     |*
     |* This interface provides a common way to have individual
     |* `IPiece`s behave together in aggregate, rather than as
@@ -162,14 +160,14 @@ namespace PathwaysEngine.Puzzle {
     |* the behavior between some external forces and a group
     |* of `IPiece`s that all need to be solved in unison.
     |**/
-    interface IPieceCombinator<T> : IPiece, ICollection<T> {
+    interface ICombinator<T> : IPiece, ICollection<T>
+                     where T : IPiece {
 
 
-        /** `AreSolved` : **`bool`**
+        /** `Pieces` : **`<T> -> bool`**
         |*
-        |* Defines if all the components are accounted for or
-        |* solved for by whatever heuristic is provided.
+        |* Denotes the "solved" state of the current system.
         |**/
-        bool AreSolved { get; set; }
+        IDictionary<T,bool> Pieces {get;}
     }
 }

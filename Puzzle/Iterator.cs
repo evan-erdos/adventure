@@ -1,4 +1,4 @@
-/* Ben Scott * bescott@andrew.cmu.edu * 2015-11-18 * PieceIterator */
+/* Ben Scott * bescott@andrew.cmu.edu * 2015-11-18 * Iterator */
 
 using UnityEngine;
 using System.Collections;
@@ -6,15 +6,15 @@ using System.Collections.Generic;
 
 namespace PathwaysEngine.Puzzle {
 
-    /** `PieceIterator` : **`Piece`**
+    /** `Iterator` : **`Piece`**
     |*
     |* Represents an instance of a puzzle piece, which must be
     |* `Solve`d to finish a puzzle.
     |**/
-    class PieceIterator<T> : Piece, IPieceIterator<T>
+    class Iterator<T> : Piece, IIterator<T>
                    where T : IPiece {
 
-        List<T> list;
+        List<T> list = new List<T>();
 
         public uint Index {
             get { return index; }
@@ -22,10 +22,6 @@ namespace PathwaysEngine.Puzzle {
 
         public bool IsReadOnly {
             get { return true; } }
-
-        public PieceIterator() {
-            list = new List<T>();
-        }
 
         public int Count {
             get { return (int) count; }

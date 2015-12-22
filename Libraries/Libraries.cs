@@ -77,4 +77,31 @@ namespace PathwaysEngine.Libraries {
         |**/
         ICollection<INode<T>> Nodes { get; }
     }
+
+
+    /** `ITypeTree<T>` : **`{ type -> <T>[] }`**
+    |*
+    |* This data structure stores instances of the specified
+    |* type and organizes them by inheritance. First, the type
+    |* is used as a key to a list of instances of that type,
+    |* and then also includes any other lists of objects that
+    |* inherit from that type directly, and those lists include
+    |* any lists of objects which derive from them, &etc.
+    |**/
+    interface ITypeTree<T> : ICollection<T> {
+    //KeyedByTypeCollection<T> {
+
+
+        /** `Add()` : **`bool`**
+        |*
+        |* Adds an object to the structure.
+        |*
+        |**/
+
+    }
 }
+
+
+
+
+

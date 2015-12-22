@@ -25,18 +25,20 @@ namespace PathwaysEngine.Inventory {
         } bool worn;
 
 
+        public override bool Take() { base.Take();
+            return Player.Wear(this); }
+
+
+        public override bool Drop() { base.Drop();
+            return Player.Stow(this); }
+
+
         /** `Backpack` : **`destructor`**
         |*
         |* Drops all the contained `Item`s if `this` is garbage
         |* collected for whatever reason (or is `Destroy()`ed).
         |**/
         ~Backpack() { DropAll(); }
-
-        public override bool Take() { base.Take();
-            return Player.Wear(this); }
-
-        public override bool Drop() { base.Drop();
-            return Player.Stow(this); }
 
         public bool Wear() {
             gameObject.SetActive(true);

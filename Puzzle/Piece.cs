@@ -31,8 +31,7 @@ namespace PathwaysEngine.Puzzle {
         } protected bool isSolved;
 
         public virtual bool Solve() {
-            return OnSolve(this,System.EventArgs.Empty,IsSolved);
-        }
+            return OnSolve(this,System.EventArgs.Empty,IsSolved); }
 
         public virtual bool OnSolve(
                         object sender,
@@ -44,6 +43,9 @@ namespace PathwaysEngine.Puzzle {
 
         public override void Awake() {
             SolveEvent += this.OnSolve; }
+
+        public void OnDestroy() {
+            SolveEvent -= this.OnSolve; }
     }
 }
 

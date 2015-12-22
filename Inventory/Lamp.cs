@@ -2,6 +2,7 @@
 
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 using mvmt=PathwaysEngine.Movement;
 using util=PathwaysEngine.Utilities;
 
@@ -14,9 +15,11 @@ namespace PathwaysEngine.Inventory {
     |**/
     public partial class Lamp : Item, IWieldable {
         bool wait = false;
+        List<Light> lights;
         public AudioClip auSwitch;
         Animator animator;
         public util::key dash;
+
 
         public override bool Held {
             get { return held; }
@@ -36,6 +39,7 @@ namespace PathwaysEngine.Inventory {
                     StartCoroutine(LateSetBool("sprint",_sprint)); }
         } bool _sprint = false;
 
+
         public bool on {
             get { return _on; }
             set { if (!Held) return;
@@ -46,6 +50,7 @@ namespace PathwaysEngine.Inventory {
                 }
             }
         } bool _on;
+
 
         public bool Worn {
             get { return worn; }
@@ -65,37 +70,32 @@ namespace PathwaysEngine.Inventory {
         public uint Uses {get;set;}
         public float time {get;set;}
 
+
         public Lamp() {
             dash = new util::key((n)=>sprint=n);
         }
 
-        public override void Awake() { base.Awake();
-            animator = GetComponent<Animator>();
-            GetComponent<AudioSource>().clip = auSwitch;
-        }
-
-        public override void Start() { base.Start();
-            on = true;
-        }
 
         public override bool Use() {
-            if (Worn && !wait) StartCoroutine(On());
+            if (Worn && !wait && gameObject.activeInHierarchy)
+                StartCoroutine(On());
             return false;
         }
 
+
         public void Attack() { Use(); }
+
 
         IEnumerator On() {
             wait = true;
             yield return new WaitForSeconds(0.125f);
-            if (time>0) //{
-                foreach (var elem in GetComponentsInChildren<Light>()) elem.enabled = on;
-                //var l = GetComponentsInChildren<Light>()[0];
-                //if (l) l.GetComponent<Light>().enabled = on;
-            //}
+            if (time>0)
+                foreach (var light in lights)
+                    light.enabled = on;
             yield return new WaitForSeconds(0.25f);
             wait = false;
         }
+
 
         IEnumerator LateSetBool(string s, bool t) {
             yield return new WaitForEndOfFrame();
@@ -103,20 +103,37 @@ namespace PathwaysEngine.Inventory {
                 animator.SetBool(s,t);
         }
 
+
         public virtual bool Wear() {
             gameObject.SetActive(true);
             Worn = true;
-            StartCoroutine(LateSetBool("worn",worn));
+            if (gameObject.activeInHierarchy)
+                StartCoroutine(LateSetBool("worn",worn));
             on = true;
             return false;
         }
 
+
         public virtual bool Stow() {
             Worn = false;
-            StartCoroutine(LateSetBool("worn",worn));
+            if (gameObject.activeInHierarchy)
+                StartCoroutine(LateSetBool("worn",worn));
             gameObject.SetActive(false);
             return false;
         }
+
+
+        public override void Awake() { base.Awake();
+            animator = GetComponent<Animator>();
+            GetComponent<AudioSource>().clip = auSwitch;
+        }
+
+
+        public override void Start() { base.Start();
+            on = true;
+            lights = new List<Light>(GetComponentsInChildren<Light>());
+        }
+
     }
 }
 
