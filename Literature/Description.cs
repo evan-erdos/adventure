@@ -121,17 +121,17 @@ namespace PathwaysEngine.Literature {
 
 
         /** `Merge()` : **`Description`**
-        |*
-        |* A static function to ensure that underspecified
-        |* description objects don't remove default values, but
-        |* do overwrite anything that they have defined.
-        |*
-        |* - `d0` : **`Description`**
-        |*     description to merge into
-        |*
-        |* - `d1` : **`Description`**
-        |*     description to populate from
-        |**/
+         *
+         * A static function to ensure that underspecified
+         * description objects don't remove default values, but
+         * do overwrite anything that they have defined.
+         *
+         * - `d0` : **`Description`**
+         *     description to merge into
+         *
+         * - `d1` : **`Description`**
+         *     description to populate from
+         **/
         public static Description Merge(
                         Description d0,
                         Description d1) {

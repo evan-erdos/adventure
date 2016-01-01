@@ -20,18 +20,18 @@ namespace PathwaysEngine {
 
 
     /** `Player` : **`Person`**
-    |*
-    |* The main `Player` class inherits from person, and has a
-    |* number of interesting features. The `Player`'s holdall
-    |* will either create or auto-assigns a temporary & local
-    |* `Holdall` when the player has no backpack, to simulate
-    |* coatpockets or hands. `Player` also interfaces with the
-    |* movement controllers, deals with damage & death, and
-    |* almost all other operations in the entire game. It is
-    |* one of the few classes which is included in the main
-    |* namespace, due to its importance and its involvement in
-    |* many of the other namespaces' systems.
-    |**/
+     *
+     * The main `Player` class inherits from person, and has a
+     * number of interesting features. The `Player`'s holdall
+     * will either create or auto-assigns a temporary & local
+     * `Holdall` when the player has no backpack, to simulate
+     * coatpockets or hands. `Player` also interfaces with the
+     * movement controllers, deals with damage & death, and
+     * almost all other operations in the entire game. It is
+     * one of the few classes which is included in the main
+     * namespace, due to its importance and its involvement in
+     * many of the other namespaces' systems.
+     **/
     public partial class Player : Person {
         public bool wait = false;
         static Regex regex = new Regex(

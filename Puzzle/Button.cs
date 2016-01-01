@@ -8,17 +8,17 @@ namespace PathwaysEngine.Puzzle {
 
 
     /** `Button` : **`class`**
-    |*
-    |* Represents any button which can be pressed, toggled, or
-    |* or otherwise manipulated with a single click.
-    |**/
+     *
+     * Represents any button which can be pressed, toggled, or
+     * or otherwise manipulated with a single click.
+     **/
     partial class Button : Piece {
 
 
         /** `IsPressed` : **`bool`**
-        |*
-        |* Whether or not the button is pressed.
-        |**/
+         *
+         * Whether or not the button is pressed.
+         **/
         public bool IsPressed {get;set;}
 
 

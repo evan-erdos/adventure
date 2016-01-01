@@ -7,10 +7,10 @@ namespace PathwaysEngine.Adventure {
 
 
 	/** `Teleporter` : **`class`**
-	|*
-	|* Extremely simple class which will teleport anything that
-	|* touches its trigger `Collider`.
-	|**/
+	 *
+	 * Extremely simple class which will teleport anything that
+	 * touches its trigger `Collider`.
+	 **/
 	[RequireComponent(typeof(AudioSource))]
 	public class Teleporter : MonoBehaviour {
 	    AudioSource _audio;

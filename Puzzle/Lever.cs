@@ -10,10 +10,10 @@ namespace PathwaysEngine.Puzzle {
 
 
     /** `Lever` : **`IPiece`**
-    |*
-    |* Represents an instance of a lever, which can either be
-    |* `Solve`d or not, depending upon if it's pulled.
-    |**/
+     *
+     * Represents an instance of a lever, which can either be
+     * `Solve`d or not, depending upon if it's pulled.
+     **/
     partial class Lever : adv::Thing, IPiece {
         bool wait = false;
         public float time = 2f, dist = 2f, delay = 4f;
@@ -108,14 +108,14 @@ namespace PathwaysEngine.Puzzle {
 
 
         /** `Pulling()` : **`coroutine`**
-        |*
-        |* Called with a boolean argument, specifies if the
-        |* lever should be pulled or pushed over a period of
-        |* `delay`. Also issues a `Terminal.Log()` message to
-        |* inform the player of the action taken. This is here
-        |* because once this is called, it is certain that the
-        |* event of pulling the lever is going to take place.
-        |**/
+         *
+         * Called with a boolean argument, specifies if the
+         * lever should be pulled or pushed over a period of
+         * `delay`. Also issues a `Terminal.Log()` message to
+         * inform the player of the action taken. This is here
+         * because once this is called, it is certain that the
+         * event of pulling the lever is going to take place.
+         **/
         IEnumerator Pulling(bool t) {
             if (!wait) {
                 wait = true;

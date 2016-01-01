@@ -6,9 +6,9 @@ namespace PathwaysEngine.Literature {
 
 
     /** `Command` : **`struct`**
-    |*
-    |* Represents any `Player`-issued command.
-    |**/
+     *
+     * Represents any `Player`-issued command.
+     **/
     public struct Command {
         public string uuid, input;
         public Regex regex {get;set;}

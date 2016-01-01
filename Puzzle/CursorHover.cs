@@ -8,12 +8,12 @@ using lit=PathwaysEngine.Literature;
 namespace PathwaysEngine.Puzzle {
 
     /** `CursorHover` : **`MonoBehaviour`**
-    |*
-    |* Deals with the cursor, how it displays, and changes it
-    |* when mousing over this particular entity. Unless there
-    |* is a rigidbody on the parent, this needs to have one for
-    |* it to be triggered by clicks.
-    |**/
+     *
+     * Deals with the cursor, how it displays, and changes it
+     * when mousing over this particular entity. Unless there
+     * is a rigidbody on the parent, this needs to have one for
+     * it to be triggered by clicks.
+     **/
     [RequireComponent(typeof (Collider))]
     public class CursorHover : MonoBehaviour {
         bool first = false;

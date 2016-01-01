@@ -19,10 +19,10 @@ namespace PathwaysEngine.Adventure {
 
 
     /** `Person` : **`class`**
-    |*
-    |* This is a pretty important class, as it defines some of
-    |* the most important behaviours that apply to `Person`s.
-    |**/
+     *
+     * This is a pretty important class, as it defines some of
+     * the most important behaviours that apply to `Person`s.
+     **/
     partial class Person : Creature {
         public float radius = 25f, dist = 4f;
         Body body;

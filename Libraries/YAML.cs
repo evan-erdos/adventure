@@ -18,22 +18,22 @@ using util=PathwaysEngine.Utilities;
 
 
 /** `YAML`
-|*
-|* These classes act as adapters for the `MonoBehaviour`-
-|* derived classes, which `YamlDotNet` cannot instantiate.
-|* Instances of these classes are instantiated instead, and
-|* then populate the main classes in `Awake()`.
-|**/
+ *
+ * These classes act as adapters for the `MonoBehaviour`-
+ * derived classes, which `YamlDotNet` cannot instantiate.
+ * Instances of these classes are instantiated instead, and
+ * then populate the main classes in `Awake()`.
+ **/
 namespace PathwaysEngine {
 
 
     /** `YAML`
-    |*
-    |* These classes act as adapters for the `MonoBehaviour`-
-    |* derived classes, which `YamlDotNet` cannot instantiate.
-    |* Instances of these classes are instantiated instead, and
-    |* then populate the main classes on `Awake()`.
-    |**/
+     *
+     * These classes act as adapters for the `MonoBehaviour`-
+     * derived classes, which `YamlDotNet` cannot instantiate.
+     * Instances of these classes are instantiated instead, and
+     * then populate the main classes on `Awake()`.
+     **/
     public static partial class Pathways {
 
         public static Dictionary<string,object> data =
@@ -50,20 +50,20 @@ namespace PathwaysEngine {
 
 
         /** `Deserialize<T,U>()` : **`function`**
-        |*
-        |* Deserialize loads data, serialized from `yml`, into
-        |* an instance of `Thing`. Should probably make use of
-        |* type contravariance, but hey, what can you do?
-        |*
-        |* - `<T>` : **`Type`**
-        |*     real type, usually derives from `Monobehaviour`
-        |*
-        |* - `<U>` : **`Type`**
-        |*     nested type, usually named `yml`
-        |*
-        |* - `o` : **`<T>`**
-        |*     object of type `T` to look for
-        |**/
+         *
+         * Deserialize loads data, serialized from `yml`, into
+         * an instance of `Thing`. Should probably make use of
+         * type contravariance, but hey, what can you do?
+         *
+         * - `<T>` : **`Type`**
+         *     real type, usually derives from `Monobehaviour`
+         *
+         * - `<U>` : **`Type`**
+         *     nested type, usually named `yml`
+         *
+         * - `o` : **`<T>`**
+         *     object of type `T` to look for
+         **/
         public static void Deserialize<T,U>(T o)
                         where T : IStorable
                         where U : ISerializable<T> {
@@ -71,10 +71,10 @@ namespace PathwaysEngine {
 
 
         /** `yml` : **`class`**
-        |*
-        |* Nested class that deals with serializing &
-        |* deserializing data from `*.yml` files.
-        |**/
+         *
+         * Nested class that deals with serializing &
+         * deserializing data from `*.yml` files.
+         **/
         public static class yml {
 
             static Deserializer deserializer =
@@ -82,14 +82,14 @@ namespace PathwaysEngine {
 
 
             /** `yml` : **`constructor`**
-            |*
-            |* Instantiates a `Deserializer`, registers tags, &
-            |* reads data from the specified files. While the
-            |* usage of `static`s *and*  `constructor`s aren't
-            |* kosher in `Unity`, but in this case, it's ok, as
-            |* this has nothing to do with the `MonoBehaviour`
-            |* loading / instantiation process.
-            |**/
+             *
+             * Instantiates a `Deserializer`, registers tags, &
+             * reads data from the specified files. While the
+             * usage of `static`s *and*  `constructor`s aren't
+             * kosher in `Unity`, but in this case, it's ok, as
+             * this has nothing to do with the `MonoBehaviour`
+             * loading / instantiation process.
+             **/
             static yml() {
                 string  pre = "tag:yaml.org,2002:",
                         ext = ".yml",
@@ -179,13 +179,13 @@ namespace PathwaysEngine {
 
 
             /** `GetReader()` : **`StringReader`**
-            |*
-            |* Gets the `*.yml` file in the main directory only
-            |* if it exists and has the proper extension.
-            |*
-            |* - `throw` : **`Exception`**
-            |*     if the file does not exist
-            |**/
+             *
+             * Gets the `*.yml` file in the main directory only
+             * if it exists and has the proper extension.
+             *
+             * - `throw` : **`Exception`**
+             *     if the file does not exist
+             **/
             static StringReader GetReader(string file) {
                 if (!File.Exists(file))
                     throw new System.Exception("YAML 404: "+file);
@@ -197,55 +197,55 @@ namespace PathwaysEngine {
 
 
             /** `GetTypeYAML()` : **`Type`**
-            |*
-            |* Tries to find a `Type` in `PathwaysEngine` which
-            |* is a match for the supplied `string`.
-            |*
-            |* - `ns` : **`string`**
-            |*     `string`ified namespace to look in
-            |*
-            |* - `s` : **`string`**
-            |*     `string`ified name of a `Type` to look for
-            |**/
+             *
+             * Tries to find a `Type` in `PathwaysEngine` which
+             * is a match for the supplied `string`.
+             *
+             * - `ns` : **`string`**
+             *     `string`ified namespace to look in
+             *
+             * - `s` : **`string`**
+             *     `string`ified name of a `Type` to look for
+             **/
             public static Type GetTypeYAML(string ns, string s) {
                 //Debug.Log("type: "+type+"  string: "+ns+s+"+yml");
                 return Type.GetType("PathwaysEngine."+ns+"."+s+"+yml"); }
 
 
             /** `Deserialize()` : **`function`**
-            |*
-            |* Called without type arguments, this will simply
-            |* deserialize into the `data` object. This is used
-            |* only by the `static` constructor to get data out
-            |* of the rest of the files (skipping the few files
-            |* which are specified above).
-            |*
-            |* - `file` : **`string`**
-            |*     filename to look for
-            |*
-            |* - `throw` : **`IOException`**
-            |**/
+             *
+             * Called without type arguments, this will simply
+             * deserialize into the `data` object. This is used
+             * only by the `static` constructor to get data out
+             * of the rest of the files (skipping the few files
+             * which are specified above).
+             *
+             * - `file` : **`string`**
+             *     filename to look for
+             *
+             * - `throw` : **`IOException`**
+             **/
             static void Deserialize(string file) {
                 foreach (var kvp in deserializer.Deserialize<Dictionary<string,object>>(GetReader(file))) data[kvp.Key] = kvp.Value; }
 
 
             /** `Deserialize<T>()` : **`<T>`**
-            |*
-            |* Returns an object of type `<T>` from the
-            |* dictionary if it exists.
-            |*
-            |* - `<T>` : **`Type`**
-            |*      type to look for, and then to cast to, when
-            |*      deserializing the data from the file.
-            |*
-            |* - `s` : **`string`**
-            |*     key to look for
-            |*
-            |* - `throw` : **`Exception`**
-            |*     There is no key at `data[s]`, or some other
-            |*     problem occurs when attempting to cast the
-            |*     object to `<T>`.
-            |**/
+             *
+             * Returns an object of type `<T>` from the
+             * dictionary if it exists.
+             *
+             * - `<T>` : **`Type`**
+             *      type to look for, and then to cast to, when
+             *      deserializing the data from the file.
+             *
+             * - `s` : **`string`**
+             *     key to look for
+             *
+             * - `throw` : **`Exception`**
+             *     There is no key at `data[s]`, or some other
+             *     problem occurs when attempting to cast the
+             *     object to `<T>`.
+             **/
             public static T Deserialize<T>(string s) {
                 object o;
                 if (!data.TryGetValue(s,out o))
@@ -257,9 +257,9 @@ namespace PathwaysEngine {
             }
 
             /** `DeserializeDefault<T>()` : **`<T>`**
-            |*
-            |* Returns the default object of type `<T>`.
-            |**/
+             *
+             * Returns the default object of type `<T>`.
+             **/
             public static T DeserializeDefault<T>() {
                 object o;
                 if (!defaults.TryGetValue(typeof(T),out o))
@@ -280,33 +280,33 @@ namespace PathwaysEngine {
 
 
     /** `IStorable` : **`interface`**
-    |*
-    |* Interface for anything that needs to be serialized
-    |* from the `yml` dictionary.
-    |**/
+     *
+     * Interface for anything that needs to be serialized
+     * from the `yml` dictionary.
+     **/
     public interface IStorable {
 
 
         /** `Name` : **`string`**
-        |*
-        |* This should be an unique identifier that the `*.yml`
-        |* `Deserializer` should look for in files.
-        |**/
+         *
+         * This should be an unique identifier that the `*.yml`
+         * `Deserializer` should look for in files.
+         **/
         string Name { get; }
     }
 
 
     /** `ISerializeable<T>` : **`interface`**
-    |*
-    |* Typically implemented by nested classes named `yml`, the
-    |* main function of this interface is to ensure that there
-    |* is a method called `Deserialize` which gets the correct
-    |* class to deserialize to at startup.
-    |*
-    |* - `<T>` : **`type`**
-    |*    the type of object to deserialize to, usually just
-    |*    the class that this is nested in.
-    |**/
+     *
+     * Typically implemented by nested classes named `yml`, the
+     * main function of this interface is to ensure that there
+     * is a method called `Deserialize` which gets the correct
+     * class to deserialize to at startup.
+     *
+     * - `<T>` : **`type`**
+     *    the type of object to deserialize to, usually just
+     *    the class that this is nested in.
+     **/
     public interface ISerializable<T>
                     where T : IStorable {
 
@@ -591,71 +591,71 @@ namespace PathwaysEngine {
 
 
             /** `ParserEvents` : **`enum`**
-            |*
-            |* This local `enum` defines the `Parse` delegates
-            |* that the `Parser` should call for each verb and
-            |* command entered. This is awful.
-            |*
-            |* - `Sudo` : **`ParserEvents`**
-            |*     `Pathways.Sudo` overrides commands
-            |*
-            |* - `Quit` : **`ParserEvents`**
-            |*     `Pathways.Quit` begins the quitting routine
-            |*
-            |* - `Redo` : **`ParserEvents`**
-            |*     `Pathways.Redo` repeats the last command
-            |*
-            |* - `Save` : **`ParserEvents`**
-            |*     `Pathways.Save` saves the game
-            |*
-            |* - `Load` : **`ParserEvents`**
-            |*     `Pathways.Load` loads from a `*.yml` file
-            |*
-            |* - `Help` : **`ParserEvents`**
-            |*     `Pathways.Help` displays a simple help text
-            |*
-            |* - `View` : **`ParserEvents`**
-            |*     `Player.View` examines some object
-            |*
-            |* - `Look` : **`ParserEvents`**
-            |*     `Player.Look` looks around/examines a room
-            |*
-            |* - `Goto` : **`ParserEvents`**
-            |*     `Player.Goto` sends the `Player` somewhere
-            |*
-            |* - `Move` : **`ParserEvents`**
-            |*     `Player.Goto` can be called to move objects
-            |*
-            |* - `Invt` : **`ParserEvents`**
-            |*     `Player.Invt` opens the inventory menu
-            |*
-            |* - `Take` : **`ParserEvents`**
-            |*     `Player.Take` takes an item
-            |*
-            |* - `Drop` : **`ParserEvents`**
-            |*     `Player.Drop` drops an item
-            |*
-            |* - `Wear` : **`ParserEvents`**
-            |*     `Player.Wear` has the player wear something
-            |*
-            |* - `Stow` : **`ParserEvents`**
-            |*     `Player.Stow` has the player stow something
-            |*
-            |* - `Read` : **`ParserEvents`**
-            |*     `Player.Read` reads an `IReadable` thing
-            |*
-            |* - `Open` : **`ParserEvents`**
-            |*     `Player.Open` opens something
-            |*
-            |* - `Shut` : **`ParserEvents`**
-            |*     `Player.Shut` closes something
-            |*
-            |* - `Push` : **`ParserEvents`**
-            |*     `Player.Push` pushes something
-            |*
-            |* - `Pull` : **`ParserEvents`**
-            |*     `Player.Pull` pulls something
-            |**/
+             *
+             * This local `enum` defines the `Parse` delegates
+             * that the `Parser` should call for each verb and
+             * command entered. This is awful.
+             *
+             * - `Sudo` : **`ParserEvents`**
+             *     `Pathways.Sudo` overrides commands
+             *
+             * - `Quit` : **`ParserEvents`**
+             *     `Pathways.Quit` begins the quitting routine
+             *
+             * - `Redo` : **`ParserEvents`**
+             *     `Pathways.Redo` repeats the last command
+             *
+             * - `Save` : **`ParserEvents`**
+             *     `Pathways.Save` saves the game
+             *
+             * - `Load` : **`ParserEvents`**
+             *     `Pathways.Load` loads from a `*.yml` file
+             *
+             * - `Help` : **`ParserEvents`**
+             *     `Pathways.Help` displays a simple help text
+             *
+             * - `View` : **`ParserEvents`**
+             *     `Player.View` examines some object
+             *
+             * - `Look` : **`ParserEvents`**
+             *     `Player.Look` looks around/examines a room
+             *
+             * - `Goto` : **`ParserEvents`**
+             *     `Player.Goto` sends the `Player` somewhere
+             *
+             * - `Move` : **`ParserEvents`**
+             *     `Player.Goto` can be called to move objects
+             *
+             * - `Invt` : **`ParserEvents`**
+             *     `Player.Invt` opens the inventory menu
+             *
+             * - `Take` : **`ParserEvents`**
+             *     `Player.Take` takes an item
+             *
+             * - `Drop` : **`ParserEvents`**
+             *     `Player.Drop` drops an item
+             *
+             * - `Wear` : **`ParserEvents`**
+             *     `Player.Wear` has the player wear something
+             *
+             * - `Stow` : **`ParserEvents`**
+             *     `Player.Stow` has the player stow something
+             *
+             * - `Read` : **`ParserEvents`**
+             *     `Player.Read` reads an `IReadable` thing
+             *
+             * - `Open` : **`ParserEvents`**
+             *     `Player.Open` opens something
+             *
+             * - `Shut` : **`ParserEvents`**
+             *     `Player.Shut` closes something
+             *
+             * - `Push` : **`ParserEvents`**
+             *     `Player.Push` pushes something
+             *
+             * - `Pull` : **`ParserEvents`**
+             *     `Player.Pull` pulls something
+             **/
             public enum ParserEvents {
                 Sudo, Quit, Redo, Save, Load, Help,
                 View, Look, Goto, Move, Invt, Take,

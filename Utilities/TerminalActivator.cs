@@ -7,11 +7,11 @@ using System.Collections.Generic;
 namespace PathwaysEngine.Utilities {
 
     /** `TerminalActivator` : **`class`**
-    |*
-    |* Specific implementation of a `Activator<T>`, used by the
-    |* `Terminal` class to enable / disable its UI effects via
-    |* a parser command.
-    |**/
+     *
+     * Specific implementation of a `Activator<T>`, used by the
+     * `Terminal` class to enable / disable its UI effects via
+     * a parser command.
+     **/
     public class TerminalActivator : Activator<Behaviour> {
 
         public override void Initialize() {

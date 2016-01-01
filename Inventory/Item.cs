@@ -11,11 +11,11 @@ namespace PathwaysEngine.Inventory {
 
 
     /** `Item` : **`class`**
-    |*
-    |* Represents anything that the `Player` can take, drop, or
-    |* use in any other way. Does not apply to any interactive
-    |* entities that the `Player` can't take with them.
-    |**/
+     *
+     * Represents anything that the `Player` can take, drop, or
+     * use in any other way. Does not apply to any interactive
+     * entities that the `Player` can't take with them.
+     **/
     [RequireComponent(typeof(Rigidbody))]
     public partial class Item : adv::Thing, IGainful {
         float volume = 0.9f, dist = 4f;
@@ -24,11 +24,11 @@ namespace PathwaysEngine.Inventory {
 
 
         /** `Held` : **`bool`**
-        |*
-        |* While the `Item` does not neccesarily know if the
-        |* `Player` is holding it, but does need to know, and
-        |* will disable its components on this basis.
-        |**/
+         *
+         * While the `Item` does not neccesarily know if the
+         * `Player` is holding it, but does need to know, and
+         * will disable its components on this basis.
+         **/
         public virtual bool Held {
             get { return held; }
             set { held = value;
@@ -42,16 +42,16 @@ namespace PathwaysEngine.Inventory {
         //public uint Uses {get;set;}
 
         /** `Cost` : **`int`**
-        |*
-        |* Clearly, this represents the price of an `Item`s.
-        |**/
+         *
+         * Clearly, this represents the price of an `Item`s.
+         **/
         public int Cost { get; set; }
 
 
         /** `Mass` : **`real`**
-        |*
-        |* This simply extends `Rigidbody.mass`.
-        |**/
+         *
+         * This simply extends `Rigidbody.mass`.
+         **/
         public float Mass {
             get { return rigidbody.mass; }
             set { rigidbody.mass = value; } }
@@ -61,11 +61,11 @@ namespace PathwaysEngine.Inventory {
 
 
         /** `Take()` : **`bool`**
-        |*
-        |* Local callback for the global command, `Take()`.
-        |* Currently, this does a bunch of nonsense specific
-        |* to `Unity3D`, such as reparenting to the `Player`.
-        |**/
+         *
+         * Local callback for the global command, `Take()`.
+         * Currently, this does a bunch of nonsense specific
+         * to `Unity3D`, such as reparenting to the `Player`.
+         **/
         public virtual bool Take() {
             lit::Terminal.LogCommand(string.Format(
                 "You take the {0}.", name));
@@ -77,11 +77,11 @@ namespace PathwaysEngine.Inventory {
         }
 
         /** `Drop()` : **`bool`**
-        |*
-        |* Inverse of `Take()`, which drops the object, and
-        |* reparents it to `root`, or the global transform in
-        |* Unity. Also prints a `Terminal` message.
-        |**/
+         *
+         * Inverse of `Take()`, which drops the object, and
+         * reparents it to `root`, or the global transform in
+         * Unity. Also prints a `Terminal` message.
+         **/
         public virtual bool Drop() {
             gameObject.SetActive(true);
             if (sound)

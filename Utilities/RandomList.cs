@@ -7,14 +7,14 @@ using System.Collections.Generic;
 namespace PathwaysEngine {
 
     /* `RandomList<T>` : **`List<T>`**
-    |*
-    |* Encapsulation class for List<T> with added methods for
-    |* random choices. Using `Random` is thread safe, and also
-    |* potentially inefficient, as this will instantiate a new
-    |* instance of `Random` for each list.
-    |* - `<T>` **Type**: Type of the `IList` to pick elements from.
-    |* - `return` **T**: random element of `list`.
-    |**/
+     *
+     * Encapsulation class for List<T> with added methods for
+     * random choices. Using `Random` is thread safe, and also
+     * potentially inefficient, as this will instantiate a new
+     * instance of `Random` for each list.
+     * - `<T>` **Type**: Type of the `IList` to pick elements from.
+     * - `return` **T**: random element of `list`.
+     **/
     public class RandomList<T> : List<T> {
         System.Random random;
 

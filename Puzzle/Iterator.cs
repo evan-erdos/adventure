@@ -7,10 +7,10 @@ using System.Collections.Generic;
 namespace PathwaysEngine.Puzzle {
 
     /** `Iterator` : **`Piece`**
-    |*
-    |* Represents an instance of a puzzle piece, which must be
-    |* `Solve`d to finish a puzzle.
-    |**/
+     *
+     * Represents an instance of a puzzle piece, which must be
+     * `Solve`d to finish a puzzle.
+     **/
     class Iterator<T> : Piece, IIterator<T>
                    where T : IPiece {
 

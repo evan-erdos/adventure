@@ -6,10 +6,10 @@ using System.Collections.Generic;
 namespace PathwaysEngine.Statistics {
 
     /** `Hit` : **`struct`**
-    |*
-    |* Low-level struct to represent a `Hit`. Factors in the
-    |* damage rolls, the resistances, & its own affinity.
-    |**/
+     *
+     * Low-level struct to represent a `Hit`. Factors in the
+     * damage rolls, the resistances, & its own affinity.
+     **/
     public struct Hit {
         public int value;
         public Damages damage;

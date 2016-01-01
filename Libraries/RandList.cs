@@ -5,13 +5,13 @@ using Random=System.Random;
 
 
 /** `RandList<T>` : **`List<T>`**
-|*
-|* Extremely simple wrapper class for `List<T>`, which
-|* adds the ability to return a random element from the
-|* list.
-|*
-|* - `<T>` : **`Type`**
-|**/
+ *
+ * Extremely simple wrapper class for `List<T>`, which
+ * adds the ability to return a random element from the
+ * list.
+ *
+ * - `<T>` : **`Type`**
+ **/
 public class RandList<T> : List<T> {
     Random random = new Random();
 

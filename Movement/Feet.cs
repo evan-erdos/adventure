@@ -9,12 +9,12 @@ namespace PathwaysEngine.Movement {
 
 
     /** `Feet` : **`class`**
-    |*
-    |* A `Component` of `Person` and therefore `Player`, this
-    |* plays a pretty large variety of foot sounds, which are
-    |* triggered by the `PhysicMaterial`s that the `Person` or
-    |* `Player` step on.
-    |**/
+     *
+     * A `Component` of `Person` and therefore `Player`, this
+     * plays a pretty large variety of foot sounds, which are
+     * triggered by the `PhysicMaterial`s that the `Person` or
+     * `Player` step on.
+     **/
     [RequireComponent(typeof(AudioSource))]
     public class Feet : MonoBehaviour {
         bool wait = false, isLanding = false;
@@ -27,26 +27,26 @@ namespace PathwaysEngine.Movement {
         public util::key jump, dash, duck;
 
         /** `Volume` : **`real`**
-        |*
-        |* hacky value to make landing louder than walking, etc
-        |**/
+         *
+         * hacky value to make landing louder than walking, etc
+         **/
         public float Volume {
             get { return (dash.input)?0.2f:((duck.input)?0.05f:0.1f); } }
 
         /** `Rate` : **`real`**
-        |*
-        |* hacky value to speed up play frequency when running
-        |**/
+         *
+         * hacky value to speed up play frequency when running
+         **/
         public float Rate {
             get { return (dash.input)?0.15f:((duck.input)?0.3f:0.2f); } }
 
 
         /** `Feet` : **`constructor`**
-        |*
-        |* Usually frowned upon in `Unity` development, but in
-        |* this case, it harmlessly creates input listeners for
-        |* the few inputs that this class needs to know about.
-        |**/
+         *
+         * Usually frowned upon in `Unity` development, but in
+         * this case, it harmlessly creates input listeners for
+         * the few inputs that this class needs to know about.
+         **/
         public Feet() {
             jump = new util::key((n)=>jump.input=n);
             dash = new util::key((n)=>dash.input=n);

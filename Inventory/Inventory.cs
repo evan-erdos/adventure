@@ -5,18 +5,18 @@ using adv=PathwaysEngine.Adventure;
 
 
 /** `PathwaysEngine.Inventory` : **`namespace`**
-|*
-|* Deals with items, their abilities, and the inventory
-|* window UI.
-|**/
+ *
+ * Deals with items, their abilities, and the inventory
+ * window UI.
+ **/
 namespace PathwaysEngine.Inventory {
 
 
     /** `Keys` : **`enum`**
-    |*
-    |* Represents broad kinds of `LockKey` that can be used to
-    |* open things via `ILockable.Unlock()`.
-    |**/
+     *
+     * Represents broad kinds of `LockKey` that can be used to
+     * open things via `ILockable.Unlock()`.
+     **/
     public enum Keys : int {
         Default  = 0,
         Breaker  = 1,
@@ -31,188 +31,188 @@ namespace PathwaysEngine.Inventory {
 
 
     /** `IItem` : **`interface`**
-    |*
-    |* Interface to all `Item`s, deals with their storage
-    |**/
+     *
+     * Interface to all `Item`s, deals with their storage
+     **/
     public interface IItem : IStorable {
 
 
         /** `Held` : **`bool`**
-        |*
-        |* is the current `Item` held in inventory?
-        |**/
+         *
+         * is the current `Item` held in inventory?
+         **/
         bool Held { get; set; }
 
 
         /** `Take()` : **`bool`**
-        |*
-        |* Called to inform the `IItem` that it's been
-        |* taken. Sets `Rigidbody.isKinematic`, etc.
-        |**/
+         *
+         * Called to inform the `IItem` that it's been
+         * taken. Sets `Rigidbody.isKinematic`, etc.
+         **/
         bool Take();
 
 
         /** `Drop()` : **`bool`**
-        |*
-        |* Called to inform the `IItem` that it's been
-        |* dropped. Sets `Rigidbody.isKinematic`, etc.
-        |**/
+         *
+         * Called to inform the `IItem` that it's been
+         * dropped. Sets `Rigidbody.isKinematic`, etc.
+         **/
         bool Drop();
     }
 
 
     /** `IItemGroup<T>` : **`interface`**
-    |*
-    |* Manages groups of `Item`s, considers them a single
-    |* instance, (e.g., not `IEnumerable`)
-    |**/
+     *
+     * Manages groups of `Item`s, considers them a single
+     * instance, (e.g., not `IEnumerable`)
+     **/
     public interface IItemGroup<T> : IItem {
 
 
         /** `Count` : **`uint`**
-        |*
-        |* Represents the number of `Item`s that this group
-        |*
-        |**/
+         *
+         * Represents the number of `Item`s that this group
+         *
+         **/
         uint Count { get; set; }
 
 
         /** `Group()` : **`function`**
-        |*
-        |* creates a group of `IItem`s
-        |**/
+         *
+         * creates a group of `IItem`s
+         **/
         void Group();
 
 
         /** `Split()` : **`IItemGroup<T>`**
-        |*
-        |* is the current `Item` held in inventory?
-        |**/
+         *
+         * is the current `Item` held in inventory?
+         **/
         IItemGroup<T> Split(uint n);
     }
 
 
     /** `IUsable` : **`interface`**
-    |*
-    |* Interface for items that can be used, and keeps
-    |* track of how many, if any, uses it has left.
-    |**/
+     *
+     * Interface for items that can be used, and keeps
+     * track of how many, if any, uses it has left.
+     **/
     public interface IUsable : IItem {
 
 
         /** `Uses` : **`uint`**
-        |*
-        |* How many uses this `IItem` has left.
-        |**/
+         *
+         * How many uses this `IItem` has left.
+         **/
         uint Uses { get; set; }
 
 
         /** `Use()` : **`bool`**
-        |*
-        |* Use the `IItem`.
-        |**/
+         *
+         * Use the `IItem`.
+         **/
         bool Use();
     }
 
 
     /** `IGainful` : **`interface`**
-    |*
-    |* Interface for items that have monetary value, and
-    |* can be traded.
-    |**/
+     *
+     * Interface for items that have monetary value, and
+     * can be traded.
+     **/
     public interface IGainful : IItem {
 
 
         /** `Cost` : **`int`**
-        |*
-        |* Price of an `IItem`.
-        |**/
+         *
+         * Price of an `IItem`.
+         **/
         int Cost { get; set; }
 
 
         /** `Buy()` : **`bool`**
-        |*
-        |* Purchases an `IItem`.
-        |**/
+         *
+         * Purchases an `IItem`.
+         **/
         bool Buy();
 
 
         /** `Sell()` : **`bool`**
-        |*
-        |* Sells this `IItem`.
-        |**/
+         *
+         * Sells this `IItem`.
+         **/
         bool Sell();
     }
 
 
     /** `IWearable` : **`interface`**
-    |*
-    |* Interface to anything that can be worn.
-    |**/
+     *
+     * Interface to anything that can be worn.
+     **/
     public interface IWearable : IItem {
 
 
         /** `Worn` : **`bool`**
-        |*
-        |* Is this currently being worn by some `Actor`?
-        |**/
+         *
+         * Is this currently being worn by some `Actor`?
+         **/
         bool Worn { get; set; }
 
 
         /** `Wear` : **`bool`**
-        |*
-        |* Equip this `IItem`.
-        |**/
+         *
+         * Equip this `IItem`.
+         **/
         bool Wear();
 
 
         /** `Stow` : **`bool`**
-        |*
-        |* Put away this `IItem`.
-        |**/
+         *
+         * Put away this `IItem`.
+         **/
         bool Stow();
     }
 
 
     /** `IWieldable` : **`interface`**
-    |*
-    |* Interface to anything that can be used to attack
-    |* someone, or alternatively, heal them, violently.
-    |**/
+     *
+     * Interface to anything that can be used to attack
+     * someone, or alternatively, heal them, violently.
+     **/
     public interface IWieldable : IWearable, IUsable {
 
 
         /** `Attack()` : **`function`**
-        |*
-        |* Event to call when being used to attack.
-        |**/
+         *
+         * Event to call when being used to attack.
+         **/
         void Attack();
     }
 
 
     /** `IItemSet` : **`interface`**
-    |*
-    |* This interface defines a collection of `Item`s, which
-    |* can be iterated over and queried for particular types of
-    |* items.
-    |**/
+     *
+     * This interface defines a collection of `Item`s, which
+     * can be iterated over and queried for particular types of
+     * items.
+     **/
     public interface IItemSet : ICollection<Item>, IEnumerable<Item> {
 
 
         /** `GetItems<T>()` : **`<T>[]`**
-        |*
-        |* Gets all items in the `IItemSet` whose type is
-        |* either `<T>` or derives from `<T>`.
-        |**/
+         *
+         * Gets all items in the `IItemSet` whose type is
+         * either `<T>` or derives from `<T>`.
+         **/
         List<T> GetItems<T>() where T : Item;
 
 
         /** `GetItem<T>()` : **`<T>`**
-        |*
-        |* Gets a single `Item` of type `<T>` from the set. If
-        |* there is no `Item` of the specified type, an `Item`
-        |* of a derived type may be returned.
-        |**/
+         *
+         * Gets a single `Item` of type `<T>` from the set. If
+         * there is no `Item` of the specified type, an `Item`
+         * of a derived type may be returned.
+         **/
         T GetItem<T>() where T : Item;
     }
 
