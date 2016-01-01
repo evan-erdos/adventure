@@ -12,10 +12,10 @@ namespace PathwaysEngine.Adventure.Setting {
 
 
     /** `Door` : **`class`**
-    |*
-    |* Represents any portal that can be opened or that usually
-    |* behaves like a door.
-    |**/
+     *
+     * Represents any portal that can be opened or that usually
+     * behaves like a door.
+     **/
     [RequireComponent(typeof(AudioSource))]
     [RequireComponent(typeof(Collider))]
     [RequireComponent(typeof(Rigidbody))]
@@ -37,12 +37,12 @@ namespace PathwaysEngine.Adventure.Setting {
 
 
         /** `IsOpen` : **`bool`**
-        |*
-        |* The state of the `Door`, denotes if it's opening or
-        |* closing, rather than its actual state (this can be
-        |* true while the `Door` is opening, or it can be false
-        |* when the door is closing but not closed).
-        |**/
+         *
+         * The state of the `Door`, denotes if it's opening or
+         * closing, rather than its actual state (this can be
+         * true while the `Door` is opening, or it can be false
+         * when the door is closing but not closed).
+         **/
         public bool IsOpen {
             get { return isOpen; }
             set { if (value==isOpen) return;
@@ -54,10 +54,10 @@ namespace PathwaysEngine.Adventure.Setting {
 
 
         /** `IsLocked` : **`bool`**
-        |*
-        |* Defines whether or not the door is locked. Setting
-        |* it changes the state of the door, e.g., unlocks it.
-        |**/
+         *
+         * Defines whether or not the door is locked. Setting
+         * it changes the state of the door, e.g., unlocks it.
+         **/
         public bool IsLocked {
             get { return isLocked; }
             set { isLocked = value; }
@@ -65,9 +65,9 @@ namespace PathwaysEngine.Adventure.Setting {
 
 
         /** `IsInitOpen` : **`bool`**
-        |*
-        |* Defines whether or not the door begins opened.
-        |**/
+         *
+         * Defines whether or not the door begins opened.
+         **/
         public bool IsInitOpen {
             get { return isInitOpened; }
             set { isInitOpened = value; }
@@ -77,18 +77,18 @@ namespace PathwaysEngine.Adventure.Setting {
 
 
         /** `LockMessage` : **`string`**
-        |*
-        |* An optional message to print out when the `Player`
-        |* tries to open a locked door.
-        |**/
+         *
+         * An optional message to print out when the `Player`
+         * tries to open a locked door.
+         **/
         public string LockMessage {get;set;}
 
 
         /** `Position` : **`<real,real,real>`**
-        |*
-        |* Represents the `door` object's local position, and
-        |* stops it if it takes the `door` out of bounds.
-        |**/
+         *
+         * Represents the `door` object's local position, and
+         * stops it if it takes the `door` out of bounds.
+         **/
         public Vector3 Position {
             get { return door.transform.localPosition; }
             set {
@@ -106,11 +106,11 @@ namespace PathwaysEngine.Adventure.Setting {
 
 
         /** `LockKey` : **`Key`**
-        |*
-        |* The `Key` object which can unlock this `Door`. Can
-        |* be either a `Key` with a `Keys`value higher than the
-        |* `Door`'s security, or a unique object.
-        |**/
+         *
+         * The `Key` object which can unlock this `Door`. Can
+         * be either a `Key` with a `Keys`value higher than the
+         * `Door`'s security, or a unique object.
+         **/
         public inv::Key LockKey {
             get { return lockKey; }
             set { lockKey = value; }
@@ -118,13 +118,13 @@ namespace PathwaysEngine.Adventure.Setting {
 
 
         /** `Open()` : **`function`**
-        |*
-        |* This is a `static` callback for the text-commands
-        |* that registers any instances of `Door` to the
-        |* command multicast delegate, which calls their local
-        |* function, `Open()`, when the `Player` or anyone else
-        |* enters a command to open doors.
-        |**/
+         *
+         * This is a `static` callback for the text-commands
+         * that registers any instances of `Door` to the
+         * command multicast delegate, which calls their local
+         * function, `Open()`, when the `Player` or anyone else
+         * enters a command to open doors.
+         **/
         public static void Open(lit::Command c) {
             if (OpenEvent==null) return;
             OpenEvent(null,null,EventArgs.Empty,c);
@@ -132,11 +132,11 @@ namespace PathwaysEngine.Adventure.Setting {
 
 
         /** `Shut()` : **`function`**
-        |*
-        |* Inverse of the `Open()` command, simply calls the
-        |* other event, & does the same thing that `Open()`
-        |* does, but instead closes the `Door`.
-        |**/
+         *
+         * Inverse of the `Open()` command, simply calls the
+         * other event, & does the same thing that `Open()`
+         * does, but instead closes the `Door`.
+         **/
         public static void Shut(lit::Command c) {
             if (ShutEvent==null) return;
             ShutEvent(null,null,EventArgs.Empty,c);
@@ -192,14 +192,14 @@ namespace PathwaysEngine.Adventure.Setting {
 
 
         /** `Opening()` : **`coroutine`**
-        |*
-        |* Called with a boolean argument, specifies if the
-        |* door should be opened or closed over the period of
-        |* `time`. Also issues a `Terminal.Log()` message to
-        |* inform the player of the action taken. This is here
-        |* because once this is called, it is certain that the
-        |* event of opening the door is going to take place.
-        |**/
+         *
+         * Called with a boolean argument, specifies if the
+         * door should be opened or closed over the period of
+         * `time`. Also issues a `Terminal.Log()` message to
+         * inform the player of the action taken. This is here
+         * because once this is called, it is certain that the
+         * event of opening the door is going to take place.
+         **/
         IEnumerator Opening(bool t) {
             if (!wait) {
                 wait = true;
@@ -224,10 +224,10 @@ namespace PathwaysEngine.Adventure.Setting {
 
 
         /** `Open()` : **`bool`**
-        |*
-        |* This is the local event handler for the `Parser`'s
-        |* command, `Open`.
-        |**/
+         *
+         * This is the local event handler for the `Parser`'s
+         * command, `Open`.
+         **/
         public bool Open(
                         object source,
                         Thing target,
@@ -244,10 +244,10 @@ namespace PathwaysEngine.Adventure.Setting {
 
 
         /** `OpenOnly()` : **`bool`**
-        |*
-        |* This does exactly what open does, but locks the door
-        |* afterwords.
-        |**/
+         *
+         * This does exactly what open does, but locks the door
+         * afterwords.
+         **/
         //public bool OpenOnly() {
         //    StartCoroutine(OpeningOnly());
         //    return true;
@@ -255,9 +255,9 @@ namespace PathwaysEngine.Adventure.Setting {
 
 
         /** `Shut()` : **`bool`**
-        |*
-        |* Closes the door, the higher-level command.
-        |**/
+         *
+         * Closes the door, the higher-level command.
+         **/
         public bool Shut(
                         object source,
                         Thing target,

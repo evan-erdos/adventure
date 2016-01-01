@@ -8,11 +8,11 @@ namespace PathwaysEngine.Statistics {
 
 
     /** `Damage` : **`struct`**
-    |*
-    |* Defines a low-level object to send statistical metadata
-    |* between the sorts of things that typically need to do
-    |* things like that.
-    |**/
+     *
+     * Defines a low-level object to send statistical metadata
+     * between the sorts of things that typically need to do
+     * things like that.
+     **/
 #if DUMB
     struct Damage {
         public int crit = 20;

@@ -10,10 +10,10 @@ namespace PathwaysEngine.Puzzle {
 
 
     /** `Button` : **`Piece<bool>`**
-    |*
-    |* Represents any button which can be pressed, toggled, or
-    |* or otherwise manipulated with a single click.
-    |**/
+     *
+     * Represents any button which can be pressed, toggled, or
+     * or otherwise manipulated with a single click.
+     **/
     partial class Button : Piece<bool> {
 
 

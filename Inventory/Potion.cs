@@ -10,10 +10,10 @@ namespace PathwaysEngine.Inventory {
 
 
     /** `Potion` : **`class`**
-    |*
-    |* This kind of `Item` can be consumed, and will then have
-    |* some arbitrary effect on game state, or not, who knows?
-    |**/
+     *
+     * This kind of `Item` can be consumed, and will then have
+     * some arbitrary effect on game state, or not, who knows?
+     **/
     public partial class Potion : Item {
 
         //public stat::StatSet Effect {get;set;}

@@ -10,13 +10,13 @@ namespace PathwaysEngine.Utilities {
 
 
     /** `SpawnManager` : **`MonoBehaviour`**
-    |*
-    |* This class deals with where to put new user-entities in
-    |* the game, and does so in `Start()`. It requires an array
-    |* (or just one?) of children with the tag `SpawnPoint`.
-    |* Then, from any of those, it will instantiate the `src`
-    |* object at the position & rotation of a random child.
-    |**/
+     *
+     * This class deals with where to put new user-entities in
+     * the game, and does so in `Start()`. It requires an array
+     * (or just one?) of children with the tag `SpawnPoint`.
+     * Then, from any of those, it will instantiate the `src`
+     * object at the position & rotation of a random child.
+     **/
     public class SpawnManager : MonoBehaviour {
         public bool isPlayer = true;
         public Transform source;
@@ -24,9 +24,9 @@ namespace PathwaysEngine.Utilities {
 
 
         /** `Spawn()` : **`function`**
-        |*
-        |* Puts the `source` at a randomly-chosen `SpawnPoint`.
-        |**/
+         *
+         * Puts the `source` at a randomly-chosen `SpawnPoint`.
+         **/
         void Spawn() {
             if (Pathways.player)
                 Pathways.player.ResetPlayerLocalPosition();

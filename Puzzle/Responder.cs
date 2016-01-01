@@ -10,10 +10,10 @@ namespace PathwaysEngine.Puzzle {
 
 
     /** `Responder<T>` : **`class`**
-    |*
-    |* Represents an instance of a puzzle piece, which must be
-    |* `Solve`d to finish a puzzle.
-    |**/
+     *
+     * Represents an instance of a puzzle piece, which must be
+     * `Solve`d to finish a puzzle.
+     **/
     class Responder<T> : Piece<T>, IResponder<T>
                where T : Component {
 

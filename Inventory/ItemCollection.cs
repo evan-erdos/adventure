@@ -10,13 +10,13 @@ namespace PathwaysEngine.Inventory {
 
 
     /** `ItemCollection` : **`class`**
-    |*
-    |* Defines a set of `Item`s, which can be used as any other
-    |* `ICollection`, but deals with `Group`ing similar `Item`s
-    |* and can perform a really fast search on the basis of the
-    |* possibly different and usually quite varied subtypes for
-    |* easy filtering of specific types of `Item`s.
-    |**/
+     *
+     * Defines a set of `Item`s, which can be used as any other
+     * `ICollection`, but deals with `Group`ing similar `Item`s
+     * and can perform a really fast search on the basis of the
+     * possibly different and usually quite varied subtypes for
+     * easy filtering of specific types of `Item`s.
+     **/
     abstract class ItemCollection : Item, IItemSet {
 
         public bool IsSynchronized => false;

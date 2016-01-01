@@ -10,18 +10,18 @@ namespace PathwaysEngine.Puzzle {
 
 
     /** `Piece<T>` : **`Thing`**
-    |*
-    |* Represents an instance of a puzzle piece, which must be
-    |* `Solve`d to finish a puzzle.
-    |**/
+     *
+     * Represents an instance of a puzzle piece, which must be
+     * `Solve`d to finish a puzzle.
+     **/
     abstract partial class Piece<T> : adv::Thing, IPiece<T> {
 
 
         /** `SolveEvent` : **`event`**
-        |*
-        |* This property wraps the inherited `solveEvent` event
-        |*
-        |**/
+         *
+         * This property wraps the inherited `solveEvent` event
+         *
+         **/
         public virtual event OnSolve<T> SolveEvent {
             add { solveEvent += value; }
             remove { solveEvent -= value; }

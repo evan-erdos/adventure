@@ -11,12 +11,12 @@ namespace PathwaysEngine.Inventory {
 
 
     /** `Backpack` : **`class`**
-    |*
-    |* Acts as the main holdall for the `Player`, and cannot be
-    |* stored, as `Take()`/`Drop()`-ing the backpack will also
-    |* `Wear()`/`Stow()` it, so it can only act as a container
-    |* for the `Player`.
-    |**/
+     *
+     * Acts as the main holdall for the `Player`, and cannot be
+     * stored, as `Take()`/`Drop()`-ing the backpack will also
+     * `Wear()`/`Stow()` it, so it can only act as a container
+     * for the `Player`.
+     **/
     class Backpack : Bag, IWearable {
 
 
@@ -32,10 +32,10 @@ namespace PathwaysEngine.Inventory {
 
 
         /** `Backpack` : **`destructor`**
-        |*
-        |* Drops all the contained `Item`s if `this` is garbage
-        |* collected for whatever reason (or is `Destroy()`ed).
-        |**/
+         *
+         * Drops all the contained `Item`s if `this` is garbage
+         * collected for whatever reason (or is `Destroy()`ed).
+         **/
         ~Backpack() { DropAll(); }
 
         public bool Wear() {

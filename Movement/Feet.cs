@@ -10,12 +10,12 @@ namespace PathwaysEngine.Movement {
 
 
     /** `Feet` : **`class`**
-    |*
-    |* A `Component` of `Person` and therefore `Player`, this
-    |* plays a pretty large variety of foot sounds, which are
-    |* triggered by the `PhysicMaterial`s that the `Person` or
-    |* `Player` step on.
-    |**/
+     *
+     * A `Component` of `Person` and therefore `Player`, this
+     * plays a pretty large variety of foot sounds, which are
+     * triggered by the `PhysicMaterial`s that the `Person` or
+     * `Player` step on.
+     **/
     [RequireComponent(typeof(AudioSource))]
     public class Feet : MonoBehaviour {
 
@@ -25,30 +25,30 @@ namespace PathwaysEngine.Movement {
         Vector3 last;
         AudioSource _audio;
         public AudioClip[] stepSounds;
-        public Dictionary<StepTypes,RandomList<AudioClip>> sounds;
+        public Dictionary<StepTypes,RandList<AudioClip>> sounds;
         public util::key jump, dash, duck;
 
         /** `Volume` : **`real`**
-        |*
-        |* hacky value to make landing louder than walking, etc
-        |**/
+         *
+         * hacky value to make landing louder than walking, etc
+         **/
         public float Volume {
             get { return (dash.input)?0.2f:((duck.input)?0.05f:0.1f); } }
 
         /** `Rate` : **`real`**
-        |*
-        |* hacky value to speed up play frequency when running
-        |**/
+         *
+         * hacky value to speed up play frequency when running
+         **/
         public float Rate {
             get { return (dash.input)?0.15f:((duck.input)?0.3f:0.2f); } }
 
 
         /** `Feet` : **`constructor`**
-        |*
-        |* Usually frowned upon in `Unity` development, but in
-        |* this case, it harmlessly creates input listeners for
-        |* the few inputs that this class needs to know about.
-        |**/
+         *
+         * Usually frowned upon in `Unity` development, but in
+         * this case, it harmlessly creates input listeners for
+         * the few inputs that this class needs to know about.
+         **/
         public Feet() {
             jump = new util::key((n)=>jump.input=n);
             dash = new util::key((n)=>dash.input=n);
@@ -84,9 +84,9 @@ namespace PathwaysEngine.Movement {
         }
 
         void PlayStep(StepTypes stepType, float volume) {
-            var sound = sounds[stepType].Pick();
+            var sound = sounds[stepType].Next();
             if (!sound)
-                sound = sounds[StepTypes.Default].Pick();
+                sound = sounds[StepTypes.Default].Next();
             _audio.PlayOneShot(sound,volume);
         }
 
@@ -113,9 +113,9 @@ namespace PathwaysEngine.Movement {
 
         void Awake() {
             _audio = GetComponent<AudioSource>();
-            sounds = new Dictionary<StepTypes,RandomList<AudioClip>>();
+            sounds = new Dictionary<StepTypes,RandList<AudioClip>>();
             foreach (var elem in util::Enum.GetValues<StepTypes>()) {
-                sounds[elem] = new RandomList<AudioClip>();
+                sounds[elem] = new RandList<AudioClip>();
                 foreach (var clip in stepSounds) {
                     var name = clip.name.ToLower();
                     if (name.Contains(elem.ToString().ToLower()))

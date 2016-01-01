@@ -7,20 +7,20 @@ using Type=System.Type;
 
 
 /** `PathwaysEngine.Statistics` : **`namespace`**
-|*
-|* Handles all statistical combat / event interactions,
-|* including all manner of powers, abilities, dice rolls,
-|* and resistances.
-|**/
+ *
+ * Handles all statistical combat / event interactions,
+ * including all manner of powers, abilities, dice rolls,
+ * and resistances.
+ **/
 namespace PathwaysEngine.Statistics {
 
 
     /** `Stat` : **`class`**
-    |*
-    |* Base class of a statistic. Can perform `Check`s and
-    |* can be used to process a `Hit` or some other roll /
-    |* event based on statistics.
-    |**/
+     *
+     * Base class of a statistic. Can perform `Check`s and
+     * can be used to process a `Hit` or some other roll /
+     * event based on statistics.
+     **/
     public class Stat {
         public StatTypes statType;
         public bool Check() { return true; }
@@ -52,9 +52,9 @@ namespace PathwaysEngine.Statistics {
             this.stats = stats; }
 
         /** `this[]` : **`Stat`**
-        |*
-        |* Get stat by name.
-        |**/
+         *
+         * Get stat by name.
+         **/
         public Stat this[string s] {
             get { foreach (var elem in stats)
                     if (s==elem.GetType().ToString()) return elem;
@@ -63,9 +63,9 @@ namespace PathwaysEngine.Statistics {
         }
 
         /** `this[]` : **`Stat`**
-        |*
-        |* Get stat by Type.
-        |**/
+         *
+         * Get stat by Type.
+         **/
         public Stat this[Type T] {
             get { foreach (var elem in stats)
                     if (T==elem.GetType()) return elem;
@@ -105,46 +105,46 @@ namespace PathwaysEngine.Statistics {
         Hit  = 2, Crit  = 3}
 
     /** `Damages` : **`enum`**
-    |*
-    |* Represents the many types of damage.
-    |*
-    |* - `Default` : **`Damages`**
-    |*     Default damage is direct, and factors into damage
-    |*     calculations against default resistances only.
-    |*
-    |* - `Pierce` : **`Damages`**
-    |*     Penetrative damage, applies to sharp & very fast
-    |*     kinds of weapons / missiles.
-    |*
-    |* - `Crush` : **`Damages`**
-    |*     Brute force damage, usually as a result of very
-    |*     heavy impacts and very strong people.
-    |*
-    |* - `Fire` : **`Damages`**
-    |*     Burning damage.
-    |*
-    |* - `Magic` : **`Damages`**
-    |*     Magical damage.
-    |**/
+     *
+     * Represents the many types of damage.
+     *
+     * - `Default` : **`Damages`**
+     *     Default damage is direct, and factors into damage
+     *     calculations against default resistances only.
+     *
+     * - `Pierce` : **`Damages`**
+     *     Penetrative damage, applies to sharp & very fast
+     *     kinds of weapons / missiles.
+     *
+     * - `Crush` : **`Damages`**
+     *     Brute force damage, usually as a result of very
+     *     heavy impacts and very strong people.
+     *
+     * - `Fire` : **`Damages`**
+     *     Burning damage.
+     *
+     * - `Magic` : **`Damages`**
+     *     Magical damage.
+     **/
     public enum Damages { Default, Pierce, Crush, Fire, Magic }
 
     /** `Affinities` : **`enum`**
-    |*
-    |* Represents the many types of hits.
-    |*
-    |* - `Miss` : **`Affinities`**
-    |*     No hit takes place.
-    |*
-    |* - `Graze` : **`Affinities`**
-    |*     Glancing blow, or extremely ineffective hit.
-    |*
-    |* - `Hit` : **`Affinities`**
-    |*     Default hit, normal effectiveness.
-    |*
-    |* - `Crit` : **`Affinities`**
-    |*     Critical hit, very damaging / extremely effective
-    |*     against the receiver's resistances.
-    |**/
+     *
+     * Represents the many types of hits.
+     *
+     * - `Miss` : **`Affinities`**
+     *     No hit takes place.
+     *
+     * - `Graze` : **`Affinities`**
+     *     Glancing blow, or extremely ineffective hit.
+     *
+     * - `Hit` : **`Affinities`**
+     *     Default hit, normal effectiveness.
+     *
+     * - `Crit` : **`Affinities`**
+     *     Critical hit, very damaging / extremely effective
+     *     against the receiver's resistances.
+     **/
     public enum Affinities : byte { Miss, Graze, Hit, Crit }
 
     public enum StatTypes : byte {

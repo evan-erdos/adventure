@@ -10,10 +10,10 @@ namespace PathwaysEngine.Puzzle {
 
 
     /** `LeverCombinator` : **`class`**
-    |*
-    |* Represents an instance of a puzzle piece, which must be
-    |* `Solve`d to finish a puzzle.
-    |**/
+     *
+     * Represents an instance of a puzzle piece, which must be
+     * `Solve`d to finish a puzzle.
+     **/
     class LeverCombinator : Combinator<int> {
 
         [SerializeField] bool[] flags;

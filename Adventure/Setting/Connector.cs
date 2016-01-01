@@ -11,9 +11,9 @@ namespace PathwaysEngine.Adventure.Setting {
 
 
 	/** `Connector` : **`class`**
-	|*
-	|* Used for explicit connections beween `Rooms` or `Area`s.
-	|**/
+	 *
+	 * Used for explicit connections beween `Rooms` or `Area`s.
+	 **/
 	class Connector : Thing {
 
 		[SerializeField] Room src;

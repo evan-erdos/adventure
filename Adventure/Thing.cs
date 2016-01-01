@@ -12,12 +12,12 @@ namespace PathwaysEngine.Adventure {
 
 
     /** `Thing` : **`class`**
-    |*
-    |* An extremely important class, `Thing` is the base class
-    |* for anything that has any interface with the `Adventure`
-    |* namespace, the `Parser`, or the `Statistics`namespace,
-    |* or the `Terminal` or any deriving/text-based interfaces.
-    |**/
+     *
+     * An extremely important class, `Thing` is the base class
+     * for anything that has any interface with the `Adventure`
+     * namespace, the `Parser`, or the `Statistics`namespace,
+     * or the `Terminal` or any deriving/text-based interfaces.
+     **/
     public class Thing : MonoBehaviour, IThing {
         bool waitViewing;
         protected internal new Rigidbody rigidbody;
@@ -33,33 +33,33 @@ namespace PathwaysEngine.Adventure {
 
 
         /** `Thing` : **`constructor`**
-        |*
-        |* Currently unused, as `Unity` doesn't play very well
-        |* with the usual methods of instantiating classes, and
-        |* prefers to use whatever it uses to create its native
-        |* script type, `MonoBehaviour`.
-        |**/
+         *
+         * Currently unused, as `Unity` doesn't play very well
+         * with the usual methods of instantiating classes, and
+         * prefers to use whatever it uses to create its native
+         * script type, `MonoBehaviour`.
+         **/
         public Thing() { }
 
 
         /** `AddListener()` : **`function`**
-        |*
-        |* Every instantiated `Thing` calls if it detects the
-        |* `Player` is nearby via `OnTriggerEnter()`. It then
-        |* subscribes itself to or unsubscribes itself from the
-        |* global/static `Thing`, acts as an event handler to
-        |* the instances. Subscribers could have any number of
-        |* functions called iff the `Player` is nearby and the
-        |* `Player` issues an appropriate command.
-        |**/
+         *
+         * Every instantiated `Thing` calls if it detects the
+         * `Player` is nearby via `OnTriggerEnter()`. It then
+         * subscribes itself to or unsubscribes itself from the
+         * global/static `Thing`, acts as an event handler to
+         * the instances. Subscribers could have any number of
+         * functions called iff the `Player` is nearby and the
+         * `Player` issues an appropriate command.
+         **/
         public static void AddListener(Thing thing) =>
             ViewEvent += thing.View;
 
 
         /** `RemoveListener()` : **`function`**
-        |*
-        |* Corollary to the `AddListener()` function.
-        |**/
+         *
+         * Corollary to the `AddListener()` function.
+         **/
         public static void RemoveListener(Thing thing) =>
             ViewEvent -= thing.View;
 

@@ -9,10 +9,10 @@ namespace PathwaysEngine.Adventure.Setting {
 
 
 	/** `Road` : **`class`**
-	|*
-	|* Acts as a connector between `Area`s, deals with moving
-	|* things between `Area`s and loading `Scene`s if needed.
-	|**/
+	 *
+	 * Acts as a connector between `Area`s, deals with moving
+	 * things between `Area`s and loading `Scene`s if needed.
+	 **/
 	class Road : Connector {
 
 		[SerializeField] Area area_src;

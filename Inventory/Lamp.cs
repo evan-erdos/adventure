@@ -11,10 +11,10 @@ namespace PathwaysEngine.Inventory {
 
 
     /** `Lamp` : **`class`**
-    |*
-    |* A kind of `Item` which the `Player` can hold and use as
-    |* a source of light. An instant classic! (remember Zork?)
-    |**/
+     *
+     * A kind of `Item` which the `Player` can hold and use as
+     * a source of light. An instant classic! (remember Zork?)
+     **/
     public partial class Lamp : Item, IWieldable {
         bool wait = false;
         List<Light> lights;

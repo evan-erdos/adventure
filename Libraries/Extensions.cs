@@ -11,22 +11,22 @@ namespace PathwaysEngine {
 
 
     /** `Extension` : **`class`**
-    |*
-    |* Class to contain all minor extension methods added to
-    |* `string` and other `System` types I can't change myself.
-    |**/
+     *
+     * Class to contain all minor extension methods added to
+     * `string` and other `System` types I can't change myself.
+     **/
     static class Extension {
 
 
         /** `md()` : **`string`**
-        |*
-        |* Adds support for `Markdown`, and can be called on
-        |* any `string`. Formats the `Markdown` syntax into
-        |* `HTML`. Currently removes all `<p>` tags.
-        |*
-        |* - `s` : **`string`**
-        |*    `string` to be formatted.
-        |**/
+         *
+         * Adds support for `Markdown`, and can be called on
+         * any `string`. Formats the `Markdown` syntax into
+         * `HTML`. Currently removes all `<p>` tags.
+         *
+         * - `s` : **`string`**
+         *    `string` to be formatted.
+         **/
         public static string md(this string s) =>
             new Buffer(Markdown.Transform(s))
             .Replace("<em>","<i>")
@@ -50,17 +50,17 @@ namespace PathwaysEngine {
 
 
         /** `Replace()` : **`string`**
-        |*
-        |* Adds an overload to the existing `Replace()` that
-        |* takes a single argument, for removing things instead
-        |* of replacing them.
-        |*
-        |* - `s` : **`string`**
-        |*    `string` to be formatted.
-        |*
-        |* - `newValue` : **`string`**
-        |*    replacement `string` to insert.
-        |**/
+         *
+         * Adds an overload to the existing `Replace()` that
+         * takes a single argument, for removing things instead
+         * of replacing them.
+         *
+         * - `s` : **`string`**
+         *    `string` to be formatted.
+         *
+         * - `newValue` : **`string`**
+         *    replacement `string` to insert.
+         **/
         public static string Replace(
                         this string s,
                         string newValue) =>
@@ -68,12 +68,12 @@ namespace PathwaysEngine {
 
 
         /** `Strip()` : **`string`**
-        |*
-        |* @TODO: Dumb name, should be changed.
-        |*
-        |* - `s` : **`string`**
-        |*    `string` to be processed for usage with `Parser`.
-        |**/
+         *
+         * @TODO: Dumb name, should be changed.
+         *
+         * - `s` : **`string`**
+         *    `string` to be processed for usage with `Parser`.
+         **/
         public static string Strip(this string s) =>
             s.Trim().ToLower()
             .Replace("\bthe\b")
@@ -81,13 +81,13 @@ namespace PathwaysEngine {
 
 
         /** `DerivesFrom<T>()` : **`bool`**
-        |*
-        |* Simple extension method to determine if a `Type` is,
-        |* or derives from, the type specified.
-        |*
-        |* - `<T>` : **`Type`**
-        |*    type to check against
-        |**/
+         *
+         * Simple extension method to determine if a `Type` is,
+         * or derives from, the type specified.
+         *
+         * - `<T>` : **`Type`**
+         *    type to check against
+         **/
         public static bool DerivesFrom<T>(this Type type) =>
             type==typeof(T) || type.IsSubclassOf(typeof(T));
 

@@ -18,83 +18,83 @@ using util=PathwaysEngine.Utilities;
 
 
 /** `PathwaysEngine` : **`namespace`**
-|*
-|* Global namespace which contains the most important classes
-|* and any class which requires interaction between any nested
-|* namespaces. This file contains most of the `interfaces`,
-|* `enums`, & other loose bits that don't belong anywhere else.
-|* Also contains direct references to the `Player`, `Terminal`,
-|* and any other extremely important, global / static class.
-|**/
+ *
+ * Global namespace which contains the most important classes
+ * and any class which requires interaction between any nested
+ * namespaces. This file contains most of the `interfaces`,
+ * `enums`, & other loose bits that don't belong anywhere else.
+ * Also contains direct references to the `Player`, `Terminal`,
+ * and any other extremely important, global / static class.
+ **/
 namespace PathwaysEngine {
 
 
     /** `GameStates` : **`enum`**
-    |*
-    |* This enumerates the global states that the engine can
-    |* have. Switching between them has a considerable number
-    |* of side effects, like hiding / showing the mouse, or
-    |* enabling / disabling UI windows & movement / input.
-    |*
-    |* - `None` : **`GameStates`**
-    |*     Represents no state, precludes `Player` motion & all
-    |*     inputs. Will possibly be used in cases like loading
-    |*     scenes & whatnot.
-    |*
-    |* - `Game` : **`GameStates`**
-    |*     State for usual gameplay, all motion input is
-    |*     permitted, & the `Terminal` UI, `Window` UI, &
-    |*     obviously the main menu are disabled.
-    |*
-    |* - `View` : **`GameStates`**
-    |*     Used for special areas and encounters that can stop
-    |*     `Player` motion and camera movement, and also frees
-    |*     the mouse such that the `Player` can make selections
-    |*     more easily and interact with small buttons, etc.
-    |*
-    |* - `Term` : **`GameStates`**
-    |*     State represents when the `Terminal` is opened, &
-    |*     the user is either entering input or dealing with
-    |*     some aspect of its function, e.g., when checking the
-    |*     `Player`'s inventory, or when resolving a command.
-    |*
-    |* - `Msgs` : **`GameStates`**
-    |*     State represents that `Window` is opened, & the
-    |*     `Player` is reading the message. This state disables
-    |*     Player` movement, hides the `Terminal`, & the mouse.
-    |*
-    |* - `Menu` : **`GameStates`**
-    |*     Active when the `Menu` is active. Disables almost
-    |*     all components & inputs, and shows the `Menu` UI.
-    |**/
+     *
+     * This enumerates the global states that the engine can
+     * have. Switching between them has a considerable number
+     * of side effects, like hiding / showing the mouse, or
+     * enabling / disabling UI windows & movement / input.
+     *
+     * - `None` : **`GameStates`**
+     *     Represents no state, precludes `Player` motion & all
+     *     inputs. Will possibly be used in cases like loading
+     *     scenes & whatnot.
+     *
+     * - `Game` : **`GameStates`**
+     *     State for usual gameplay, all motion input is
+     *     permitted, & the `Terminal` UI, `Window` UI, &
+     *     obviously the main menu are disabled.
+     *
+     * - `View` : **`GameStates`**
+     *     Used for special areas and encounters that can stop
+     *     `Player` motion and camera movement, and also frees
+     *     the mouse such that the `Player` can make selections
+     *     more easily and interact with small buttons, etc.
+     *
+     * - `Term` : **`GameStates`**
+     *     State represents when the `Terminal` is opened, &
+     *     the user is either entering input or dealing with
+     *     some aspect of its function, e.g., when checking the
+     *     `Player`'s inventory, or when resolving a command.
+     *
+     * - `Msgs` : **`GameStates`**
+     *     State represents that `Window` is opened, & the
+     *     `Player` is reading the message. This state disables
+     *     Player` movement, hides the `Terminal`, & the mouse.
+     *
+     * - `Menu` : **`GameStates`**
+     *     Active when the `Menu` is active. Disables almost
+     *     all components & inputs, and shows the `Menu` UI.
+     **/
     public enum GameStates { None, Game, View, Term, Msgs, Menu }
 
 
     /** `Cursors` : **`enum`**
-    |*
-    |* This enumerates the possible cursor graphics, e.g., the
-    |* indexes of each respective image in the array.
-    |**/
+     *
+     * This enumerates the possible cursor graphics, e.g., the
+     * indexes of each respective image in the array.
+     **/
     public enum Cursors : int {
         None = 0, Pick = 1, Hand = 2, Grab = 3,
         Look = 4, Wait = 5, Back = 6 };
 
 
     /** `StateHandler` : **`delegate`**
-    |*
-    |* This is a global event delegate for dealing with changes
-    |* to the overall game state. Subscribers are sent the
-    |* `gameState`, and do with it whatever they please.
-    |*
-    |* - `sender` : **`object`**
-    |*     reference to whatever sent the event
-    |*
-    |* - `e` : **`EventArgs`**
-    |*     default event arguments
-    |*
-    |* - `gameState` : **`GameStates`**
-    |*     game state to change to
-    |**/
+     *
+     * This is a global event delegate for dealing with changes
+     * to the overall game state. Subscribers are sent the
+     * `gameState`, and do with it whatever they please.
+     *
+     * - `sender` : **`object`**
+     *     reference to whatever sent the event
+     *
+     * - `e` : **`EventArgs`**
+     *     default event arguments
+     *
+     * - `gameState` : **`GameStates`**
+     *     game state to change to
+     **/
     delegate void StateHandler(
                     object sender,
                     System.EventArgs e,
@@ -102,15 +102,15 @@ namespace PathwaysEngine {
 
 
     /** `Pathways` : **`main`**
-    |*
-    |* This is the main class for the entire engine. While it
-    |* does have a lot of global states, some of them are the
-    |* only way I can see to deal with the complex interactions
-    |* between the many subsystems in the engine. While having
-    |* any sort of global state is usually bad, using it in a
-    |* limited manner can help the entire engine's cohesion, as
-    |* well as the organization of these different subsystems.
-    |**/
+     *
+     * This is the main class for the entire engine. While it
+     * does have a lot of global states, some of them are the
+     * only way I can see to deal with the complex interactions
+     * between the many subsystems in the engine. While having
+     * any sort of global state is usually bad, using it in a
+     * limited manner can help the entire engine's cohesion, as
+     * well as the organization of these different subsystems.
+     **/
     public static partial class Pathways {
         public static DateTime gameDate, finalDate;
         public static Camera mainCamera;
@@ -126,11 +126,11 @@ namespace PathwaysEngine {
 
 
         /** `GameState` : **`GameStates`**
-        |*
-        |* Changes the global state of the engine, and has many
-        |* side effects, such as changing the mouse visiblility
-        |* and movement inputs, UI visibility, etc.
-        |**/
+         *
+         * Changes the global state of the engine, and has many
+         * side effects, such as changing the mouse visiblility
+         * and movement inputs, UI visibility, etc.
+         **/
         public static GameStates GameState {
             get { return gameState; }
             set { if (gameState==value) return;
@@ -142,21 +142,21 @@ namespace PathwaysEngine {
 
 
         /** `LastState` : **`GameStates`**
-        |*
-        |* Records what the state was last frame. Useful when
-        |* trying to sort out if / what actions to take when
-        |* changing between states.
-        |**/
+         *
+         * Records what the state was last frame. Useful when
+         * trying to sort out if / what actions to take when
+         * changing between states.
+         **/
         public static GameStates LastState {
             get { return lastState; }
         } static GameStates lastState = GameStates.Game;
 
 
         /** `CursorGraphic` : **`Cursors`**
-        |*
-        |* This property changes the currently displayed cursor
-        |* graphic only if the `enum` assigned is different.
-        |**/
+         *
+         * This property changes the currently displayed cursor
+         * graphic only if the `enum` assigned is different.
+         **/
         public static Cursors CursorGraphic {
             get { return cursorGraphic; }
             set { if (cursorGraphic==value) return;
@@ -169,12 +169,12 @@ namespace PathwaysEngine {
 
 
         /** `Pathways` : **`constructor`**
-        |*
-        |* Initializes some important global variables before
-        |* most other classes / `MonoBehaviour`s are created,
-        |* and well before any call that `UnityEngine` makes to
-        |* `MonoBehaviour.Awake` or any other event.
-        |**/
+         *
+         * Initializes some important global variables before
+         * most other classes / `MonoBehaviour`s are created,
+         * and well before any call that `UnityEngine` makes to
+         * `MonoBehaviour.Awake` or any other event.
+         **/
         static Pathways() {
             gameDate = new DateTime(1994,5,8,2,0,0);
             finalDate = new DateTime(1994,5,13,14,0,0);
@@ -195,20 +195,20 @@ namespace PathwaysEngine {
         }
 
         /** `EventListener()` : **`function`**
-        |*
-        |* This is the main multicast `delegate` for changes
-        |* made to the global state of the game. Lots of other
-        |* classes subscribe to this event via `EventListener`.
-        |*
-        |* - `sender` : **`object`**
-        |*     Included in case I want any kind of callback.
-        |*
-        |* - `e` : **`EventArgs`**
-        |*     Standard event class, included for consistency.
-        |*
-        |* - `state` : **`GameStates`**
-        |*     Gamestate to change to.
-        |**/
+         *
+         * This is the main multicast `delegate` for changes
+         * made to the global state of the game. Lots of other
+         * classes subscribe to this event via `EventListener`.
+         *
+         * - `sender` : **`object`**
+         *     Included in case I want any kind of callback.
+         *
+         * - `e` : **`EventArgs`**
+         *     Standard event class, included for consistency.
+         *
+         * - `state` : **`GameStates`**
+         *     Gamestate to change to.
+         **/
         public static void EventListener(
                         object sender,
                         System.EventArgs e,
@@ -229,36 +229,36 @@ namespace PathwaysEngine {
 
 
         /** `Sudo()` : **`Parse`**
-        |*
-        |* For special user commands. Unused, so far.
-        |*
-        |* - `c` : **`Command`**
-        |*     Default `Command` struct, sometimes unused, but
-        |*     means that this function is a `Parse` delegate.
-        |**/
+         *
+         * For special user commands. Unused, so far.
+         *
+         * - `c` : **`Command`**
+         *     Default `Command` struct, sometimes unused, but
+         *     means that this function is a `Parse` delegate.
+         **/
         public static bool Sudo(lit::Command c) { return true; }
 
 
         /** `Redo()` : **`Parse`**
-        |*
-        |* Runs the prior command issued to the `Parser` again.
-        |*
-        |* - `c` : **`Command`**
-        |*     Default `Command` struct, sometimes unused, but
-        |*     means that this function is a `Parse` delegate.
-        |**/
+         *
+         * Runs the prior command issued to the `Parser` again.
+         *
+         * - `c` : **`Command`**
+         *     Default `Command` struct, sometimes unused, but
+         *     means that this function is a `Parse` delegate.
+         **/
         public static bool Redo(lit::Command c) { return true; }
             //adv::Parser.eval(c.input); } infinite loop!
 
 
         /** `Quit()` : **`Parse`**
-        |*
-        |* Prompts user through `Terminal` to quit the game.
-        |*
-        |* - `c` : **`command`**
-        |*     Default `command` struct, sometimes unused, but
-        |*     means that this function is a `Parse` delegate.
-        |**/
+         *
+         * Prompts user through `Terminal` to quit the game.
+         *
+         * - `c` : **`command`**
+         *     Default `command` struct, sometimes unused, but
+         *     means that this function is a `Parse` delegate.
+         **/
         public static bool Quit(lit::Command c) {
             lit::Terminal.Alert(messages["quit"]);
             return true;
@@ -266,13 +266,13 @@ namespace PathwaysEngine {
 
 
         /** `Load()` : **`Parse`**
-        |*
-        |* Loads a game from a `*.yml` file. Currently broken.
-        |*
-        |* - `c` : **`Command`**
-        |*     Default `Command` struct, sometimes unused, but
-        |*     means that this function is a `Parse` delegate.
-        |**/
+         *
+         * Loads a game from a `*.yml` file. Currently broken.
+         *
+         * - `c` : **`Command`**
+         *     Default `Command` struct, sometimes unused, but
+         *     means that this function is a `Parse` delegate.
+         **/
         public static bool Load(lit::Command c) {
             lit::Terminal.Clear();
             lit::Terminal.LogImmediate("I/O Disabled, restarting level.");
@@ -282,13 +282,13 @@ namespace PathwaysEngine {
 
 
         /** `Save()` : **`Parse`**
-        |*
-        |* Saves a game from a `*.yml` file. Currently broken.
-        |*
-        |* - `c` : **`Command`**
-        |*     Default `Command` struct, sometimes unused, but
-        |*     means that this function is a `Parse` delegate.
-        |**/
+         *
+         * Saves a game from a `*.yml` file. Currently broken.
+         *
+         * - `c` : **`Command`**
+         *     Default `Command` struct, sometimes unused, but
+         *     means that this function is a `Parse` delegate.
+         **/
         public static bool Save(lit::Command c) {
             if (File.Exists(c.input))
                 lit::Terminal.Alert("Overwriting file...");
@@ -317,13 +317,13 @@ namespace PathwaysEngine {
 
 
         /** `Help()` : **`Parse`**
-        |*
-        |* Shows the help menu via `Window`.
-        |*
-        |* - `c` : **`Command`**
-        |*     Default `Command` struct, sometimes unused, but
-        |*     means that this function is a `Parse` delegate.
-        |**/
+         *
+         * Shows the help menu via `Window`.
+         *
+         * - `c` : **`Command`**
+         *     Default `Command` struct, sometimes unused, but
+         *     means that this function is a `Parse` delegate.
+         **/
         public static bool Help(lit::Command c) {
             lit::Window.Display(messages["help"]);
             return true;
@@ -331,19 +331,19 @@ namespace PathwaysEngine {
     }
 
     /** `P_ID` : **`struct`**
-    |*
-    |* **Deprecated**
-    |*
-    |* Attempt to formalize the `uuid`s from the serialization
-    |* process.
-    |*
-    |* - `name` : **`string`**
-    |*     Name of the `P_ID` to be used when serializing.
-    |*
-    |* - `date` : **`DateTime`**
-    |*     Date to use, to keep all `P_ID`s unique when
-    |*     serializing a saved game.
-    |**/
+     *
+     * **Deprecated**
+     *
+     * Attempt to formalize the `uuid`s from the serialization
+     * process.
+     *
+     * - `name` : **`string`**
+     *     Name of the `P_ID` to be used when serializing.
+     *
+     * - `date` : **`DateTime`**
+     *     Date to use, to keep all `P_ID`s unique when
+     *     serializing a saved game.
+     **/
     public struct P_ID { // hehe, get it? PiD!
         public DateTime date;
         public string @name { // ! enforce length

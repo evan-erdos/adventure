@@ -9,11 +9,11 @@ namespace PathwaysEngine.Utilities {
 
 
     /** `TerminalActivator` : **`Activator<T>`**
-    |*
-    |* Specific implementation of a `Activator<T>`, used by the
-    |* `Terminal` class to enable / disable its UI effects via
-    |* a parser command.
-    |**/
+     *
+     * Specific implementation of a `Activator<T>`, used by the
+     * `Terminal` class to enable / disable its UI effects via
+     * a parser command.
+     **/
     public class TerminalActivator : Activator<Behaviour> {
 
         public override void Initialize() {

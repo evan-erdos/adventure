@@ -9,10 +9,10 @@ namespace PathwaysEngine.Puzzle {
 
 
     /** `Combinator` : **`class`**
-    |*
-    |* A Set of `IPiece`s which must be solved in a particular
-    |* configuration for the system to be considered solved.
-    |**/
+     *
+     * A Set of `IPiece`s which must be solved in a particular
+     * configuration for the system to be considered solved.
+     **/
     class Combinator<T> : Piece<T>, ICombinator<T> {
 
         [SerializeField] IPiece<T>[] externalPieces;
@@ -28,9 +28,9 @@ namespace PathwaysEngine.Puzzle {
 
 
         /** `Pieces` : **`IPiece<T> -> T`**
-        |*
-        |* Denotes the "solved" state of the current system.
-        |**/
+         *
+         * Denotes the "solved" state of the current system.
+         **/
         public IDictionary<IPiece<T>,T> Pieces {
             get { return pieces; } }
         protected Dictionary<IPiece<T>,T> pieces

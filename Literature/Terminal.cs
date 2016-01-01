@@ -16,13 +16,13 @@ namespace PathwaysEngine.Literature {
 
 
     /** `Terminal` : **`class`**
-    |*
-    |* One of the most important classes in the whole engine.
-    |* `Terminal` manages player input, and logs `Message`s
-    |* from any and all sources through its `static` method
-    |* `Log`, and all its overloads. This includes overloads
-    |* for `Thing`s, `Message`s, etc.
-    |**/
+     *
+     * One of the most important classes in the whole engine.
+     * `Terminal` manages player input, and logs `Message`s
+     * from any and all sources through its `static` method
+     * `Log`, and all its overloads. This includes overloads
+     * for `Thing`s, `Message`s, etc.
+     **/
     [RequireComponent(typeof(RectTransform))]
     public class Terminal : MonoBehaviour {
         static bool wait = false, isLocked = false;
@@ -41,10 +41,10 @@ namespace PathwaysEngine.Literature {
 
 
         /** `focus` : **`bool`**
-        |*
-        |* This property represents the state of the `Terminal`
-        |* window, i.e., if it's `focus`sed, or not.
-        |**/
+         *
+         * This property represents the state of the `Terminal`
+         * window, i.e., if it's `focus`sed, or not.
+         **/
         public static bool focus {
             get { return _focus; }
             set {
@@ -75,19 +75,19 @@ namespace PathwaysEngine.Literature {
 
 
         /** `prompt` : **`string`**
-        |*
-        |* This property represents the state of the `Terminal`
-        |* window, i.e., if it's `focus`sed, or not.
-        |**/
+         *
+         * This property represents the state of the `Terminal`
+         * window, i.e., if it's `focus`sed, or not.
+         **/
         public static string prompt =>
             $"{Pathways.gameDate:yyyy-MM-dd hh:mm} > ";
 
 
         /** `EventListener()` : **`event`**
-        |*
-        |* This property represents the state of the `Terminal`
-        |* window, i.e., if it's `focus`sed, or not.
-        |**/
+         *
+         * This property represents the state of the `Terminal`
+         * window, i.e., if it's `focus`sed, or not.
+         **/
         public void EventListener(
                 object sender,
                 System.EventArgs e,
@@ -97,11 +97,11 @@ namespace PathwaysEngine.Literature {
 
 
         /** `LockLog` : **`coroutine`**
-        |*
-        |* Stops the `Terminal.Log` from printing any new
-        |* messages, usually useful in the first few frames of
-        |* the game, when the startup information is visible.
-        |**/
+         *
+         * Stops the `Terminal.Log` from printing any new
+         * messages, usually useful in the first few frames of
+         * the game, when the startup information is visible.
+         **/
         IEnumerator LockLog(float t) {
             isLocked = true;
             yield return new WaitForSeconds(t);
@@ -110,10 +110,10 @@ namespace PathwaysEngine.Literature {
 
 
         /** `Term` : **`coroutine`**
-        |*
-        |* Provides a time buffer when switching between states
-        |* using the terminal input key, usually **TAB**.
-        |**/
+         *
+         * Provides a time buffer when switching between states
+         * using the terminal input key, usually **TAB**.
+         **/
         IEnumerator Term() {
             wait = true;
             yield return new WaitForSeconds(0.125f);
@@ -125,11 +125,11 @@ namespace PathwaysEngine.Literature {
 
 
         /** `Logging` : **`coroutine`**
-        |*
-        |* Waits for `time` seconds between logging any objects
-        |* that were sent as `ILoggable`. Simple `string`s will
-        |* not be logged if `isLocked` is `true`.
-        |**/
+         *
+         * Waits for `time` seconds between logging any objects
+         * that were sent as `ILoggable`. Simple `string`s will
+         * not be logged if `isLocked` is `true`.
+         **/
         IEnumerator Logging() {
             for (;;) {
                 if (queue.Count>0 && !isLocked)
@@ -140,11 +140,11 @@ namespace PathwaysEngine.Literature {
 
 
         /** `Clear()` : **`function`**
-        |*
-        |* This clears the entire `Terminal` log, and makes a
-        |* new instance of the `buffer`, while `enqueue`-ing
-        |* the old text into the `logs`.
-        |**/
+         *
+         * This clears the entire `Terminal` log, and makes a
+         * new instance of the `buffer`, while `enqueue`-ing
+         * the old text into the `logs`.
+         **/
         public static void Clear() {
             logs.Enqueue(log.text);
             buffer = new Buffer();

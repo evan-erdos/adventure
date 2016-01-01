@@ -8,10 +8,10 @@ namespace PathwaysEngine.Literature {
 
 
     /** `Message` : `struct`
-    |*
-    |* Represents any message that can be formatted and sent to
-    |* the `Terminal`, and can be serialized via `IStorable`.
-    |**/
+     *
+     * Represents any message that can be formatted and sent to
+     * the `Terminal`, and can be serialized via `IStorable`.
+     **/
     public struct Message : IStorable, ILoggable {
 
         public string Name {get;set;}
