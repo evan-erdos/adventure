@@ -41,7 +41,7 @@ namespace PathwaysEngine.Inventory {
         |*
         |* is the current `Item` held in inventory?
         |**/
-        bool Held { get; set; }
+        bool Held {get;set;}
 
 
         /** `Take()` : **`bool`**
@@ -74,7 +74,7 @@ namespace PathwaysEngine.Inventory {
         |* Represents the number of `Item`s that this group
         |*
         |**/
-        uint Count { get; set; }
+        uint Count {get;set;}
 
 
         /** `Group()` : **`function`**
@@ -104,7 +104,7 @@ namespace PathwaysEngine.Inventory {
         |*
         |* How many uses this `IItem` has left.
         |**/
-        uint Uses { get; set; }
+        uint Uses {get;set;}
 
 
         /** `Use()` : **`bool`**
@@ -127,7 +127,7 @@ namespace PathwaysEngine.Inventory {
         |*
         |* Price of an `IItem`.
         |**/
-        int Cost { get; set; }
+        int Cost {get;set;}
 
 
         /** `Buy()` : **`bool`**
@@ -156,7 +156,7 @@ namespace PathwaysEngine.Inventory {
         |*
         |* Is this currently being worn by some `Actor`?
         |**/
-        bool Worn { get; set; }
+        bool Worn {get;set;}
 
 
         /** `Wear` : **`bool`**
@@ -182,11 +182,11 @@ namespace PathwaysEngine.Inventory {
     public interface IWieldable : IWearable, IUsable {
 
 
-        /** `Attack()` : **`function`**
+        /** `Attack()` : **`bool`**
         |*
         |* Event to call when being used to attack.
         |**/
-        void Attack();
+        bool Attack();
     }
 
 
@@ -197,6 +197,9 @@ namespace PathwaysEngine.Inventory {
     |* items.
     |**/
     public interface IItemSet : ICollection<Item>, IEnumerable<Item> {
+
+
+        void Add<T>(ICollection<T> list) where T : Item;
 
 
         /** `GetItems<T>()` : **`<T>[]`**

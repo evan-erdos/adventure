@@ -2,6 +2,7 @@
 
 using System.Text.RegularExpressions;
 
+
 namespace PathwaysEngine.Literature {
 
 
@@ -58,10 +59,10 @@ namespace PathwaysEngine.Literature {
             : this(uuid,new Regex(regex),parse,input) { }
 
 
-        public bool Fits(Description d) {
-            return d.Fits(this); }
+        public bool Fits(Description d) =>
+            d.Fits(this);
 
-        public bool Fits(IDescribable d) {
-            return Fits(d.description); }
+        public bool Fits(IDescribable d) =>
+            Fits(d.description);
     }
 }

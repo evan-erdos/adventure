@@ -4,7 +4,9 @@ using UnityEngine; // “Help, Help, Snark in MTS!”
 using System.Collections;
 using EventArgs=System.EventArgs;
 using lit=PathwaysEngine.Literature;
+//using static PathwaysEngine.Literature.Terminal;
 using inv=PathwaysEngine.Inventory;
+
 
 namespace PathwaysEngine.Adventure.Setting {
 
@@ -17,7 +19,7 @@ namespace PathwaysEngine.Adventure.Setting {
     [RequireComponent(typeof(AudioSource))]
     [RequireComponent(typeof(Collider))]
     [RequireComponent(typeof(Rigidbody))]
-    public partial class Door : Thing, IOpenable, ILockable {
+    partial class Door : Thing, IOpenable, ILockable {
         bool wait, wait_open;
         byte frameOpen;
         float time = 4f;
@@ -204,9 +206,9 @@ namespace PathwaysEngine.Adventure.Setting {
                 Near = false;
                 collider.enabled = false;
                 dirTarget = (t)?(dirOpen):(dirInit);
-                lit::Terminal.LogCommand(
-                    (t) ? "You open the door."
-                        : "The door clicks closed.");
+                PathwaysEngine.Literature.Terminal.LogCommand(
+                    (t) ? $"You open the {Name}."
+                        : $"The {Name} clicks closed.");
                 audio.PlayOneShot(soundOpen,0.8f);
                 yield return new WaitForSeconds(time);
                 if (autoClose && t) {
@@ -232,7 +234,7 @@ namespace PathwaysEngine.Adventure.Setting {
                         EventArgs e,
                         lit::Command c) {
             if (IsOpen) {
-                lit::Terminal.LogCommand(
+                PathwaysEngine.Literature.Terminal.LogCommand(
                     "It's already opened.");
                 return true;
             } else if (IsLocked)
@@ -263,7 +265,7 @@ namespace PathwaysEngine.Adventure.Setting {
                         lit::Command c) {
             if (dirTarget!=dirInit)
                 return this.Shut();
-            lit::Terminal.LogCommand(
+            PathwaysEngine.Literature.Terminal.LogCommand(
                 "It's already closed.");
             return true;
         }

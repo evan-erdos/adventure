@@ -6,7 +6,9 @@ using System.Collections.Generic;
 using mvmt=PathwaysEngine.Movement;
 using util=PathwaysEngine.Utilities;
 
+
 namespace PathwaysEngine.Inventory {
+
 
     /** `Lamp` : **`class`**
     |*
@@ -83,7 +85,7 @@ namespace PathwaysEngine.Inventory {
         }
 
 
-        public void Attack() { Use(); }
+        public bool Attack() => Use();
 
 
         IEnumerator On() {

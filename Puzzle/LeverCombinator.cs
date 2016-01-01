@@ -5,6 +5,7 @@ using System.Collections;
 using System.Collections.Generic;
 using lit=PathwaysEngine.Literature;
 
+
 namespace PathwaysEngine.Puzzle {
 
 
@@ -13,10 +14,10 @@ namespace PathwaysEngine.Puzzle {
     |* Represents an instance of a puzzle piece, which must be
     |* `Solve`d to finish a puzzle.
     |**/
-    class LeverCombinator : Combinator<Lever> {
+    class LeverCombinator : Combinator<int> {
 
         [SerializeField] bool[] flags;
-        [SerializeField] LightResponder responder;
+        //[SerializeField] LightResponder responder;
 
 
         public override bool IsSolved {
@@ -31,20 +32,19 @@ namespace PathwaysEngine.Puzzle {
         }
 
 
-        public override bool OnSolve(
-                        object sender,
+        public override int OnSolve(
+                        IPiece<int> sender,
                         System.EventArgs e,
                         bool wasSolved) {
-            return Solve();
+            return 0;
         }
 
 
-        public override bool Solve() {
-            if (IsSolved) {
-                if (responder!=null)
-                    responder.WhenSolved(this);
-                return true;
-            } else return false;
+        public override bool Solve(int condition) {
+            if (!IsSolved) return false;
+            //if (responder!=null)
+            //    responder.WhenSolved(this);
+            return true;
         }
 
 

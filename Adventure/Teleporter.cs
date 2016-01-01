@@ -3,6 +3,7 @@
 using UnityEngine;
 using System.Collections;
 
+
 namespace PathwaysEngine.Adventure {
 
 
@@ -12,10 +13,10 @@ namespace PathwaysEngine.Adventure {
 	|* touches its trigger `Collider`.
 	|**/
 	[RequireComponent(typeof(AudioSource))]
-	public class Teleporter : MonoBehaviour {
+	class Teleporter : MonoBehaviour {
 	    AudioSource _audio;
-	    public AudioClip sound;
-	    public Transform tgt;
+	    [SerializeField] AudioClip sound;
+	    [SerializeField] Transform tgt;
 
 	    void Awake() { _audio = GetComponent<AudioSource>(); }
 

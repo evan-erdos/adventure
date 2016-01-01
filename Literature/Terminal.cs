@@ -11,6 +11,7 @@ using adv=PathwaysEngine.Adventure;
 using inv=PathwaysEngine.Inventory;
 using util=PathwaysEngine.Utilities;
 
+
 namespace PathwaysEngine.Literature {
 
 
@@ -78,10 +79,8 @@ namespace PathwaysEngine.Literature {
         |* This property represents the state of the `Terminal`
         |* window, i.e., if it's `focus`sed, or not.
         |**/
-        public static string prompt {
-            get { return string.Format(
-                "{0:yyyy-MM-dd hh:mm} > ",
-                    Pathways.gameDate); } }
+        public static string prompt =>
+            $"{Pathways.gameDate:yyyy-MM-dd hh:mm} > ";
 
 
         /** `EventListener()` : **`event`**
@@ -152,8 +151,8 @@ namespace PathwaysEngine.Literature {
             log.text = "";
         }
 
-        public static void Log(string s="\n") {
-            Log(new Message(s,Styles.Default)); }
+        public static void Log(string s="\n") =>
+            Log(new Message(s,Styles.Default));
 
         public static void Log(params string[] lines) {
             var b = new Buffer();
@@ -162,8 +161,8 @@ namespace PathwaysEngine.Literature {
             Log(new Message(b.ToString(), Styles.Default));
         }
 
-        public static void Log(string s,params Styles[] f) {
-            Log(new Message(s,f)); }
+        public static void Log(string s,params Styles[] f) =>
+            Log(new Message(s,f));
 
         public static void Log(ILoggable o) {
             if (o==null || o==last) return;
@@ -183,8 +182,8 @@ namespace PathwaysEngine.Literature {
             LogImmediate(Terminal.Format(sb.ToString(),f));
         }
 
-        public static void Log(ICollection<ILoggable> list) {
-            Log(list,Styles.Default); }
+        public static void Log(ICollection<ILoggable> list) =>
+            Log(list,Styles.Default);
 
         public static void Log(
                         ICollection<IDescribable> list,
@@ -195,15 +194,16 @@ namespace PathwaysEngine.Literature {
             Log(temp,f);
         }
 
-        public static void Log(ICollection<IDescribable> list) {
-            Log(list,Styles.Default); }
+        public static void Log(
+                        ICollection<IDescribable> list) =>
+            Log(list,Styles.Default);
 
 
-        public static void Log(IDescribable o) {
-            Log((ILoggable) o.description); }
+        public static void Log(IDescribable o) =>
+            Log((ILoggable) o.description);
 
-        public static void LogCommand(string s) {
-            Log(new Message(s,Styles.Command)); }
+        public static void LogCommand(string s) =>
+            Log(new Message(s,Styles.Command));
 
         public static void LogImmediate(string s) {
             buffer.Append((TrailingNewline(buffer))
@@ -212,8 +212,8 @@ namespace PathwaysEngine.Literature {
             log.text = buffer.ToString();
         }
 
-        public static void LogImmediate(ILoggable o) {
-            LogImmediate(o.Entry); }
+        public static void LogImmediate(ILoggable o) =>
+            LogImmediate(o.Entry);
 
         public static void LogImmediate(
                         ICollection<ILoggable> list) {
@@ -227,8 +227,8 @@ namespace PathwaysEngine.Literature {
                 LogImmediate(elem.description.Entry);
         }
 
-        static bool TrailingNewline(Buffer b) {
-            return (b.Length>0 && b[b.Length-1]=='\n'); }
+        static bool TrailingNewline(Buffer b) =>
+            (b.Length>0 && b[b.Length-1]=='\n');
 
         public static string Format(string s, params Styles[] f) {
             if (s==null || s.Length<1) return s;
@@ -267,8 +267,8 @@ namespace PathwaysEngine.Literature {
             } return s;
         }
 
-        public static void Alert(string s) {
-            Alert(s,Styles.Alert); }
+        public static void Alert(string s) =>
+            Alert(s,Styles.Alert);
 
         public static void Alert(string s, params Styles[] f) {
             isLocked = false;
@@ -328,8 +328,8 @@ namespace PathwaysEngine.Literature {
             if (Pathways.GameState!=GameStates.Term)
                 scrollRect.verticalNormalizedPosition = 0f; }
 
-        public void CommandInput() {
-            Parser.Evaluate(inputField.text); }
+        public void CommandInput() =>
+            Parser.Evaluate(inputField.text);
 
         public void CommandChange() {
             if (inputField.text.Contains("\t")) {

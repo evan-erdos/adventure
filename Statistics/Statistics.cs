@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using Flags=System.FlagsAttribute;
 using Type=System.Type;
 
+
 /** `PathwaysEngine.Statistics` : **`namespace`**
 |*
 |* Handles all statistical combat / event interactions,
@@ -12,6 +13,7 @@ using Type=System.Type;
 |* and resistances.
 |**/
 namespace PathwaysEngine.Statistics {
+
 
     /** `Stat` : **`class`**
     |*
@@ -23,7 +25,7 @@ namespace PathwaysEngine.Statistics {
         public StatTypes statType;
         public bool Check() { return true; }
         public bool Check(Stat stat) { return true; }
-        protected uint @value { get; set; }
+        protected uint @value {get;set;}
 
         public Stat() {  }
 
@@ -79,10 +81,10 @@ namespace PathwaysEngine.Statistics {
     }
 
     public class HealthStats : Set {
-        Faculties faculties { get; set; }
-        Condition condition { get; set; }
-        Diagnosis diagnosis { get; set; }
-        Prognosis prognosis { get; set; }
+        Faculties faculties {get;set;}
+        Condition condition {get;set;}
+        Diagnosis diagnosis {get;set;}
+        Prognosis prognosis {get;set;}
 
         public HealthStats(StatTypes statType) {
             this.statType = statType; }

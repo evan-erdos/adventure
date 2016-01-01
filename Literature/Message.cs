@@ -3,6 +3,7 @@
 using System.Text.RegularExpressions;
 using YamlDotNet.Serialization;
 
+
 namespace PathwaysEngine.Literature {
 
 
@@ -30,7 +31,7 @@ namespace PathwaysEngine.Literature {
         public Message(
                         string name,
                         string Entry,
-                        params Styles[] styles) {
+                        params Styles[] styles) : this() {
             this.Name = name;
             this.styles = styles;
             this.Entry = Entry;
@@ -46,8 +47,8 @@ namespace PathwaysEngine.Literature {
             : this(name,Entry,Styles.Default) { }
 
 
-        public string Log() { return Entry; }
+        public string Log() => Entry;
 
-        public override string ToString() { return desc; }
+        public override string ToString() => desc;
     }
 }

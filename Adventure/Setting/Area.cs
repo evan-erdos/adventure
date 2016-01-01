@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using lit=PathwaysEngine.Literature;
 
+
 namespace PathwaysEngine.Adventure.Setting {
 
 
@@ -17,7 +18,7 @@ namespace PathwaysEngine.Adventure.Setting {
 	|* traveled to from it, either via the `Map`view, or by the
 	|* **goto** command. Also defines all contained `Rooms`.
 	|**/
-	public partial class Area : Thing {
+	partial class Area : Thing {
 
 
 		/** `rooms` : **`Room[]`**

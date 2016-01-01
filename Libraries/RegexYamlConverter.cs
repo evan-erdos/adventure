@@ -1,17 +1,17 @@
 /* Ben Scott * bescott@andrew.cmu.edu * 2015-11-04 * Regex Type Converter */
 
-using System.Collections;
-using System.Collections.Generic;
+//using System.Collections;
+//using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using Type=System.Type;
 using YamlDotNet.Core;
 using YamlDotNet.Core.Events;
 using YamlDotNet.Serialization;
 
-public class RegexYamlConverter : IYamlTypeConverter {
 
-    public bool Accepts(Type type) {
-        return (type==typeof(Regex)); }
+class RegexYamlConverter : IYamlTypeConverter {
+
+    public bool Accepts(Type type) => type==typeof(Regex);
 
     public object ReadYaml(IParser parser, Type type) {
         var current = parser.Current;
@@ -23,11 +23,13 @@ public class RegexYamlConverter : IYamlTypeConverter {
         return new Regex(@"\b"+scalar.Value.Trim('/')+@"\b");
     }
 
-    public void WriteYaml(IEmitter emitter, object value, Type type) {
-        throw new System.NotImplementedException("Emitter."); }
-
-    bool isRegexLiteral(string s) {
-        if (string.IsNullOrEmpty(s)) return false;
-        return (s.StartsWith("/") && s.EndsWith("/"));
+    public void WriteYaml(
+                    IEmitter emitter,
+                    object value,
+                    Type type) {
+        throw new System.NotImplementedException("Emitter.");
     }
+
+    bool isRegexLiteral(string s) =>
+        (s!=null && s.StartsWith("/") && s.EndsWith("/"));
 }

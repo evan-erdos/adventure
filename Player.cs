@@ -16,6 +16,7 @@ using u=PathwaysEngine.Utilities;
 
 using System.Reflection;
 
+
 namespace PathwaysEngine {
 
 
@@ -46,10 +47,10 @@ namespace PathwaysEngine {
             get { return ((Person) Pathways.player).room; }
             set { ((Person) Pathways.player).room = value; } }
 
-        static public bool IsGrounded { get; set; }
-        static public bool WasGrounded { get; set; }
-        static public bool IsJumping { get; set; }
-        static public bool WasJumping { get; set; }
+        static public bool IsGrounded {get;set;}
+        static public bool WasGrounded {get;set;}
+        static public bool IsJumping {get;set;}
+        static public bool WasJumping {get;set;}
 
         static public bool IsSliding {
             get { return ((Person) Pathways.player).motor.IsSliding; } }
@@ -63,13 +64,13 @@ namespace PathwaysEngine {
             }
         } static bool __isDead = false;
 
-        public uint massLimit { get; set; }
+        public uint massLimit {get;set;}
 
         static public float Saturation {
             get { return Pathways.mainCamera.GetComponent<ColorCorrectionCurves>().saturation; }
             set { Pathways.mainCamera.GetComponent<ColorCorrectionCurves>().saturation = value; }}
 
-        public RandList<string> deathMessages { get; set; }
+        public RandList<string> deathMessages {get;set;}
 
         static public new Vector3 Position {
             get { return ((Person) Pathways.player).motor.Position; } }

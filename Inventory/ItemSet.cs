@@ -12,6 +12,7 @@ using lit=PathwaysEngine.Literature;
 using stat=PathwaysEngine.Statistics;
 using util=PathwaysEngine.Utilities;
 
+
 namespace PathwaysEngine.Inventory {
 
 
@@ -87,18 +88,6 @@ namespace PathwaysEngine.Inventory {
                 this.items[typeof(Item)] = new List<Item>(); }
 
 
-        /** `Add()` : **`function`**
-        |*
-        |* Override of the `ICollection<T>` function.
-        |*
-        |* - `item` : **`Item`**
-        |*     Instance of `Item` to be added.
-        |**/
-        public void Add(Item item) {
-            if (!Items.ContainsKey(item.GetType()))
-                Items[item.GetType()] = new List<Item>();
-            Items[item.GetType()].Add(item); }
-
 
         /** `Add()` : **`function`**
         |*
@@ -111,6 +100,22 @@ namespace PathwaysEngine.Inventory {
         |**/
         public void Add(Type type,List<Item> list) {
             Items[type].AddRange(list); }
+
+
+        public void Add(Item item) {
+            if (!Items.ContainsKey(item.GetType()))
+                Items[item.GetType()] = new List<Item>();
+            Items[item.GetType()].Add(item);
+        }
+
+        public void Add<T>(ICollection<T> list)
+                        where T : Item {
+            if (list?.Count<1) return;
+            if (!Items.ContainsKey(typeof(T)))
+                Items[typeof(T)] = new List<Item>();
+            foreach (var elem in list)
+                Items[typeof(T)].Add(elem);
+        }
 
 
         /** `Contains()` : **`bool`**

@@ -8,7 +8,10 @@ using adv=PathwaysEngine.Adventure;
 using inv=PathwaysEngine.Inventory;
 using util=PathwaysEngine.Utilities;
 
+
 namespace PathwaysEngine.Movement {
+
+
     [RequireComponent(typeof(Animator))]
     public class ThirdPersonController : MonoBehaviour {
         public bool onGround, isLookCam, falling;
@@ -30,7 +33,7 @@ namespace PathwaysEngine.Movement {
         IComparer rayHitComparer;
         public PhysicMaterial frictionZero, frictionFull;
         Transform cam;
-        public Transform lookTarget { get; set; }
+        public Transform lookTarget {get;set;}
         public GameObject root;
         public util::key jump, dash, duck;
         public util::axis axisX, axisY;

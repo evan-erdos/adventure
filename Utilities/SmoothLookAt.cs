@@ -2,7 +2,10 @@
 
 using UnityEngine;
 
+
 namespace PathwaysEngine.Utilities {
+
+
 	public class SmoothLookAt : MonoBehaviour {
 		public bool smooth = true;
 		public float damping = 6f;

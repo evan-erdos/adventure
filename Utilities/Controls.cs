@@ -2,7 +2,10 @@
 
 using UnityEngine;
 
+
 namespace PathwaysEngine.Utilities {
+
+
     public class Controls : MonoBehaviour {
         static key menu, term, invt, lamp,
             jump, dash, duck, fire, accept;

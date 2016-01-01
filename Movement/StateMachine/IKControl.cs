@@ -3,9 +3,13 @@
 using UnityEngine;
 using System.Collections;
 
+
 namespace PathwaysEngine.Movement.StateMachine {
+
+
     [RequireComponent(typeof(Animator))] //[ExecuteInEditMode]
     public class IKControl : MonoBehaviour {
+
         public enum Hands : byte { Left, Right };
         public Hands hand = Hands.Left;
         protected Animator animator;

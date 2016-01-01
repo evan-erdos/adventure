@@ -3,8 +3,9 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-using lit=PathwaysEngine.Literature;
+//using static PathwaysEngine.Literature.Terminal;
 using stat=PathwaysEngine.Statistics;
+
 
 namespace PathwaysEngine.Adventure {
 
@@ -16,7 +17,7 @@ namespace PathwaysEngine.Adventure {
     |* such as `Person`, `Player`, and all sorts of things!
     |**/
     partial class Creature : Thing, ILiving {
-        public virtual stat::Set stats { get; set; }
+        public virtual stat::Set stats {get;set;}
 
 
         /** `IsDead` : **`bool`**
@@ -49,7 +50,8 @@ namespace PathwaysEngine.Adventure {
         |**/
         public virtual void Kill() {
             IsDead = true;
-            lit::Terminal.LogCommand(Name+" has died.");
+            PathwaysEngine.Literature.Terminal.LogCommand(
+                $"{Name} has died.");
         }
     }
 }

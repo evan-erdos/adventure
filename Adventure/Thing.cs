@@ -4,7 +4,9 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using EventArgs=System.EventArgs;
+//using static PathwaysEngine.Literature.Terminal;
 using lit=PathwaysEngine.Literature;
+
 
 namespace PathwaysEngine.Adventure {
 
@@ -16,15 +18,14 @@ namespace PathwaysEngine.Adventure {
     |* namespace, the `Parser`, or the `Statistics`namespace,
     |* or the `Terminal` or any deriving/text-based interfaces.
     |**/
-    partial class Thing : MonoBehaviour, IThing {
+    public class Thing : MonoBehaviour, IThing {
         bool waitViewing;
         protected internal new Rigidbody rigidbody;
         protected internal new Collider collider;
 
-        public virtual bool Seen { get; set; }
+        public virtual bool Seen {get;set;}
 
-        public string Name {
-            get { return gameObject.name; } }
+        public string Name => gameObject.name;
 
         public virtual lit::Description description {get;set;}
 
@@ -51,20 +52,18 @@ namespace PathwaysEngine.Adventure {
         |* functions called iff the `Player` is nearby and the
         |* `Player` issues an appropriate command.
         |**/
-        public static void AddListener(Thing thing) {
+        public static void AddListener(Thing thing) =>
             ViewEvent += thing.View;
-        }
 
 
         /** `RemoveListener()` : **`function`**
         |*
         |* Corollary to the `AddListener()` function.
         |**/
-        public static void RemoveListener(Thing thing) {
+        public static void RemoveListener(Thing thing) =>
             ViewEvent -= thing.View;
-        }
 
-        public virtual bool Find() { return false; }
+        public virtual bool Find() => false;
 
         public virtual bool View(
                         object source,
@@ -75,13 +74,12 @@ namespace PathwaysEngine.Adventure {
             return true;
         }
 
-        public virtual bool View() {
-            return View(null,this,EventArgs.Empty,
-                new lit::Command()); }
+        public virtual bool View() =>
+            View(null,this,EventArgs.Empty,new lit::Command());
 
 
-        public virtual bool IsMatch(string s) {
-            return description.Nouns.IsMatch(s); }
+        public virtual bool IsMatch(string s) =>
+            description.Nouns.IsMatch(s);
 
 
         IEnumerator Viewing() {
@@ -125,10 +123,12 @@ namespace PathwaysEngine.Adventure {
             StopAllCoroutines();
         }
 
+        public virtual void Deserialize() =>
+            Pathways.Deserialize<Thing,Thing_yml>(this);
 
-        public override string ToString() { return Name; }
 
-        public static bool operator !(Thing o) {
-            return (o==null); }
+        public override string ToString() => Name;
+
+        public static bool operator !(Thing o) => (o==null);
     }
 }

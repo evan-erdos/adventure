@@ -1,16 +1,16 @@
 //  This file is part of YamlDotNet - A .NET library for YAML.
 //  Copyright (c) Antoine Aubry and contributors
-    
+
 //  Permission is hereby granted, free of charge, to any person obtaining a copy of
 //  this software and associated documentation files (the "Software"), to deal in
 //  the Software without restriction, including without limitation the rights to
 //  use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
 //  of the Software, and to permit persons to whom the Software is furnished to do
 //  so, subject to the following conditions:
-    
+
 //  The above copyright notice and this permission notice shall be included in all
 //  copies or substantial portions of the Software.
-    
+
 //  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 //  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 //  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -33,22 +33,22 @@ namespace YamlDotNet.Serialization
 		/// <summary>
 		/// Specifies that this property should be serialized as the given type, rather than using the actual runtime value's type.
 		/// </summary>
-		public Type SerializeAs { get; set; }
+		public Type SerializeAs {get;set;}
 
         /// <summary>
         /// Specifies the order priority of this property.
         /// </summary>
-        public int Order { get; set; }
+        public int Order {get;set;}
 
 		/// <summary>
 		/// Instructs the <see cref="Deserializer"/> to use a different field name for serialization.
 		/// </summary>
-		public string Alias { get; set; }
+		public string Alias {get;set;}
 
         /// <summary>
         /// Specifies the scalar style of the property when serialized. This will only affect the serialization of scalar properties.
         /// </summary>
-        public ScalarStyle ScalarStyle { get; set; }
+        public ScalarStyle ScalarStyle {get;set;}
 
         /// <summary>
         /// Initializes a new instance of the <see cref="YamlMemberAttribute" /> class.

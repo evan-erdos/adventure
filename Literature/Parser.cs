@@ -6,6 +6,7 @@ using System.Text.RegularExpressions;
 using adv=PathwaysEngine.Adventure;
 using Buffer=System.Text.StringBuilder;
 
+
 namespace PathwaysEngine.Literature {
 
 
@@ -69,11 +70,11 @@ namespace PathwaysEngine.Literature {
             return false;
         }
 
-        public static bool Failure(Command c, string s) {
-            return Failure(c.input,s); }
+        public static bool Failure(Command c, string s) =>
+            Failure(c.input,s);
 
-        public static bool Failure(string s) {
-            return Failure(s,confused.Next()); }
+        public static bool Failure(string s) =>
+            Failure(s,confused.Next());
 
         public static bool Intercept(
                         Command c,
@@ -99,8 +100,8 @@ namespace PathwaysEngine.Literature {
         }
 
 
-        public static bool Intercept(string s) {
-            return Intercept(lastCommand,s); }
+        public static bool Intercept(string s) =>
+            Intercept(lastCommand,s);
 
         //public static bool Report(Command c) { }
 

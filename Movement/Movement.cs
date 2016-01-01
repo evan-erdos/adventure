@@ -4,6 +4,7 @@ using UnityEngine;
 using System.Collections.Generic;
 using adv=PathwaysEngine.Adventure;
 
+
 /** `PathwaysEngine.Movement` : **`namespace`**
 |*
 |* Deals with the mathematical & effect-based subsystems
@@ -11,6 +12,7 @@ using adv=PathwaysEngine.Adventure;
 |* make sounds, animate, and interact, physically.
 |**/
 namespace PathwaysEngine.Movement {
+
 
     /** `Hands` : **`enum`**
     |*
@@ -84,25 +86,25 @@ namespace PathwaysEngine.Movement {
         |*
         |* Is the motor responsive?
         |**/
-        bool IsDead { get; set; }
+        bool IsDead {get;set;}
 
         /** `Position` : **`<real,real,real>`**
         |*
         |* The global position of this motor.
         |**/
-        Vector3 Position { get; set; }
+        Vector3 Position {get;set;}
 
         /** `LocalPosition` : **`<real,real,real>`**
         |*
         |* The local transform of this motor.
         |**/
-        Vector3 LocalPosition { get; set; }
+        Vector3 LocalPosition {get;set;}
 
         /** `Velocity` : **`<real,real,real>`**
         |*
         |* Current velocity of this motor.
         |**/
-        Vector3 Velocity { get; set; }
+        Vector3 Velocity {get;set;}
 
         /** `Kill()` : **`bool`**
         |*

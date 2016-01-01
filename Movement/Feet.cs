@@ -5,6 +5,7 @@ using System.Collections;
 using System.Collections.Generic;
 using util=PathwaysEngine.Utilities;
 
+
 namespace PathwaysEngine.Movement {
 
 
@@ -17,6 +18,7 @@ namespace PathwaysEngine.Movement {
     |**/
     [RequireComponent(typeof(AudioSource))]
     public class Feet : MonoBehaviour {
+
         bool wait = false, isLanding = false;
         public const float step = 0.4f;
         public float landVolume = 0.6f;

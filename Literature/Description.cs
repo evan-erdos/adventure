@@ -1,4 +1,4 @@
-/* Ben Scott * bescott@andrew.cmu.edu * 2015-11-04 * Description */
+/* Ben Scott * bescott@andrew.cmu.edu * 2015-01-01 * Description */
 
 using UnityEngine;
 using System.Collections.Generic;
@@ -6,9 +6,27 @@ using System.Text.RegularExpressions;
 using type=System.Type;
 using YamlDotNet.Serialization;
 
+
 namespace PathwaysEngine.Literature {
 
+
+    /** `Description` : **`ILoggable`**
+     *
+     * Deals with most of the functions of describable things.
+     * It stores a name, some adjectives and nouns which can be
+     * used to refer to stuff (by way of a `Regex`), along with
+     * some style options, and another string which serves as a
+     * formatting template for the other elements.
+     **/
     public class Description : ILoggable {
+
+
+        /** `Seen` : **`bool`**
+         *
+         * Used to determine if this instance has been seen by
+         * the `Player` before, to potentially alter the text
+         * it renders when it is `Log()`-ed thereafter.
+         **/
         public bool Seen {
             get { return seen; }
             set { seen = value;
@@ -16,31 +34,70 @@ namespace PathwaysEngine.Literature {
             }
         } bool seen;
 
+
+        /** `Name` : **`string`**
+         *
+         * Simple UUID such that **`Description`**s can be put
+         * into `*.yml` files.
+         **/
         [YamlMember(Alias="name")]
         public string Name {get;set;}
 
+
+        /** `Template` : **`string`**
+         *
+         * A string to be used to apply `*.md` formatting to
+         * the rendered output of `Entry`.
+         **/
         [YamlMember(Alias="template")]
         public virtual string Template {
             get { return template; }
             set { RefreshTemplate(value); }
-        } string template = "### {0} ###\n{1}\n\n{2}";
+        } string template = $"### {0} ###\n{1}\n\n{2}";
 
 
+        /** `Entry` : **`string`**
+         *
+         * Stores the rendered `*.md` string behind the scenes,
+         * and keeps track of the raw input as well.
+         **/
         [YamlMember(Alias="desc")]
         public string Entry {
             get { return desc; }
             set { Refresh(value); }
         } protected string desc, raw;
 
+        /** `init` : **`string`**
+         *
+         * An optional string to be appended before the main
+         * text (or wherever else the `Template` specifies).
+         **/
         [YamlMember(Alias="initial description")]
         public string init {get;set;}
 
+
+        /** `help` : **`string`**
+         *
+         * A specially formatted help text which can be added
+         * to the description if the user appears to be dumb.
+         **/
         //[YamlMember(Alias="help")]
         public string help {get;set;}
 
-        [YamlMember(Alias="styles")]
+        /** `styles` : **`Styles[]`**
+         *
+         * An array of formatting styles to be applied to the
+         * `Entry` before being `Log()`-ed.
+         **/
+        //[YamlMember(Alias="styles")]
         public Styles[] styles {get;set;}
 
+
+        /** `Nouns` : **`/regex/`**
+         *
+         * A `regex` to be matched against user input, which
+         * acts as a dynamic identifier for the object.
+         **/
         [YamlMember(Alias="nouns")]
         public Regex Nouns {
             get { return nouns; }
@@ -49,11 +106,19 @@ namespace PathwaysEngine.Literature {
                     Name,value)); }
         } Regex nouns;
 
+
+        /** `rand` : **`string[]`**
+         *
+         * A list of `string`s which will be chosen at random
+         * and inserted into the rendered output.
+         **/
         [YamlMember(Alias="random descriptions")]
         public RandList<string> rand {get;set;}
 
+
         public bool IsMatch(string s) {
             return nouns.IsMatch(s); }
+
 
         public Description() : this(" ") { }
 
@@ -92,7 +157,13 @@ namespace PathwaysEngine.Literature {
         }
 
 
-        public void Refresh() { Refresh(raw); }
+        /** `Refresh()` : **`function`**
+         *
+         * Re-applies the formatting to the `Entry`, as some
+         * of the variables may have changed since the last
+         * time the formatting was applied.
+         **/
+        public void Refresh() => Refresh(raw);
 
         void Refresh(string s) {
             raw = s;
@@ -113,11 +184,11 @@ namespace PathwaysEngine.Literature {
                 .Replace("{").Replace("}");
         }
 
-        public bool Fits(string s) {
-            return nouns.IsMatch(s); }
+        public bool Fits(string s) =>
+            nouns.IsMatch(s);
 
-        public bool Fits(Command c) {
-            return nouns.IsMatch(c.input); }
+        public bool Fits(Command c) =>
+            nouns.IsMatch(c.input);
 
 
         /** `Merge()` : **`Description`**
@@ -166,18 +237,18 @@ namespace PathwaysEngine.Literature {
             return d0;
         }
 
-        public virtual string Log() { return Entry; }
+        public virtual string Log() => Entry;
 
-        public override string ToString() { return desc; }
+        public override string ToString() => desc;
 
-        public static explicit operator string(Description d) {
-            return d.Entry; }
+        public static explicit operator string(Description d) =>
+            d.Entry;
     }
 
     class Description<T> : Description
                  where T : ILoggable {
 
-        public override string Log() {
-            return string.Format(Template,desc); }
+        public override string Log() =>
+            $Template,desc;
     }
 }

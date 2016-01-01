@@ -3,7 +3,9 @@
 using UnityEngine;
 using System.Collections.Generic;
 
+
 namespace PathwaysEngine.Statistics {
+
 
     /** `Hit` : **`struct`**
     |*

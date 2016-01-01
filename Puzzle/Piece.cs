@@ -2,17 +2,19 @@
 
 using UnityEngine;
 using System.Collections.Generic;
+using EventArgs=System.EventArgs;
 using adv=PathwaysEngine.Adventure;
+
 
 namespace PathwaysEngine.Puzzle {
 
 
-    /** `Piece` : **`Thing`**
+    /** `Piece<T>` : **`Thing`**
     |*
     |* Represents an instance of a puzzle piece, which must be
     |* `Solve`d to finish a puzzle.
     |**/
-    partial class Piece : adv::Thing, IPiece {
+    abstract partial class Piece<T> : adv::Thing, IPiece<T> {
 
 
         /** `SolveEvent` : **`event`**
@@ -20,32 +22,44 @@ namespace PathwaysEngine.Puzzle {
         |* This property wraps the inherited `solveEvent` event
         |*
         |**/
-        public virtual event OnSolve SolveEvent {
+        public virtual event OnSolve<T> SolveEvent {
             add { solveEvent += value; }
             remove { solveEvent -= value; }
-        } event OnSolve solveEvent;
+        } event OnSolve<T> solveEvent;
 
         public virtual bool IsSolved {
-            get { return isSolved; }
-            set { isSolved = value; }
-        } protected bool isSolved;
+            get { return EqualityComparer<T>.Default.Equals(
+                    Condition, Solution); } }
 
-        public virtual bool Solve() {
-            return OnSolve(this,System.EventArgs.Empty,IsSolved); }
+        public T Condition {get;set;}
 
-        public virtual bool OnSolve(
-                        object sender,
-                        System.EventArgs e,
-                        bool wasSolved) {
-            if (wasSolved) Debug.Log("Piece Solved!");
+        public T Solution {
+            get { return solution; }
+            private set { solution = value; }
+        } T solution;
+
+
+        public virtual bool Solve(T condition) {
+            var wasSolved = IsSolved;
+            Condition = condition;
+            if (IsSolved!=wasSolved)
+                OnSolve(this,EventArgs.Empty,IsSolved);
             return IsSolved;
         }
 
-        public override void Awake() {
-            SolveEvent += this.OnSolve; }
+        public virtual T OnSolve(
+                        IPiece<T> sender,
+                        EventArgs e,
+                        bool solved) {
+            if (solved) Debug.Log("Piece Solved!");
+            return Condition;
+        }
 
-        public void OnDestroy() {
-            SolveEvent -= this.OnSolve; }
+        public override void Awake() {
+            solveEvent += OnSolve; }
+
+        public virtual void OnDestroy() {
+            solveEvent -= OnSolve; }
     }
 }
 

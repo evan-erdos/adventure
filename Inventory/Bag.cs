@@ -4,10 +4,11 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
+
 namespace PathwaysEngine.Inventory {
 
 
-    public partial class Bag : ItemCollection {
+    partial class Bag : ItemCollection {
 
         public void DropAll() {
             foreach (var item in this) item.Drop(); }

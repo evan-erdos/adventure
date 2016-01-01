@@ -3,8 +3,10 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using EventArgs=System.EventArgs;
 using adv=PathwaysEngine.Adventure;
 using lit=PathwaysEngine.Literature;
+
 
 namespace PathwaysEngine.Puzzle {
 
@@ -14,7 +16,7 @@ namespace PathwaysEngine.Puzzle {
     |* Represents an instance of a lever, which can either be
     |* `Solve`d or not, depending upon if it's pulled.
     |**/
-    partial class Lever : adv::Thing, IPiece {
+    partial class Lever : adv::Thing, IPiece<int> {
         bool wait = false;
         public float time = 2f, dist = 2f, delay = 4f;
         float tgt, speed, handle_tgt, handle_speed;
@@ -28,17 +30,13 @@ namespace PathwaysEngine.Puzzle {
         AudioSource _audio;
         GameObject arm, handle;
 
-        public event OnSolve SolveEvent {
+        public event OnSolve<int> SolveEvent {
             add { solveEvent += value; }
             remove { solveEvent -= value; }
-        } event OnSolve solveEvent;
+        } event OnSolve<int> solveEvent;
 
         public bool IsSolved {
-            get { return isSolved; }
-            set { isSolved = value;
-                tgt = (value)?(armRange.y):(armRange.x);
-            }
-        } [SerializeField] bool isSolved;
+            get { return (Condition==Solution); } }
 
         public bool IsInitSolved {
             get { return isInitSolved; }
@@ -55,6 +53,18 @@ namespace PathwaysEngine.Puzzle {
         } [SerializeField] bool isLocked = false;
 
 
+        public int Condition {
+            get { return condition; }
+            set { condition = value; }
+        } int condition;
+
+
+        public int Solution {
+            get { return solution; }
+            private set { solution = value; }
+        } int solution;
+
+
         public float Theta {
             get { return theta; }
             set {
@@ -63,12 +73,6 @@ namespace PathwaysEngine.Puzzle {
             }
         } float theta = -20f;
 
-        public bool OnSolved(
-                        object sender,
-                        System.EventArgs e,
-                        bool wasSolved) {
-            return IsSolved;
-        }
 
         public override void Awake() { base.Awake();
             arm = transform.FindChild("arm").gameObject;
@@ -79,9 +83,7 @@ namespace PathwaysEngine.Puzzle {
             SolveEvent += this.OnSolve;
         }
 
-        public override void Start() { base.Start();
-            IsSolved = IsInitSolved;
-        }
+        //public override void Start() { base.Start(); }
 
         void FixedUpdate() {
             if (IsLocked) return;
@@ -97,7 +99,7 @@ namespace PathwaysEngine.Puzzle {
 
         void Pull(lit::Command c) {
             if (description.Nouns.IsMatch(c.input))
-                StartCoroutine(Pulling(!isSolved)); }
+                StartCoroutine(Pulling(!IsSolved)); }
 
         IEnumerator Solving(bool t) {
             yield break;
@@ -123,22 +125,27 @@ namespace PathwaysEngine.Puzzle {
                 lit::Terminal.LogCommand(
                     "You pull the lever "+
                         ((t)?"back.":"forwards."));
-                IsSolved = t;
-                Solve();
+                //IsSolved = t;
+                Solve(t?1:0);
                 yield return new WaitForSeconds(delay);
                 wait = false;
             }
         }
 
-        public bool OnSolve(
-                        object sender,
-                        System.EventArgs e,
-                        bool wasSolved) {
-            return IsSolved;
+        public int OnSolve(
+                        IPiece<int> sender,
+                        EventArgs e,
+                        bool solved) {
+            if (!IsSolved) return 0;
+            return Condition;
         }
 
-        public bool Solve() {
-            return solveEvent(this,System.EventArgs.Empty,IsSolved);
+        public bool Solve(int condition) {
+            var wasSolved = IsSolved;
+            Condition = condition;
+            if (IsSolved!=wasSolved)
+                solveEvent(this,EventArgs.Empty,IsSolved);
+            return IsSolved;
         }
 
         public override IEnumerator OnMouseOver() {
@@ -147,7 +154,7 @@ namespace PathwaysEngine.Puzzle {
             if (Pathways.CursorGraphic==Cursors.Grab) yield break;
             Pathways.CursorGraphic = Cursors.Hand;
             if (Input.GetButton("Fire1"))
-                yield return StartCoroutine(Pulling(!isSolved));
+                yield return StartCoroutine(Pulling(!IsSolved));
             while (Input.GetButton("Fire1")
             && Vector3.Distance(transform.position,Player.Position)<dist) {
                 var v0 = Input.mousePosition;

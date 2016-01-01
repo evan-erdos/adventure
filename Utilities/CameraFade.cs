@@ -4,7 +4,10 @@ using UnityEngine;
 using System.Collections;
 using Action = System.Action;
 
+
 namespace PathwaysEngine.Utilities {
+
+
     public class CameraFade : MonoBehaviour {
         private static CameraFade mInstance = null;
 

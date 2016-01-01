@@ -4,6 +4,8 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using lit=PathwaysEngine.Literature;
+//using static PathwaysEngine.Literature.Terminal;
+
 
 namespace PathwaysEngine.Inventory {
 
@@ -15,14 +17,10 @@ namespace PathwaysEngine.Inventory {
     |* `Wear()`/`Stow()` it, so it can only act as a container
     |* for the `Player`.
     |**/
-    public class Backpack : Bag, IWearable {
+    class Backpack : Bag, IWearable {
 
-        public bool Worn {
-            get { return worn; }
-            set { worn = value;
-                if (worn) Wear();
-                else Stow(); }
-        } bool worn;
+
+        public bool Worn {get;set;}
 
 
         public override bool Take() { base.Take();
@@ -41,15 +39,15 @@ namespace PathwaysEngine.Inventory {
         ~Backpack() { DropAll(); }
 
         public bool Wear() {
+            Worn = true;
             gameObject.SetActive(true);
-            lit::Terminal.LogCommand(
-                "You put on the backpack.\n");
+            PathwaysEngine.Literature.Terminal.LogCommand("You put on the backpack.");
             return false;
         }
 
         public bool Stow() {
-            lit::Terminal.LogCommand(
-                "You take off the backpack.\n");
+            Worn = false;
+            PathwaysEngine.Literature.Terminal.LogCommand("You take off the backpack.");
             gameObject.SetActive(false);
             return false;
         }

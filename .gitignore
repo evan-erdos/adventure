@@ -1,4 +1,6 @@
-.sublime-project
-.sublime-workspace
-.DS_Store
-.meta
+
+*.sublime-project
+*.sublime-workspace
+*.DS_Store
+*.meta
+*.*.meta

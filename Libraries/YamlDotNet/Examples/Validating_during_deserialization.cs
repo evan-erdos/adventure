@@ -13,7 +13,7 @@ public class Validating_during_deserialization : MonoBehaviour {
     void Start () {
         // Wrap the existing ObjectNodeDeserializer
         // with our ValidatingNodeDeserializer:
-        
+
         var deserializer = new Deserializer();
 
         var objectDeserializer = deserializer.NodeDeserializers
@@ -22,10 +22,10 @@ public class Validating_during_deserialization : MonoBehaviour {
                 Index = i
             })
             .First(d => d.Deserializer != null);
-        
+
         deserializer.NodeDeserializers[objectDeserializer.Index] =
             new ValidatingNodeDeserializer(objectDeserializer.Deserializer);
-        
+
         // This will cause a message to be logged in the console
         deserializer.Deserialize<Data>(new StringReader(@"Name: ~"));
     }
@@ -53,7 +53,7 @@ public class ValidatingNodeDeserializer : INodeDeserializer
         if (_nodeDeserializer.Deserialize(reader, expectedType,
             nestedObjectDeserializer, out value))
         {
-            if (((Data)value).Name == null) 
+            if (((Data)value).Name == null)
             {
                 Debug.Log("ValidatingNodeDeserializer found that 'Name' was missing or null");
             }
@@ -65,5 +65,5 @@ public class ValidatingNodeDeserializer : INodeDeserializer
 
 public class Data
 {
-    public string Name { get; set; }
+    public string Name {get;set;}
 }

@@ -4,7 +4,9 @@ using Exception=System.Exception;
 using adv=PathwaysEngine.Adventure;
 using System.Collections.Generic;
 
+
 namespace PathwaysEngine.Literature {
+
 
     /** `TextException` : **`Exception`**
     |*

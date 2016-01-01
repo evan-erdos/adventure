@@ -8,10 +8,10 @@
 //  use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
 //  of the Software, and to permit persons to whom the Software is furnished to do
 //  so, subject to the following conditions:
-    
+
 //  The above copyright notice and this permission notice shall be included in all
 //  copies or substantial portions of the Software.
-    
+
 //  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 //  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 //  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -39,13 +39,13 @@ namespace YamlDotNet.RepresentationModel
 		/// Gets or sets the value of the node.
 		/// </summary>
 		/// <value>The value.</value>
-		public string Value { get; set; }
+		public string Value {get;set;}
 
 		/// <summary>
 		/// Gets or sets the style of the node.
 		/// </summary>
 		/// <value>The style.</value>
-		public ScalarStyle Style { get; set; }
+		public ScalarStyle Style {get;set;}
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="YamlScalarNode"/> class.
@@ -94,7 +94,7 @@ namespace YamlDotNet.RepresentationModel
 		{
             emitter.Emit(new Scalar(Anchor, Tag, Value, Style, true, false));
 		}
-		
+
 		/// <summary>
 		/// Accepts the specified visitor by calling the appropriate Visit method on it.
 		/// </summary>
@@ -104,14 +104,14 @@ namespace YamlDotNet.RepresentationModel
 		public override void Accept(IYamlVisitor visitor) {
 			visitor.Visit(this);
 		}
-		
+
 		/// <summary />
 		public override bool Equals(object other)
 		{
 			var obj = other as YamlScalarNode;
 			return obj != null && Equals(obj) && SafeEquals(Value, obj.Value);
 		}
-			
+
 		/// <summary>
 		/// Serves as a hash function for a particular type.
 		/// </summary>

@@ -5,8 +5,12 @@ using System.Collections;
 using adv=PathwaysEngine.Adventure;
 using inv=PathwaysEngine.Inventory;
 
+
 namespace PathwaysEngine.Movement.StateMachine {
+
+
     public class FlashlightWield : StateMachineBehaviour {
+
         inv::Flashlight flashlight;
 
         override public void OnStateEnter(Animator a,AnimatorStateInfo asi,int i) {

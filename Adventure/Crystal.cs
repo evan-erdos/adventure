@@ -4,7 +4,10 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
+
 namespace PathwaysEngine.Adventure {
+
+
     [RequireComponent(typeof(AudioSource))]
     [RequireComponent(typeof(Collider))]
     [RequireComponent(typeof(Light))]
@@ -24,7 +27,7 @@ namespace PathwaysEngine.Adventure {
         public Color color;
         public Crystal[] crystals;
 
-        public bool ring { get; set; }
+        public bool ring {get;set;}
 
         public float Delay {
             get { return delay+Random.Range(-0.01f,0.01f); }

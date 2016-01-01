@@ -4,7 +4,10 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
+
 namespace PathwaysEngine.Inventory {
+
+
     public partial class Gun : Weapon {
         public bool isAuto, isBurst, isPrimary;
         public uint countAmmo, sizeClip, countLoaded,
@@ -64,7 +67,7 @@ namespace PathwaysEngine.Inventory {
             }
         }
 
-        public override void Attack() {
+        public override bool Attack() {
             if (sinceShot>rate && !am.isPlaying) {
 #if TODO
                 string cAnimation;
@@ -103,7 +106,7 @@ namespace PathwaysEngine.Inventory {
                 case (WeaponTypes.Crystal) : break;
     //          case (WeaponTypes.Melee) : am.Play(cAnimation); break;
                 }
-            }
+            } return false;
         }
 
         internal void Reload(bool canReload) {

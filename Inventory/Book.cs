@@ -4,8 +4,11 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using lit=PathwaysEngine.Literature;
+//using static PathwaysEngine.Literature.Terminal;
+
 
 namespace PathwaysEngine.Inventory {
+
 
     partial class Book : Item, lit::IReadable {
         bool waitRead;
@@ -26,7 +29,7 @@ namespace PathwaysEngine.Inventory {
 
 
         public bool Read() {
-            lit::Terminal.Log(Passage, lit::Styles.Paragraph);
+            PathwaysEngine.Literature.Terminal.Log(Passage, lit::Styles.Paragraph);
             return true;
         }
 

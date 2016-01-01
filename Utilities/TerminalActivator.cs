@@ -4,9 +4,11 @@ using UnityEngine;
 using ui=UnityEngine.UI;
 using System.Collections.Generic;
 
+
 namespace PathwaysEngine.Utilities {
 
-    /** `TerminalActivator` : **`class`**
+
+    /** `TerminalActivator` : **`Activator<T>`**
     |*
     |* Specific implementation of a `Activator<T>`, used by the
     |* `Terminal` class to enable / disable its UI effects via

@@ -4,10 +4,11 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
+
 namespace PathwaysEngine.Inventory {
 
 
-    public class ItemGroup<T> : Item, IItemGroup <T> {
+    class ItemGroup<T> : Item, IItemGroup <T> {
         int radius = 4, layerItem = 16;
 
         public uint Count {

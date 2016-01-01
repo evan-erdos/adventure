@@ -28,8 +28,8 @@ namespace PathwaysEngine.Inventory {
 		public GameObject[] ShotParticles;
 		public Camera mCAMR;
 
-		public bool Worn { get; set; }
-		public uint Uses { get; set; }
+		public bool Worn {get;set;}
+		public uint Uses {get;set;}
 		public uint Shards {get;set;}
 
 		internal Crystal() {
@@ -71,9 +71,9 @@ namespace PathwaysEngine.Inventory {
 			}
 		}
 
-		public override bool Use() { Attack(); return false; }
+		public override bool Use() => Attack();
 
-		public void Attack() {
+		public bool Attack() {
 			if (sinceShot>rate && !am.isPlaying) {
 #if TODO
 				string cAnimation;
@@ -112,7 +112,7 @@ namespace PathwaysEngine.Inventory {
 				case (WeaponTypes.Crystal) : break;
 	//			case (WeaponTypes.Melee) : am.Play(cAnimation); break;
 				}
-			}
+			} return true;
 		}
 
 		internal void Reload(bool canReload) {
@@ -125,9 +125,11 @@ namespace PathwaysEngine.Inventory {
 			}
 		}
 
-		public bool Stow() { StartCoroutine(Holster(true)); return false; }
+		public bool Stow() {
+			StartCoroutine(Holster(true)); return false; }
 
-		public bool Wear() { StartCoroutine(Holster(false)); return false; }
+		public bool Wear() {
+			StartCoroutine(Holster(false)); return false; }
 
 		internal IEnumerator Focus() {
 			float cViewField = mCAMR.fieldOfView;

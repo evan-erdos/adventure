@@ -107,7 +107,7 @@ namespace PathwaysEngine {
                     { "date", typeof(DateTime) },
 
                     // Adventure Tags
-                    { "thing", typeof(adv::Thing.yml) },
+                    { "thing", typeof(adv::Thing_yml) },
                     { "creature", typeof(adv::Creature.yml) },
                     { "person", typeof(adv::Person.yml) },
                     { "player", typeof(Player.yml) },
@@ -118,6 +118,7 @@ namespace PathwaysEngine {
                     { "door", typeof(map::Door.yml) },
 
                     // Literature Tags
+                    { "parse", typeof(lit::Parse) },
                     { "message", typeof(lit::Message) },
                     { "encounter", typeof(lit::Encounter.yml) },
 
@@ -134,7 +135,7 @@ namespace PathwaysEngine {
                     { "gun", typeof(inv::Gun.yml) },
 
                     // Puzzle Tags
-                    { "piece", typeof(puzl::Piece.yml) },
+                    //{ "piece", typeof(puzl::Piece.yml) },
                     { "button", typeof(puzl::Button.yml) },
                     { "lever", typeof(puzl::Lever.yml) }};
 
@@ -147,24 +148,24 @@ namespace PathwaysEngine {
 
                 var files = new[] { // special files
                     "commands", // list of commands
-                    "defaults", // base descriptions & values
-                    "pathways", // system-wide messages
+                    "defaults", // default data
+                    "pathways", // system messages
                     "settings"}; // project settings
 
                 foreach (var file in files) {
-                    var sr = GetReader(Path.Combine(dir,file)+ext);
+                    var r = GetReader(Path.Combine(dir,file)+ext);
                     switch (file) {
                         case "commands" :
-                            foreach (var kvp in deserializer.Deserialize<Dictionary<string,lit::Command_yml>>(sr))
+                            foreach (var kvp in deserializer.Deserialize<Dictionary<string,lit::Command_yml>>(r))
                                 Pathways.commands[kvp.Key] = kvp.Value.Deserialize(kvp.Key);
                             break;
                         case "defaults" :
-                            foreach (var elem in deserializer.Deserialize<Dictionary<string,Dictionary<string,object>>>(sr))
+                            foreach (var elem in deserializer.Deserialize<Dictionary<string,Dictionary<string,object>>>(r))
                                 foreach (var kvp in elem.Value)
                                     Pathways.defaults[GetTypeYAML(elem.Key,kvp.Key)] = kvp.Value;
                             break;
                         case "pathways" :
-                            foreach (var kvp in deserializer.Deserialize<Dictionary<string,lit::Message>>(sr))
+                            foreach (var kvp in deserializer.Deserialize<Dictionary<string,lit::Message>>(r))
                                 Pathways.messages[kvp.Key] = kvp.Value;
                             break;
                     }
@@ -331,29 +332,23 @@ namespace PathwaysEngine {
 
     namespace Adventure {
 
-        public partial class Thing {
+        public class Thing_yml : ISerializable<Thing> {
+            public bool seen {get;set;}
+            public string Name {get;set;}
+            public lit::Description description {get;set;}
 
-            public virtual void Deserialize() {
-                Pathways.Deserialize<Thing,Thing.yml>(this); }
+            public void ApplyDefaults<T>(Thing o) {
+                var d = Pathways.yml.DeserializeDefault<Thing_yml>();
+                o.Seen = d.seen;
+                o.description = d.description;
+            }
 
-            public class yml : ISerializable<Thing> {
-                public bool seen {get;set;}
-                public string Name {get;set;}
-                public lit::Description description {get;set;}
-
-                public void ApplyDefaults<T>(Thing o) {
-                    var d = Pathways.yml.DeserializeDefault<Thing.yml>();
-                    o.Seen = d.seen;
-                    o.description = d.description;
-                }
-
-                public void Deserialize(Thing o) {
-                    ApplyDefaults<Thing>(o);
-                    o.Seen = this.seen;
-                    o.description.Name = o.Name;
-                    o.description = lit::Description.Merge(
-                        this.description, o.description);
-                }
+            public void Deserialize(Thing o) {
+                ApplyDefaults<Thing>(o);
+                o.Seen = this.seen;
+                o.description.Name = o.Name;
+                o.description = lit::Description.Merge(
+                    this.description, o.description);
             }
         }
 
@@ -363,11 +358,11 @@ namespace PathwaysEngine {
             public override void Deserialize() {
                 Pathways.Deserialize<Creature,Creature.yml>(this); }
 
-            public new class yml : Thing.yml, ISerializable<Creature> {
+            public class yml : ISerializable<Creature> {//Thing_yml,
                 public bool isDead {get;set;}
 
                 public void Deserialize(Creature o) {
-                    Deserialize((Thing) o);
+                    //Deserialize((Thing) o);
                     o.isDead = isDead;
                 }
             }
@@ -396,7 +391,7 @@ namespace PathwaysEngine {
                 public override void Deserialize() {
                     Pathways.Deserialize<Room,Room.yml>(this); }
 
-                public new class yml : Thing.yml, ISerializable<Room> {
+                public class yml : Thing_yml, ISerializable<Room> {
                     public int depth {get;set;}
                     public List<Thing> things {get;set;}
                     public List<Room> nearbyRooms {get;set;}
@@ -414,7 +409,7 @@ namespace PathwaysEngine {
                 public override void Deserialize() {
                     Pathways.Deserialize<Area,Area.yml>(this); }
 
-                public new class yml : Thing.yml, ISerializable<Area> {
+                public class yml : Thing_yml, ISerializable<Area> {
                     public bool safe {get;set;}
                     public int level {get;set;}
                     public List<Room.yml> rooms {get;set;}
@@ -435,7 +430,7 @@ namespace PathwaysEngine {
                 public override void Deserialize() {
                     Pathways.Deserialize<Door,Door.yml>(this); }
 
-                public new class yml : Thing.yml, ISerializable<Door> {
+                public class yml : Thing_yml, ISerializable<Door> {
 
                     [YamlMember(Alias="opened")]
                     public bool IsOpen {get;set;}
@@ -476,7 +471,7 @@ namespace PathwaysEngine {
             public override void Deserialize() {
                 Pathways.Deserialize<Item,Item.yml>(this); }
 
-            public new class yml : adv::Thing.yml, ISerializable<Item> {
+            public class yml : adv::Thing_yml, ISerializable<Item> {
                 public int cost {get;set;}
                 public float mass {get;set;}
 
@@ -529,7 +524,7 @@ namespace PathwaysEngine {
             public override void Deserialize() {
                 Pathways.Deserialize<Book,Book.yml>(this); }
 
-            public new class yml : adv::Thing.yml, ISerializable<Book> {
+            public new class yml : adv::Thing_yml, ISerializable<Book> {
                 public string passage {get;set;}
 
                 public void ApplyDefaults(Book o) {
@@ -737,7 +732,7 @@ namespace PathwaysEngine {
             public override void Deserialize() {
                 Pathways.Deserialize<Encounter,Encounter.yml>(this); }
 
-            public new class yml : adv::Thing.yml, ISerializable<Encounter> {
+            public class yml : adv::Thing_yml, ISerializable<Encounter> {
                 public bool reuse {get;set;}
                 public float time {get;set;}
                 public Inputs input {get;set;}
@@ -755,48 +750,48 @@ namespace PathwaysEngine {
 
     namespace Puzzle {
 
-        public partial class Piece : adv::Thing, IPiece {
+        abstract partial class Piece<T> : adv::Thing, IPiece<T> {
 
             public override void Deserialize() {
-                Pathways.Deserialize<Piece,Piece.yml>(this); }
+                Pathways.Deserialize<Piece<T>,Piece<T>.yml>(this); }
 
-            public new class yml : adv::Thing.yml, ISerializable<Piece> {
-                public bool IsSolved {get;set;}
+            public class yml : adv::Thing_yml, ISerializable<Piece<T>> {
 
-                public void Deserialize(Piece o) {
+                public T condition {get;set;}
+
+                public T solution {get;set;}
+
+                public void Deserialize(Piece<T> o) {
                     Deserialize((adv::Thing) o);
-                    o.IsSolved = this.IsSolved;
+                    o.Condition = condition;
+                    o.Solution = solution;
                 }
             }
         }
 
-        partial class Button : Piece {
+        partial class Button : Piece<bool> {
 
             public override void Deserialize() {
                 Pathways.Deserialize<Button,Button.yml>(this); }
 
-            public new class yml : Piece.yml, ISerializable<Button> {
-                [YamlMember(Alias="pressed")]
-                public bool IsPressed {get;set;}
+            public new class yml : Piece<bool>.yml, ISerializable<Button> {
 
                 public void Deserialize(Button o) {
-                    Deserialize((Piece) o);
-                    o.IsPressed = this.IsPressed;
+                    Deserialize((Piece<bool>) o);
                 }
             }
          }
 
-        partial class Lever : adv::Thing, IPiece {
+        partial class Lever : adv::Thing, IPiece<int> {
 
             public override void Deserialize() {
                 Pathways.Deserialize<Lever,Lever.yml>(this); }
 
-            public new class yml : adv::Thing.yml, ISerializable<Lever> {
+            public class yml : adv::Thing_yml, ISerializable<Lever> {
                 public bool IsSolved {get;set;}
 
                 public void Deserialize(Lever o) {
                     Deserialize((adv::Thing) o);
-                    o.IsSolved = this.IsSolved;
                 }
             }
         }

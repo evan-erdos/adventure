@@ -2,31 +2,27 @@
 
 using UnityEngine;
 using System.Collections.Generic;
+using EventArgs=System.EventArgs;
 using intf=PathwaysEngine.Adventure;
+
 
 namespace PathwaysEngine.Puzzle {
 
 
-    /** `Button` : **`class`**
+    /** `Button` : **`Piece<bool>`**
     |*
     |* Represents any button which can be pressed, toggled, or
     |* or otherwise manipulated with a single click.
     |**/
-    partial class Button : Piece {
-
-
-        /** `IsPressed` : **`bool`**
-        |*
-        |* Whether or not the button is pressed.
-        |**/
-        public bool IsPressed {get;set;}
+    partial class Button : Piece<bool> {
 
 
         public override bool OnSolve(
-                        object sender,
-                        System.EventArgs e,
+                        IPiece<bool> sender,
+                        EventArgs e,
                         bool wasSolved) {
-            if (wasSolved) Debug.Log("Button Solved!");
+            if (wasSolved)
+                Debug.Log("Button Solved!");
             return IsSolved;
         }
 

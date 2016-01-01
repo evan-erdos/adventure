@@ -1,5 +1,6 @@
 /* Ben Scott * bescott@andrew.cmu.edu * 2015-11-13 * Utilities */
 
+
 using System.Collections.Generic;
 
 
@@ -30,7 +31,7 @@ namespace PathwaysEngine.Utilities {
 
     [System.AttributeUsage(System.AttributeTargets.Field)]
     public class InputKeyAttribute : System.Attribute {
-        public string button { get; set; }
+        public string button {get;set;}
 
         public InputKeyAttribute() { }
 

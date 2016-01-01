@@ -1,3 +1,4 @@
+
 /* Ben Scott * bescott@andrew.cmu.edu * 2015-11-13 * Adventure */
 
 using EventArgs=System.EventArgs;
@@ -199,10 +200,10 @@ namespace PathwaysEngine.Adventure {
         |*     the thing cannot be examined
         |**/
         bool View(
-            object source,
-            Thing target,
-            EventArgs e,
-            lit::Command c);
+                        object source,
+                        Thing target,
+                        EventArgs e,
+                        lit::Command c);
     }
 
 
@@ -219,14 +220,14 @@ namespace PathwaysEngine.Adventure {
         |*
         |* Is this being dead?
         |**/
-        bool IsDead { get; set; }
+        bool IsDead {get;set;}
 
 
         /** `Stats` : **`Set`**
         |*
         |* Set of statistics for this being.
         |**/
-        stat::Set stats { get; set; }
+        stat::Set stats {get;set;}
 
 
         /** `ApplyDamage()` : **`function`**

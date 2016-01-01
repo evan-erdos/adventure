@@ -5,6 +5,7 @@ using System.Collections;
 using System.Collections.Generic;
 using lit=PathwaysEngine.Literature;
 
+
 namespace PathwaysEngine.Movement {
 
 
@@ -19,6 +20,7 @@ namespace PathwaysEngine.Movement {
 		Collider _collider;
 		public Transform target;
 		public float dist = 1f;
+		public float nearClip = 0.1;
 		float time = 1f;
 		bool wait = false;
 
@@ -91,7 +93,7 @@ namespace PathwaysEngine.Movement {
 				Pathways.CursorGraphic = Cursors.Pick;
 		}
 
-		IEnumerator OnMouseOver() {
+		IEnumerator OnMouseEnter() {
             if (Vector3.Distance(transform.position,Player.Position)>dist) {
                 Pathways.CursorGraphic = Cursors.None; yield break; }
             Pathways.CursorGraphic = Cursors.Look;

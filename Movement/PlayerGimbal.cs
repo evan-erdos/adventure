@@ -8,7 +8,10 @@ using System.Collections.Generic;
 using inv=PathwaysEngine.Inventory;
 using util=PathwaysEngine.Utilities;
 
+
 namespace PathwaysEngine.Movement {
+
+
     public class PlayerGimbal : MonoBehaviour {
         bool isRestoring, isDead, wasHit;
         uint index;

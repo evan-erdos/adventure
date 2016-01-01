@@ -6,7 +6,9 @@ using System.Collections.Generic;
 using inv=PathwaysEngine.Inventory;
 using util=PathwaysEngine.Utilities;
 
+
 namespace PathwaysEngine.Movement {
+
     public class Hand : MonoBehaviour {
         public bool ikActive;
         public Transform objHand;

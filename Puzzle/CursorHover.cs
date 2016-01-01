@@ -5,7 +5,9 @@ using System.Collections;
 using System.Collections.Generic;
 using lit=PathwaysEngine.Literature;
 
+
 namespace PathwaysEngine.Puzzle {
+
 
     /** `CursorHover` : **`MonoBehaviour`**
     |*
@@ -26,7 +28,7 @@ namespace PathwaysEngine.Puzzle {
             if (!_collider) throw new System.Exception("No collider!");
         }
 
-        IEnumerator OnMouseOver() {
+        IEnumerator OnMouseEnter() {
             var d = Vector3.Distance(transform.position,Player.Position);
             if (d>distance) {
                 Pathways.CursorGraphic = Cursors.None; yield break; }

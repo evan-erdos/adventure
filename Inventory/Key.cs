@@ -5,6 +5,7 @@ using System.Collections;
 using EventArgs=System.EventArgs;
 using lit=PathwaysEngine.Literature;
 
+
 namespace PathwaysEngine.Inventory {
 
 
@@ -13,7 +14,7 @@ namespace PathwaysEngine.Inventory {
     |* Represents any object which can be used to `Unlock()` a
     |* `Door`, a `Container`, or any other `ILockable` object.
     |**/
-    public partial class Key : Item {
+    partial class Key : Item {
 
 
         /** `Kind` : **`Keys`**

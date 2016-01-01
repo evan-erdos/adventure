@@ -5,7 +5,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using adv=PathwaysEngine.Adventure;
-using lit=PathwaysEngine.Literature;
+//using static PathwaysEngine.Literature.Terminal;
+
 
 namespace PathwaysEngine.Inventory {
 
@@ -19,8 +20,8 @@ namespace PathwaysEngine.Inventory {
     [RequireComponent(typeof(Rigidbody))]
     public partial class Item : adv::Thing, IGainful {
         float volume = 0.9f, dist = 4f;
-        public AudioClip sound;
-        public Sprite Icon;
+        [SerializeField] AudioClip sound;
+        [SerializeField] public Sprite Icon;
 
 
         /** `Held` : **`bool`**
@@ -45,7 +46,7 @@ namespace PathwaysEngine.Inventory {
         |*
         |* Clearly, this represents the price of an `Item`s.
         |**/
-        public int Cost { get; set; }
+        public int Cost {get;set;}
 
 
         /** `Mass` : **`real`**
@@ -57,7 +58,7 @@ namespace PathwaysEngine.Inventory {
             set { rigidbody.mass = value; } }
 
 
-        public virtual bool Use() { return Drop(); }
+        public virtual bool Use() => Drop();
 
 
         /** `Take()` : **`bool`**
@@ -67,8 +68,7 @@ namespace PathwaysEngine.Inventory {
         |* to `Unity3D`, such as reparenting to the `Player`.
         |**/
         public virtual bool Take() {
-            lit::Terminal.LogCommand(string.Format(
-                "You take the {0}.", name));
+            PathwaysEngine.Literature.Terminal.LogCommand($"You take the {Name}.");
             transform.localPosition = Vector3.zero;
             transform.localRotation = Quaternion.identity;
             Held = true;
@@ -87,8 +87,8 @@ namespace PathwaysEngine.Inventory {
             if (sound)
                 AudioSource.PlayClipAtPoint(
                     sound,transform.position,volume);
-            lit::Terminal.LogCommand(string.Format(
-                "You drop the {0}.", name));
+            Literature.Terminal.LogCommand(
+                $"You drop the {Name}.");
             Held = false;
             //transform.localPosition = new Vector3(0f,1f,0.5f);
             transform.parent = null;
@@ -99,9 +99,9 @@ namespace PathwaysEngine.Inventory {
             return true;
         }
 
-        public virtual bool Buy() { return false; }
+        public virtual bool Buy() => false;
 
-        public virtual bool Sell() { return false; }
+        public virtual bool Sell() => false;
 
         public override void Awake() { base.Awake();
             gameObject.layer = LayerMask.NameToLayer("Item");
@@ -113,18 +113,17 @@ namespace PathwaysEngine.Inventory {
 
         public override IEnumerator OnMouseOver() {
             while ((transform.position-Player.Position).sqrMagnitude<dist) {
-            //if (Vector3.Distance(transform.position,Player.Position)>dist) {
-                //Pathways.CursorGraphic = Cursors.None;
-                //yield break;
-            //}
-            Pathways.CursorGraphic = Cursors.Hand;
-            if (Input.GetButton("Fire1")) {
-                Pathways.CursorGraphic = Cursors.Grab;
-                yield return new WaitForSeconds(0.1f);
-                OnMouseExit();
-                Player.Take(this);
-            } else yield return new WaitForSeconds(0.05f);
-
+                //if (Vector3.Distance(transform.position,Player.Position)>dist) {
+                    //Pathways.CursorGraphic = Cursors.None;
+                    //yield break;
+                //}
+                Pathways.CursorGraphic = Cursors.Hand;
+                if (Input.GetButton("Fire1")) {
+                    Pathways.CursorGraphic = Cursors.Grab;
+                    yield return new WaitForSeconds(0.1f);
+                    OnMouseExit();
+                    Player.Take(this);
+                } else yield return new WaitForSeconds(0.05f);
             } OnMouseExit();
         }
 

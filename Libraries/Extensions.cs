@@ -6,6 +6,7 @@ using System.Text.RegularExpressions;
 using Type=System.Type;
 using Buffer=System.Text.StringBuilder;
 
+
 namespace PathwaysEngine {
 
 
@@ -26,19 +27,26 @@ namespace PathwaysEngine {
         |* - `s` : **`string`**
         |*    `string` to be formatted.
         |**/
-        public static string md(this string s) {
-            var buffer = new Buffer(Markdown.Transform(s));
-            return buffer
-                .Replace("<em>","<i>").Replace("</em>","</i>")
-                .Replace("<blockquote>","<i>").Replace("</blockquote>","</i>")
-                .Replace("<strong>","<b>").Replace("</strong>","</b>")
-                .Replace("<h1>","<size=36>").Replace("</h1>","</size>")
-                .Replace("<h2>","<size=24>").Replace("</h2>","</size>")
-                .Replace("<h3>","<size=16>").Replace("</h3>","</size>")
-                .Replace("<ul>","").Replace("</ul>","")
-                .Replace("<li>","").Replace("</li>","")
-                .Replace("<p>","").Replace("</p>","").ToString();
-        }
+        public static string md(this string s) =>
+            new Buffer(Markdown.Transform(s))
+            .Replace("<em>","<i>")
+            .Replace("</em>","</i>")
+            .Replace("<blockquote>","<i>")
+            .Replace("</blockquote>","</i>")
+            .Replace("<strong>","<b>")
+            .Replace("</strong>","</b>")
+            .Replace("<h1>","<size=36>")
+            .Replace("</h1>","</size>")
+            .Replace("<h2>","<size=24>")
+            .Replace("</h2>","</size>")
+            .Replace("<h3>","<size=16>")
+            .Replace("</h3>","</size>")
+            .Replace("<ul>","")
+            .Replace("</ul>","")
+            .Replace("<li>","")
+            .Replace("</li>","")
+            .Replace("<p>","")
+            .Replace("</p>","").ToString();
 
 
         /** `Replace()` : **`string`**
@@ -53,8 +61,10 @@ namespace PathwaysEngine {
         |* - `newValue` : **`string`**
         |*    replacement `string` to insert.
         |**/
-        public static string Replace(this string s, string newValue) {
-            return s.Replace(newValue,""); }
+        public static string Replace(
+                        this string s,
+                        string newValue) =>
+            s.Replace(newValue,"");
 
 
         /** `Strip()` : **`string`**
@@ -64,9 +74,10 @@ namespace PathwaysEngine {
         |* - `s` : **`string`**
         |*    `string` to be processed for usage with `Parser`.
         |**/
-        public static string Strip(this string s) {
-            return s.Trim().ToLower()
-                .Replace("\bthe\b").Replace("\ba\b"); }
+        public static string Strip(this string s) =>
+            s.Trim().ToLower()
+            .Replace("\bthe\b")
+            .Replace("\ba\b");
 
 
         /** `DerivesFrom<T>()` : **`bool`**
@@ -77,8 +88,8 @@ namespace PathwaysEngine {
         |* - `<T>` : **`Type`**
         |*    type to check against
         |**/
-        public static bool DerivesFrom<T>(this Type type) {
-            return (type==typeof(T) || type.IsSubclassOf(typeof(T))); }
+        public static bool DerivesFrom<T>(this Type type) =>
+            type==typeof(T) || type.IsSubclassOf(typeof(T));
 
 #if DUMB
         public static string FormatWith(

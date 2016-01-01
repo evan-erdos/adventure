@@ -6,7 +6,9 @@ using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using inv=PathwaysEngine.Inventory;
 using lit=PathwaysEngine.Literature;
+//using static PathwaysEngine.Literature.Terminal;
 using Buffer=System.Text.StringBuilder;
+
 
 namespace PathwaysEngine.Adventure.Setting {
 
@@ -64,7 +66,7 @@ namespace PathwaysEngine.Adventure.Setting {
                 collider.enabled = false;
                 yield return new WaitForSeconds(1f);
                 Seen = true; //if (hack>0x7F) {
-                lit::Terminal.LogCommand(
+                PathwaysEngine.Literature.Terminal.LogCommand(
                     "Now Entering: "+Name);
                 Player.Room = this;
                 // now rooms are one time use
@@ -98,10 +100,8 @@ namespace PathwaysEngine.Adventure.Setting {
         }
 
         void LogRoom() {
-            if (Seen)
-                lit::Terminal.LogCommand(string.Format(
-                    "Now Entering: {0}",Name));
-            else lit::Terminal.Log(description);
+            if (Seen) PathwaysEngine.Literature.Terminal.LogCommand($"Now Entering: {Name}");
+            else PathwaysEngine.Literature.Terminal.Log(description);
             Seen = true;
             Player.Room = this;
         }

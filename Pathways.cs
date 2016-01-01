@@ -346,17 +346,19 @@ namespace PathwaysEngine {
     |**/
     public struct P_ID { // hehe, get it? PiD!
         public DateTime date;
-        public string @name { // ! enforce length, not sure if I care
+        public string @name { // ! enforce length
             get { return string.Format(
                 "pathways-{1:yyyy-mm-dd}-{0}",_name,date); }
             private set { _name = value; }
         } private string _name;
 
-        public P_ID(string name) {
-            this.@name = name; date = new DateTime(1994,5,8); }
+        public P_ID(string name)
+            : this(name,new DateTime(1994,5,8)) { }
 
-        public P_ID(string name, DateTime date)
-            : this(name) { this.date = date; }
+        public P_ID(string name, DateTime date) : this() {
+            this.@name = name;
+            this.date = date;
+        }
 
         public override string ToString() { return @name; }
     }
@@ -374,9 +376,9 @@ namespace dev {
 */
 
     public class Point {
-        public float x { get; set; }
-        public float y { get; set; }
-        public float z { get; set; }
+        public float x {get;set;}
+        public float y {get;set;}
+        public float z {get;set;}
 
         public Point() { x = 0; y = 0; z = 0; }
 

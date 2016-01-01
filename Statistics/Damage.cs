@@ -3,7 +3,8 @@
 using UnityEngine;
 using System.Collections;
 
-namespace PathwaysEngine.Adventure {
+
+namespace PathwaysEngine.Statistics {
 
 
     /** `Damage` : **`struct`**

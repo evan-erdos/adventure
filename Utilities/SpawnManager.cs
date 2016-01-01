@@ -5,9 +5,11 @@ using System.Collections;
 using System.Collections.Generic;
 using Rand=System.Random;
 
+
 namespace PathwaysEngine.Utilities {
 
-    /** `SpawnManager` : **`class`**
+
+    /** `SpawnManager` : **`MonoBehaviour`**
     |*
     |* This class deals with where to put new user-entities in
     |* the game, and does so in `Start()`. It requires an array

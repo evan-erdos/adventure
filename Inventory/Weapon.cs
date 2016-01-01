@@ -3,9 +3,12 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-using lit=PathwaysEngine.Literature;
+//using static PathwaysEngine.Literature.Terminal;
+
 
 namespace PathwaysEngine.Inventory {
+
+
     public partial class Weapon : Item, IWieldable {
         public enum WeaponStates : byte { Stowed, Held, Aimed, Crossed };
         public WeaponStates WeaponState = WeaponStates.Held;
@@ -13,16 +16,18 @@ namespace PathwaysEngine.Inventory {
         public AudioClip[] attackSounds;
         public LayerMask layerMask;
 
-        public bool Worn { get; set; }
+        public bool Worn {get;set;}
 
-        public uint Uses { get; set; }
+        public uint Uses {get;set;}
 
-        public override bool Use() { Attack(); return false; }
+        public override bool Use() => Attack();
 
-        public virtual void Attack() { lit::Terminal.Log(" ahh ohhh nooo"); }
+        public virtual bool Attack() {
+            Literature.Terminal.Log(
+                " ahh ohhh nooo"); return false; }
 
-        public bool Stow() { return false; }
+        public bool Stow() => false;
 
-        public bool Wear() { return false; }
+        public bool Wear() => false;
     }
 }
