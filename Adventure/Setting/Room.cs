@@ -6,18 +6,20 @@ using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using inv=PathwaysEngine.Inventory;
 using lit=PathwaysEngine.Literature;
+//using static PathwaysEngine.Literature.Terminal;
 using Buffer=System.Text.StringBuilder;
+
 
 namespace PathwaysEngine.Adventure.Setting {
 
 
     /** `Room` : **`class`**
-    |*
-    |* This class represents a room or an outdoor room, which
-    |* defines its connections to other rooms, any of the other
-    |* `Thing`s it might contain, and defines, pretty broadly,
-    |* where the `Player` is, and what they're doing.
-    |**/
+     *
+     * This class represents a room or an outdoor room, which
+     * defines its connections to other rooms, any of the other
+     * `Thing`s it might contain, and defines, pretty broadly,
+     * where the `Player` is, and what they're doing.
+     **/
     public partial class Room : Thing {
         bool wait;
         public byte hack = 0x0;
@@ -26,11 +28,11 @@ namespace PathwaysEngine.Adventure.Setting {
 
 
         /** `Depth` : **`int`**
-        |*
-        |* Determines which room gets precedence when the room
-        |* colliders intersect. Higher values represent more
-        |* deeply nested rooms.
-        |**/
+         *
+         * Determines which room gets precedence when the room
+         * colliders intersect. Higher values represent more
+         * deeply nested rooms.
+         **/
         public int Depth {
             get { return depth; }
             set { depth = value; }
@@ -39,9 +41,9 @@ namespace PathwaysEngine.Adventure.Setting {
 
 
         /** `Things` : **`Thing[]`**
-        |*
-        |* Collection of `Thing`s that start in the room.
-        |**/
+         *
+         * Collection of `Thing`s that start in the room.
+         **/
         public List<Thing> Things {
             get { return new List<Thing>(things); }
         } List<Thing> things;
@@ -51,20 +53,20 @@ namespace PathwaysEngine.Adventure.Setting {
 
 
         /** `LoggingRoom` : **`coroutine`**
-        |*
-        |* Locks the `Terminal` for a bit while the description
-        |* of this `Room` is `Log`ged. Can be called from all
-        |* over, even from `Update` functions which are called
-        |* every frame, because it will take at least `4s` for
-        |* the next `Description` to be logged.
-        |**/
+         *
+         * Locks the `Terminal` for a bit while the description
+         * of this `Room` is `Log`ged. Can be called from all
+         * over, even from `Update` functions which are called
+         * every frame, because it will take at least `4s` for
+         * the next `Description` to be logged.
+         **/
         IEnumerator LoggingRoom() {
             if (!wait) {
                 wait = true;
                 collider.enabled = false;
                 yield return new WaitForSeconds(1f);
                 Seen = true; //if (hack>0x7F) {
-                lit::Terminal.LogCommand(
+                PathwaysEngine.Literature.Terminal.LogCommand(
                     "Now Entering: "+Name);
                 Player.Room = this;
                 // now rooms are one time use
@@ -87,10 +89,10 @@ namespace PathwaysEngine.Adventure.Setting {
 
 
         /** `IsValidRoom()` : **`bool`**
-        |*
-        |* Checks if the `Player`'s current room can switch to
-        |* this room, and if it already is the current room.
-        |**/
+         *
+         * Checks if the `Player`'s current room can switch to
+         * this room, and if it already is the current room.
+         **/
         static bool IsValidRoom(Room room) {
             if (!room || room==Player.Room) return false;
             if (!Player.Room) return true;
@@ -98,10 +100,8 @@ namespace PathwaysEngine.Adventure.Setting {
         }
 
         void LogRoom() {
-            if (Seen)
-                lit::Terminal.LogCommand(string.Format(
-                    "Now Entering: {0}",Name));
-            else lit::Terminal.Log(description);
+            if (Seen) PathwaysEngine.Literature.Terminal.LogCommand($"Now Entering: {Name}");
+            else PathwaysEngine.Literature.Terminal.Log(description);
             Seen = true;
             Player.Room = this;
         }

@@ -5,7 +5,5 @@ using System.Collections;
 using System.Collections.Generic;
 
 namespace PathwaysEngine.Inventory {
-	public class Gloves : Equipment {
-
-	}
+	class Gloves : Equipment { }
 }

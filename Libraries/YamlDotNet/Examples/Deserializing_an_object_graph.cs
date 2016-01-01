@@ -13,11 +13,11 @@ public class Deserializing_an_object_graph : MonoBehaviour {
 
     void Start () {
         var input = new StringReader(Document);
-        
+
         var deserializer = new Deserializer(namingConvention: new CamelCaseNamingConvention());
-        
+
         var order = deserializer.Deserialize<Order>(input);
-        
+
         var output = new StringBuilder();
         output.AppendLine("Order");
         output.AppendLine("-----");
@@ -27,7 +27,7 @@ public class Deserializing_an_object_graph : MonoBehaviour {
             output.AppendLine(String.Format("{0}\t{1}\t{2}\t{3}", item.PartNo, item.Quantity, item.Price, item.Descrip));
         }
         output.AppendLine();
-        
+
         output.AppendLine("Shipping");
         output.AppendLine("--------");
         output.AppendLine();
@@ -35,7 +35,7 @@ public class Deserializing_an_object_graph : MonoBehaviour {
         output.AppendLine(order.ShipTo.City);
         output.AppendLine(order.ShipTo.State);
         output.AppendLine();
-        
+
         output.AppendLine("Billing");
         output.AppendLine("-------");
         output.AppendLine();
@@ -47,7 +47,7 @@ public class Deserializing_an_object_graph : MonoBehaviour {
             output.AppendLine(order.ShipTo.State);
         }
         output.AppendLine();
-        
+
         output.AppendLine("Delivery instructions");
         output.AppendLine("---------------------");
         output.AppendLine();
@@ -55,45 +55,45 @@ public class Deserializing_an_object_graph : MonoBehaviour {
 
         Debug.Log(output);
     }
-        
+
     public class Order
     {
-        public string Receipt { get; set; }
-        public DateTime Date { get; set; }
-        public Customer Customer { get; set; }
-        public List<OrderItem> Items { get; set; }
-        
+        public string Receipt {get;set;}
+        public DateTime Date {get;set;}
+        public Customer Customer {get;set;}
+        public List<OrderItem> Items {get;set;}
+
         [YamlMember(Alias = "bill-to")]
-        public Address BillTo { get; set; }
-        
+        public Address BillTo {get;set;}
+
         [YamlMember(Alias = "ship-to")]
-        public Address ShipTo { get; set; }
-        
-        public string SpecialDelivery { get; set; }
+        public Address ShipTo {get;set;}
+
+        public string SpecialDelivery {get;set;}
     }
-    
+
     public class Customer
     {
-        public string Given { get; set; }
-        public string Family { get; set; }
+        public string Given {get;set;}
+        public string Family {get;set;}
     }
-    
+
     public class OrderItem
     {
         [YamlMember(Alias = "part_no")]
-        public string PartNo { get; set; }
-        public string Descrip { get; set; }
-        public decimal Price { get; set; }
-        public int Quantity { get; set; }
+        public string PartNo {get;set;}
+        public string Descrip {get;set;}
+        public decimal Price {get;set;}
+        public int Quantity {get;set;}
     }
-    
+
     public class Address
     {
-        public string Street { get; set; }
-        public string City { get; set; }
-        public string State { get; set; }
+        public string Street {get;set;}
+        public string City {get;set;}
+        public string State {get;set;}
     }
-        
+
     private const string Document = @"---
         receipt:    Oz-Ware Purchase Invoice
         date:        2007-08-06

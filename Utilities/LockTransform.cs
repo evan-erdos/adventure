@@ -1,11 +1,12 @@
 ﻿/* Ben Scott * bescott@andrew.cmu.edu * 2014-07-07 * Lock Transform */
 
-//#define ANIMATOR_UPDATE
-
 using UnityEngine;
 using System.Collections;
 
+
 namespace PathwaysEngine.Utilities {
+
+
     public class LockTransform : MonoBehaviour {
         public bool isLocked = true, useInit = true;
         //Vector3 initT = Vector3.zero;

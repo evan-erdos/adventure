@@ -5,7 +5,10 @@ using UnityEngine;
 using UnityEditor;
 #endif
 
+
 namespace PathwaysEngine.Utilities {
+
+
     [ExecuteInEditMode]
     public class PivotBasedCameraRig : AbstractTargetFollower {
         // This script is designed to be placed on the root object of a camera rig,

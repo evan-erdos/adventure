@@ -3,19 +3,20 @@
 using UnityEngine;
 using System.Collections;
 
+
 namespace PathwaysEngine.Adventure {
 
 
 	/** `Teleporter` : **`class`**
-	|*
-	|* Extremely simple class which will teleport anything that
-	|* touches its trigger `Collider`.
-	|**/
+	 *
+	 * Extremely simple class which will teleport anything that
+	 * touches its trigger `Collider`.
+	 **/
 	[RequireComponent(typeof(AudioSource))]
-	public class Teleporter : MonoBehaviour {
+	class Teleporter : MonoBehaviour {
 	    AudioSource _audio;
-	    public AudioClip sound;
-	    public Transform tgt;
+	    [SerializeField] AudioClip sound;
+	    [SerializeField] Transform tgt;
 
 	    void Awake() { _audio = GetComponent<AudioSource>(); }
 

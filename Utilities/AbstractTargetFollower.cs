@@ -2,7 +2,10 @@
 
 using UnityEngine;
 
+
 namespace PathwaysEngine.Utilities {
+
+
     abstract public class AbstractTargetFollower : MonoBehaviour {
         public enum UpdateType { Auto, FixedUpdate, LateUpdate }
         public UpdateType updateType;

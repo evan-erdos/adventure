@@ -3,7 +3,10 @@
 using UnityEngine;
 using System.Collections;
 
+
 namespace PathwaysEngine.Movement {
+
+
     public class PlayerMapFollower : MonoBehaviour {
         private Transform rTransform, playerTR;
         private Vector3 playerXY = Vector3.zero;

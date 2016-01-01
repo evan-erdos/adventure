@@ -26,9 +26,9 @@ namespace YamlDotNet.Core
 	[Serializable]
 	internal class Cursor
 	{
-		public int Index { get; set; }
-		public int Line { get; set; }
-		public int LineOffset { get; set; }
+		public int Index {get;set;}
+		public int Line {get;set;}
+		public int LineOffset {get;set;}
 
 		public Cursor()
 		{
@@ -52,7 +52,7 @@ namespace YamlDotNet.Core
 			Index++;
 			LineOffset++;
 		}
-		
+
 		public void SkipLineByOffset(int offset)
 		{
 			Index += offset;

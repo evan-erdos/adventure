@@ -5,10 +5,21 @@ using System.Collections;
 using adv=PathwaysEngine.Adventure;
 using util=PathwaysEngine.Utilities;
 
+
 namespace PathwaysEngine.Literature {
+
+    /** `Encounter` : **`Thing`**
+     *
+     * Any kind of special event which displays output to the
+     * `Window`. Could be triggered by a `Collider`, a click,
+     * or by an amount of time having elapsed since the scene
+     * was initialized.
+     **/
     [RequireComponent(typeof(Collider))]
     public partial class Encounter : adv::Thing, IStorable {
-        public enum Inputs : byte { Trigger, Click, Elapsed, Sight };
+
+        public enum Inputs : byte {
+            Trigger, Click, Elapsed, Sight };
         Inputs input;
         bool reuse;
         float time;
@@ -19,9 +30,9 @@ namespace PathwaysEngine.Literature {
             _collider.isTrigger = true;
         }
 
-        public string Desc_Style(Description desc) {
-            return string.Format("{1}{0}",desc,
-                "## Special Encounter ##\n"); }
+        public string Desc_Style(Description desc) =>
+            $"## Special Encounter ##\n{desc}";
+
 
         public override void Start() { base.Start();
             if (input==Inputs.Elapsed)

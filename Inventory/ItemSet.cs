@@ -12,15 +12,16 @@ using lit=PathwaysEngine.Literature;
 using stat=PathwaysEngine.Statistics;
 using util=PathwaysEngine.Utilities;
 
+
 namespace PathwaysEngine.Inventory {
 
 
     /** `ItemSet` : **`class`**
-    |*
-    |* This class implements the `IItemSet` interface, and
-    |* provides a way to deal with collections of items,
-    |* iterate over them, & get particular types of `Item`s.
-    |**/
+     *
+     * This class implements the `IItemSet` interface, and
+     * provides a way to deal with collections of items,
+     * iterate over them, & get particular types of `Item`s.
+     **/
     public class ItemSet : IItemSet, lit::IDescribable {
 
         public bool IsReadOnly { get { return false; } }
@@ -39,10 +40,10 @@ namespace PathwaysEngine.Inventory {
         public lit::Description description {get;set;}
 
         /** `Items` : **`Dictionary<Type,List<Item>>`**
-        |*
-        |* Mapping between the `Type`s of the `Item` values
-        |* and the `Item`s themselves.
-        |**/
+         *
+         * Mapping between the `Type`s of the `Item` values
+         * and the `Item`s themselves.
+         **/
         public Dictionary<Type,List<Item>> Items {
             get { return items; }
         } Dictionary<Type,List<Item>> items;
@@ -56,23 +57,23 @@ namespace PathwaysEngine.Inventory {
 
 
         /** `Indexer[Type]` : **`List<Item>`**
-        |*
-        |* Indexer to get individual `List`s or lists of more
-        |* derived `Item`s from the dictionary.
-        |*
-        |* - `type` : **`Type`**
-        |*     Type of the `Item`s to get from the set.
-        |**/
+         *
+         * Indexer to get individual `List`s or lists of more
+         * derived `Item`s from the dictionary.
+         *
+         * - `type` : **`Type`**
+         *     Type of the `Item`s to get from the set.
+         **/
         public List<Item> this[Type type] {
             get { return Items[type]; }
             set { Items[type] = (List<Item>) value; } }
 
 
         /** `ItemSet` : **`constructor`**
-        |*
-        |* Initializes the datastructure with every `Item` in
-        |* the scene.
-        |**/
+         *
+         * Initializes the datastructure with every `Item` in
+         * the scene.
+         **/
         public ItemSet()
             : this(new Dictionary<Type,List<Item>>()
                 {{typeof(Item),new List<Item>()}}) { }
@@ -87,39 +88,43 @@ namespace PathwaysEngine.Inventory {
                 this.items[typeof(Item)] = new List<Item>(); }
 
 
-        /** `Add()` : **`function`**
-        |*
-        |* Override of the `ICollection<T>` function.
-        |*
-        |* - `item` : **`Item`**
-        |*     Instance of `Item` to be added.
-        |**/
-        public void Add(Item item) {
-            if (!Items.ContainsKey(item.GetType()))
-                Items[item.GetType()] = new List<Item>();
-            Items[item.GetType()].Add(item); }
-
 
         /** `Add()` : **`function`**
-        |*
-        |* Override of the `ICollection<T>` function.
-        |*
-        |* - `type` : **`Type`**
-        |*
-        |* - `item` : **`Item`**
-        |*     Instance of `Item` to be added.
-        |**/
+         *
+         * Override of the `ICollection<T>` function.
+         *
+         * - `type` : **`Type`**
+         *
+         * - `item` : **`Item`**
+         *     Instance of `Item` to be added.
+         **/
         public void Add(Type type,List<Item> list) {
             Items[type].AddRange(list); }
 
 
+        public void Add(Item item) {
+            if (!Items.ContainsKey(item.GetType()))
+                Items[item.GetType()] = new List<Item>();
+            Items[item.GetType()].Add(item);
+        }
+
+        public void Add<T>(ICollection<T> list)
+                        where T : Item {
+            if (list?.Count<1) return;
+            if (!Items.ContainsKey(typeof(T)))
+                Items[typeof(T)] = new List<Item>();
+            foreach (var elem in list)
+                Items[typeof(T)].Add(elem);
+        }
+
+
         /** `Contains()` : **`bool`**
-        |*
-        |* Membership test for a particular `Item`.
-        |*
-        |* - `item` : **`Item`**
-        |*     Instance of `Item` to be added.
-        |**/
+         *
+         * Membership test for a particular `Item`.
+         *
+         * - `item` : **`Item`**
+         *     Instance of `Item` to be added.
+         **/
         public bool Contains(Item item) {
             List<Item> temp;
             return (TryGetValue<Item>(out temp)
@@ -128,35 +133,35 @@ namespace PathwaysEngine.Inventory {
 
 
         /** `IndexOf()` : **`int`**
-        |*
-        |* Finds the first instance of `item` and returns its
-        |* position in the set.
-        |*
-        |* - `item` : **`Item`**
-        |*     Instance of `Item` to be added.
-        |**/
+         *
+         * Finds the first instance of `item` and returns its
+         * position in the set.
+         *
+         * - `item` : **`Item`**
+         *     Instance of `Item` to be added.
+         **/
         public int IndexOf(Item item) {
             return items[typeof(Item)].IndexOf(item); }
 
 
         /** `Remove()` : **`bool`**
-        |*
-        |* Removes the specified
-        |*
-        |* - `item` : **`Item`**
-        |*     Instance of `Item` to be added.
-        |**/
+         *
+         * Removes the specified
+         *
+         * - `item` : **`Item`**
+         *     Instance of `Item` to be added.
+         **/
         public bool Remove(Item item) {
             return Items[item.GetType()].Remove(item); }
 
 
         /** `Remove()` : **`function`**
-        |*
-        |* Removes the specified
-        |*
-        |* - `item` : **`Item`**
-        |*     Instance of `Item` to be added.
-        |**/
+         *
+         * Removes the specified
+         *
+         * - `item` : **`Item`**
+         *     Instance of `Item` to be added.
+         **/
         public bool Remove(List<Item> list) {
             if (list==null) return false;
             if (ContainsKey(list[0].GetType())) {
@@ -228,10 +233,10 @@ namespace PathwaysEngine.Inventory {
 
 
         /** `Log()` : **`string`**
-        |*
-        |* Specified by `ILoggable`, `Terminal` calls this
-        |* function to get a special `string` to log.
-        |**/
+         *
+         * Specified by `ILoggable`, `Terminal` calls this
+         * function to get a special `string` to log.
+         **/
         public string Log() {
             var s = description.Template;
             foreach (var item in this)

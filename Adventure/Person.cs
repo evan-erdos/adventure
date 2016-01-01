@@ -10,6 +10,7 @@ using EventArgs=System.EventArgs;
 using map=PathwaysEngine.Adventure.Setting;
 using inv=PathwaysEngine.Inventory;
 using lit=PathwaysEngine.Literature;
+//using static PathwaysEngine.Literature.Terminal;
 using mv=PathwaysEngine.Movement;
 using stat=PathwaysEngine.Statistics;
 using util=PathwaysEngine.Utilities;
@@ -19,10 +20,10 @@ namespace PathwaysEngine.Adventure {
 
 
     /** `Person` : **`class`**
-    |*
-    |* This is a pretty important class, as it defines some of
-    |* the most important behaviours that apply to `Person`s.
-    |**/
+     *
+     * This is a pretty important class, as it defines some of
+     * the most important behaviours that apply to `Person`s.
+     **/
     partial class Person : Creature {
         public float radius = 25f, dist = 4f;
         Body body;
@@ -42,7 +43,7 @@ namespace PathwaysEngine.Adventure {
         public Vector3 Position {
             get { return motor.Position; } }
 
-        public override stat::Set stats { get; set; }
+        public override stat::Set stats {get;set;}
 
         public List<inv::Item> nearbyItems {
             get {
@@ -102,8 +103,7 @@ namespace PathwaysEngine.Adventure {
             if (temp.Count==1)
                 return Player.Take(temp[0]);
             return false;
-            //else if (temp.Count!=0)
-            //    lit::Terminal.Resolve(c,temp);
+            //else if (temp.Count!=0) Resolve(c,temp);
         }
 
         public virtual bool Take(List<inv::Item> list) {
@@ -118,10 +118,7 @@ namespace PathwaysEngine.Adventure {
             return item.Take();
         }
 
-        public virtual bool Take() {
-            return Take(nearbyItems); }
-
-
+        public virtual bool Take() => Take(nearbyItems);
 
         public virtual bool Drop(lit::Command c) {
             var temp = new List<inv::Item>();
@@ -172,25 +169,17 @@ namespace PathwaysEngine.Adventure {
             return item.Wear();
         }
 
-        public virtual bool Stow(inv::IWearable o) {
-            return o.Stow(); }
+        public virtual bool Stow(inv::IWearable o) => o.Stow();
 
-        public virtual bool Push(IPushable o) {
-            return o.Push(); }
+        public virtual bool Push(IPushable o) => o.Push();
 
-        public virtual bool Pull(IPullable o) {
-            return o.Pull(); }
+        public virtual bool Pull(IPullable o) => o.Pull();
 
-        public virtual bool Open(IOpenable o) {
-            return o.Open(); }
+        public virtual bool Open(IOpenable o) => o.Open();
 
-        public virtual bool Shut(IOpenable o) {
-            return o.Shut(); }
+        public virtual bool Shut(IOpenable o) => o.Shut();
 
-        public bool Goto(map::Area tgt) {
-            //StartCoroutine(Goto(tgt.level));
-            return false;
-        }
+        public bool Goto(map::Area tgt) => false;
 
         IEnumerator Goto(int n) {
             util::CameraFade.StartAlphaFade(
@@ -215,16 +204,14 @@ namespace PathwaysEngine.Adventure {
         }
 
         public bool Lock(ILockable o) {
-            if (o==null) return false;
-            if (o.IsLocked) return true;
+            if (o?.IsLocked==true) return true;
             foreach (var key in Items.GetItems<inv::Key>())
                 if (o.LockKey==key) return true;
             return false;
         }
 
         public bool Unlock(ILockable o) {
-            if (o==null) return false;
-            if (!o.IsLocked) return true;
+            if (o?.IsLocked==false) return true;
             foreach (var key in Items.GetItems<inv::Key>())
                 if (o.LockKey==key) return true;
             return false;
@@ -246,7 +233,7 @@ namespace PathwaysEngine.Adventure {
         }
 
         public override bool View() {
-            lit::Terminal.Log(description);
+            PathwaysEngine.Literature.Terminal.Log(description);
             return true;
         }
 
@@ -272,15 +259,16 @@ namespace PathwaysEngine.Adventure {
                 4f,LayerMask.NameToLayer("Items"));
             var list = new List<inv::Item>();
             foreach (var elem in temp) {
-                if (elem.attachedRigidbody==null) continue;
-                var item = elem.attachedRigidbody.GetComponent<inv::Item>();
+                var item = elem.attachedRigidbody?.GetComponent<inv::Item>();
                 if (item && !list.Contains(item) && !item.Held) list.Add(item);
             } return list;
         }
 
         public void AddCondition(stat::Condition cond) { }
 
-        public void AddCondition(stat::Condition cond,stat::Severity svrt) { }
+        public void AddCondition(
+                    stat::Condition cond,
+                    stat::Severity svrt) { }
 
         class Body {
             inv::IWearable[] list;
@@ -293,8 +281,9 @@ namespace PathwaysEngine.Adventure {
 
             public inv::IWearable this[Corpus n] {
                 get { return list[(int) n]; }
-                set { var temp = (inv::IWearable) list[(int) n];
-                    if (temp!=null && temp!=value) Player.Stow(temp);
+                set { if (value==null) return;
+                    var temp = (inv::IWearable) list[(int) n];
+                    if (temp!=value) Player.Stow(temp);
                     var item = (inv::Item) value;
                     item.transform.parent = anchors[(int) n].transform;
                     item.transform.localPosition = Vector3.zero;
@@ -305,8 +294,9 @@ namespace PathwaysEngine.Adventure {
 
             public inv::IWearable this[Type T] {
                 get { return list[Type_Index(T)]; }
-                set { var temp = list[Type_Index(T)];
-                    if (temp!=null && temp!=value) Player.Stow(temp);
+                set { if (value==null) return;
+                    var temp = list[Type_Index(T)];
+                    if (temp!=value) Player.Stow(temp);
                     var item = (inv::Item) value;
                     item.transform.parent =
                         anchors[(int) Type_Index(T)].transform;
@@ -358,14 +348,14 @@ namespace PathwaysEngine.Adventure {
         public float healthCurrent, healthCritical, RUL, TTF;
         public float bodyMass, bodyTemp, bodyWater;
         public double staminaCurrent, staminaCritical;
-        public Faculties faculties { get; set; }
-        public Condition condition { get; set; }
-        public Diagnosis diagnosis { get; set; }
-        public Prognosis prognosis { get; set; }
-        public Severity[] severityFaculties { get; set; }
-        public Severity[] severityCondition { get; set; }
-        public Severity[] severityDiagnosis { get; set; }
-        public Severity[] severityPrognosis { get; set; }
+        public Faculties faculties {get;set;}
+        public Condition condition {get;set;}
+        public Diagnosis diagnosis {get;set;}
+        public Prognosis prognosis {get;set;}
+        public Severity[] severityFaculties {get;set;}
+        public Severity[] severityCondition {get;set;}
+        public Severity[] severityDiagnosis {get;set;}
+        public Severity[] severityPrognosis {get;set;}
         public AudioSource au;
         public AudioClip[] soundsHurt, soundsHeal;
 

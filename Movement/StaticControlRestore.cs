@@ -4,7 +4,9 @@ using UnityEngine;
 using System.Collections;
 using util = PathwaysEngine.Utilities;
 
+
 namespace PathwaysEngine.Movement {
+
     public class StaticControlRestore : MonoBehaviour {
         public void Start () {
             Camera newCamera = gameObject.GetComponentInChildren<Camera>();

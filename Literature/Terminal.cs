@@ -11,17 +11,18 @@ using adv=PathwaysEngine.Adventure;
 using inv=PathwaysEngine.Inventory;
 using util=PathwaysEngine.Utilities;
 
+
 namespace PathwaysEngine.Literature {
 
 
     /** `Terminal` : **`class`**
-    |*
-    |* One of the most important classes in the whole engine.
-    |* `Terminal` manages player input, and logs `Message`s
-    |* from any and all sources through its `static` method
-    |* `Log`, and all its overloads. This includes overloads
-    |* for `Thing`s, `Message`s, etc.
-    |**/
+     *
+     * One of the most important classes in the whole engine.
+     * `Terminal` manages player input, and logs `Message`s
+     * from any and all sources through its `static` method
+     * `Log`, and all its overloads. This includes overloads
+     * for `Thing`s, `Message`s, etc.
+     **/
     [RequireComponent(typeof(RectTransform))]
     public class Terminal : MonoBehaviour {
         static bool wait = false, isLocked = false;
@@ -40,10 +41,10 @@ namespace PathwaysEngine.Literature {
 
 
         /** `focus` : **`bool`**
-        |*
-        |* This property represents the state of the `Terminal`
-        |* window, i.e., if it's `focus`sed, or not.
-        |**/
+         *
+         * This property represents the state of the `Terminal`
+         * window, i.e., if it's `focus`sed, or not.
+         **/
         public static bool focus {
             get { return _focus; }
             set {
@@ -74,21 +75,19 @@ namespace PathwaysEngine.Literature {
 
 
         /** `prompt` : **`string`**
-        |*
-        |* This property represents the state of the `Terminal`
-        |* window, i.e., if it's `focus`sed, or not.
-        |**/
-        public static string prompt {
-            get { return string.Format(
-                "{0:yyyy-MM-dd hh:mm} > ",
-                    Pathways.gameDate); } }
+         *
+         * This property represents the state of the `Terminal`
+         * window, i.e., if it's `focus`sed, or not.
+         **/
+        public static string prompt =>
+            $"{Pathways.gameDate:yyyy-MM-dd hh:mm} > ";
 
 
         /** `EventListener()` : **`event`**
-        |*
-        |* This property represents the state of the `Terminal`
-        |* window, i.e., if it's `focus`sed, or not.
-        |**/
+         *
+         * This property represents the state of the `Terminal`
+         * window, i.e., if it's `focus`sed, or not.
+         **/
         public void EventListener(
                 object sender,
                 System.EventArgs e,
@@ -98,11 +97,11 @@ namespace PathwaysEngine.Literature {
 
 
         /** `LockLog` : **`coroutine`**
-        |*
-        |* Stops the `Terminal.Log` from printing any new
-        |* messages, usually useful in the first few frames of
-        |* the game, when the startup information is visible.
-        |**/
+         *
+         * Stops the `Terminal.Log` from printing any new
+         * messages, usually useful in the first few frames of
+         * the game, when the startup information is visible.
+         **/
         IEnumerator LockLog(float t) {
             isLocked = true;
             yield return new WaitForSeconds(t);
@@ -111,10 +110,10 @@ namespace PathwaysEngine.Literature {
 
 
         /** `Term` : **`coroutine`**
-        |*
-        |* Provides a time buffer when switching between states
-        |* using the terminal input key, usually **TAB**.
-        |**/
+         *
+         * Provides a time buffer when switching between states
+         * using the terminal input key, usually **TAB**.
+         **/
         IEnumerator Term() {
             wait = true;
             yield return new WaitForSeconds(0.125f);
@@ -126,11 +125,11 @@ namespace PathwaysEngine.Literature {
 
 
         /** `Logging` : **`coroutine`**
-        |*
-        |* Waits for `time` seconds between logging any objects
-        |* that were sent as `ILoggable`. Simple `string`s will
-        |* not be logged if `isLocked` is `true`.
-        |**/
+         *
+         * Waits for `time` seconds between logging any objects
+         * that were sent as `ILoggable`. Simple `string`s will
+         * not be logged if `isLocked` is `true`.
+         **/
         IEnumerator Logging() {
             for (;;) {
                 if (queue.Count>0 && !isLocked)
@@ -141,19 +140,19 @@ namespace PathwaysEngine.Literature {
 
 
         /** `Clear()` : **`function`**
-        |*
-        |* This clears the entire `Terminal` log, and makes a
-        |* new instance of the `buffer`, while `enqueue`-ing
-        |* the old text into the `logs`.
-        |**/
+         *
+         * This clears the entire `Terminal` log, and makes a
+         * new instance of the `buffer`, while `enqueue`-ing
+         * the old text into the `logs`.
+         **/
         public static void Clear() {
             logs.Enqueue(log.text);
             buffer = new Buffer();
             log.text = "";
         }
 
-        public static void Log(string s="\n") {
-            Log(new Message(s,Styles.Default)); }
+        public static void Log(string s="\n") =>
+            Log(new Message(s,Styles.Default));
 
         public static void Log(params string[] lines) {
             var b = new Buffer();
@@ -162,8 +161,8 @@ namespace PathwaysEngine.Literature {
             Log(new Message(b.ToString(), Styles.Default));
         }
 
-        public static void Log(string s,params Styles[] f) {
-            Log(new Message(s,f)); }
+        public static void Log(string s,params Styles[] f) =>
+            Log(new Message(s,f));
 
         public static void Log(ILoggable o) {
             if (o==null || o==last) return;
@@ -183,8 +182,8 @@ namespace PathwaysEngine.Literature {
             LogImmediate(Terminal.Format(sb.ToString(),f));
         }
 
-        public static void Log(ICollection<ILoggable> list) {
-            Log(list,Styles.Default); }
+        public static void Log(ICollection<ILoggable> list) =>
+            Log(list,Styles.Default);
 
         public static void Log(
                         ICollection<IDescribable> list,
@@ -195,15 +194,16 @@ namespace PathwaysEngine.Literature {
             Log(temp,f);
         }
 
-        public static void Log(ICollection<IDescribable> list) {
-            Log(list,Styles.Default); }
+        public static void Log(
+                        ICollection<IDescribable> list) =>
+            Log(list,Styles.Default);
 
 
-        public static void Log(IDescribable o) {
-            Log((ILoggable) o.description); }
+        public static void Log(IDescribable o) =>
+            Log((ILoggable) o.description);
 
-        public static void LogCommand(string s) {
-            Log(new Message(s,Styles.Command)); }
+        public static void LogCommand(string s) =>
+            Log(new Message(s,Styles.Command));
 
         public static void LogImmediate(string s) {
             buffer.Append((TrailingNewline(buffer))
@@ -212,8 +212,8 @@ namespace PathwaysEngine.Literature {
             log.text = buffer.ToString();
         }
 
-        public static void LogImmediate(ILoggable o) {
-            LogImmediate(o.Entry); }
+        public static void LogImmediate(ILoggable o) =>
+            LogImmediate(o.Entry);
 
         public static void LogImmediate(
                         ICollection<ILoggable> list) {
@@ -227,8 +227,8 @@ namespace PathwaysEngine.Literature {
                 LogImmediate(elem.description.Entry);
         }
 
-        static bool TrailingNewline(Buffer b) {
-            return (b.Length>0 && b[b.Length-1]=='\n'); }
+        static bool TrailingNewline(Buffer b) =>
+            (b.Length>0 && b[b.Length-1]=='\n');
 
         public static string Format(string s, params Styles[] f) {
             if (s==null || s.Length<1) return s;
@@ -267,8 +267,8 @@ namespace PathwaysEngine.Literature {
             } return s;
         }
 
-        public static void Alert(string s) {
-            Alert(s,Styles.Alert); }
+        public static void Alert(string s) =>
+            Alert(s,Styles.Alert);
 
         public static void Alert(string s, params Styles[] f) {
             isLocked = false;
@@ -328,8 +328,8 @@ namespace PathwaysEngine.Literature {
             if (Pathways.GameState!=GameStates.Term)
                 scrollRect.verticalNormalizedPosition = 0f; }
 
-        public void CommandInput() {
-            Parser.Evaluate(inputField.text); }
+        public void CommandInput() =>
+            Parser.Evaluate(inputField.text);
 
         public void CommandChange() {
             if (inputField.text.Contains("\t")) {

@@ -1,20 +1,23 @@
-/* Ben Scott * bescott@andrew.cmu.edu * 2015-08-09 * Connector */
+/* Ben Scott * bescott@andrew.cmu.edu * 2016-01-01 * Connector */
 
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using lit=PathwaysEngine.Literature;
+//using static PathwaysEngine.Literature.Terminal;
+
 
 namespace PathwaysEngine.Adventure.Setting {
 
 
 	/** `Connector` : **`class`**
-	|*
-	|* Used for explicit connections beween `Rooms` or `Area`s.
-	|**/
-	public class Connector : Thing {
+	 *
+	 * Used for explicit connections beween `Rooms` or `Area`s.
+	 **/
+	class Connector : Thing {
 
-		public Room src, tgt;
+		[SerializeField] Room src;
+		[SerializeField] Room tgt;
 
 		public override lit::Description description {get;set;}
 
@@ -28,6 +31,6 @@ namespace PathwaysEngine.Adventure.Setting {
 		} string _desc_type;
 
 		void OnTriggerEnter(Collider o) {
-			if (Player.IsCollider(o)) lit::Terminal.Log(this); }
+			if (Player.IsCollider(o)) PathwaysEngine.Literature.Terminal.Log(this); }
 	}
 }

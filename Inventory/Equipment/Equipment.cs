@@ -5,9 +5,9 @@ using System.Collections;
 using System.Collections.Generic;
 
 namespace PathwaysEngine.Inventory {
-	public abstract class Equipment : Item, IWearable {
+	abstract class Equipment : Item, IWearable {
 
-		public uint Uses { get; set; }
+		public uint Uses {get;set;}
 
 		public bool Worn {
 			get { return worn; }

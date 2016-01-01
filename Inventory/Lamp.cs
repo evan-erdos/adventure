@@ -6,13 +6,15 @@ using System.Collections.Generic;
 using mvmt=PathwaysEngine.Movement;
 using util=PathwaysEngine.Utilities;
 
+
 namespace PathwaysEngine.Inventory {
 
+
     /** `Lamp` : **`class`**
-    |*
-    |* A kind of `Item` which the `Player` can hold and use as
-    |* a source of light. An instant classic! (remember Zork?)
-    |**/
+     *
+     * A kind of `Item` which the `Player` can hold and use as
+     * a source of light. An instant classic! (remember Zork?)
+     **/
     public partial class Lamp : Item, IWieldable {
         bool wait = false;
         List<Light> lights;
@@ -83,7 +85,7 @@ namespace PathwaysEngine.Inventory {
         }
 
 
-        public void Attack() { Use(); }
+        public bool Attack() => Use();
 
 
         IEnumerator On() {

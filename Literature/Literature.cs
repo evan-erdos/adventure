@@ -14,72 +14,72 @@ using util=PathwaysEngine.Utilities;
 
 
 /** `Literature` : **`namespace`**
-|*
-|* A somewhat pretentiously monikered namespace which contains
-|* any and all things related to text and language. Of note, it
-|* holds the `Parser`, the `Terminal`, and `Description`s. Most
-|* classes in the engine have some sort of representation here,
-|* and most can be written to the `Terminal` via `Log()`, or to
-|* `Window` via `Display()`, usually in the form of `struct`s
-|* like `Message`or `Description`.
-|**/
+ *
+ * A somewhat pretentiously monikered namespace which contains
+ * any and all things related to text and language. Of note, it
+ * holds the `Parser`, the `Terminal`, and `Description`s. Most
+ * classes in the engine have some sort of representation here,
+ * and most can be written to the `Terminal` via `Log()`, or to
+ * `Window` via `Display()`, usually in the form of `struct`s
+ * like `Message`or `Description`.
+ **/
 namespace PathwaysEngine.Literature {
 
 
     /** `Styles` : **`enum`**
-    |*
-    |* This enumerates the various formatting options that the
-    |* `Terminal` can use. Most values have some meaning, which
-    |* are used by the `Terminal.Format` function. They might
-    |* be `hex` values for colors, sizes of headers, etc.
-    |*
-    |* - `Inline` : **`Styles`**
-    |*     Removes a newline, so the message is logged on the
-    |*     same line as the previous message.
-    |*
-    |* - `Newline` : **`Styles`**
-    |*     Add a newline before logging the message.
-    |*
-    |* - `Paragraph` : **`Styles`**
-    |*     Add a newline before and after logging the message.
-    |*
-    |* - `Refresh` : **`Styles`**
-    |*     Clears the buffer before printing the message.
-    |*
-    |* - `h1` : **`Styles`**
-    |*     Makes this message a <h1> header, its enum value
-    |*     being the size for the text.
-    |*
-    |* - `h2` : **`Styles`**
-    |*     Makes this message a <h2> header, its enum value
-    |*     being the size for the text.
-    |*
-    |* - `h3` : **`Styles`**
-    |*     Makes this message a <h3> header, its enum value
-    |*     being the size for the text.
-    |*
-    |* - `h4` : **`Styles`**
-    |*     Makes this message a <h4> header, its enum value
-    |*     being the size for the text.
-    |*
-    |* - `Default` : **`Styles`**
-    |*     The base color for the text, currently `0xFFFFFF`,
-    |*     for pure white text. This one doesn't need to be
-    |*     specified when formatting, but its value is used.
-    |*
-    |* - `State` : **`Styles`**
-    |*     Special color to use to represent some change in
-    |*     state, be it some game event passing, or any number
-    |*     of other changes the `Player` should be privy to.
-    |*
-    |* - `Alert` : **`Styles`**
-    |*     Usually red, this alerts the `Player` to dangerous
-    |*     or very important messages in the `Terminal`.
-    |*
-    |* - `Command` : **`Styles`**
-    |*     Color to use when the user is issuing / resolving
-    |*     commands from the parser.
-    |**/
+     *
+     * This enumerates the various formatting options that the
+     * `Terminal` can use. Most values have some meaning, which
+     * are used by the `Terminal.Format` function. They might
+     * be `hex` values for colors, sizes of headers, etc.
+     *
+     * - `Inline` : **`Styles`**
+     *     Removes a newline, so the message is logged on the
+     *     same line as the previous message.
+     *
+     * - `Newline` : **`Styles`**
+     *     Add a newline before logging the message.
+     *
+     * - `Paragraph` : **`Styles`**
+     *     Add a newline before and after logging the message.
+     *
+     * - `Refresh` : **`Styles`**
+     *     Clears the buffer before printing the message.
+     *
+     * - `h1` : **`Styles`**
+     *     Makes this message a <h1> header, its enum value
+     *     being the size for the text.
+     *
+     * - `h2` : **`Styles`**
+     *     Makes this message a <h2> header, its enum value
+     *     being the size for the text.
+     *
+     * - `h3` : **`Styles`**
+     *     Makes this message a <h3> header, its enum value
+     *     being the size for the text.
+     *
+     * - `h4` : **`Styles`**
+     *     Makes this message a <h4> header, its enum value
+     *     being the size for the text.
+     *
+     * - `Default` : **`Styles`**
+     *     The base color for the text, currently `0xFFFFFF`,
+     *     for pure white text. This one doesn't need to be
+     *     specified when formatting, but its value is used.
+     *
+     * - `State` : **`Styles`**
+     *     Special color to use to represent some change in
+     *     state, be it some game event passing, or any number
+     *     of other changes the `Player` should be privy to.
+     *
+     * - `Alert` : **`Styles`**
+     *     Usually red, this alerts the `Player` to dangerous
+     *     or very important messages in the `Terminal`.
+     *
+     * - `Command` : **`Styles`**
+     *     Color to use when the user is issuing / resolving
+     *     commands from the parser.
+     **/
     public enum Styles : int {
         Inline=0, Newline=1, Paragraph=2, Refresh=3,
         h1=36, h2=28, h3=24, h4=18,
@@ -93,14 +93,14 @@ namespace PathwaysEngine.Literature {
     	State=4}
 
     /** `Parse()` : **`delegate`**
-    |*
-    |* The standard `event`/`delegate` for commands from
-    |* the `Parser` class.
-    |*
-    |* - `c` : **`Command`**
-    |*     Default `Command` struct, sometimes unused, but
-    |*     means that this function is a `Parse` delegate.
-    |**/
+     *
+     * The standard `event`/`delegate` for commands from
+     * the `Parser` class.
+     *
+     * - `c` : **`Command`**
+     *     Default `Command` struct, sometimes unused, but
+     *     means that this function is a `Parse` delegate.
+     **/
     public delegate bool Parse(Command c);
 
 
@@ -112,30 +112,30 @@ namespace PathwaysEngine.Literature {
 
 
     /** `CommandEvent` : **`delegate`**
-    |*
-    |* This delegate is used for creating multicast callbacks
-    |* for certain `Parser` commands. The user input is sent
-    |* directly to subscribers in the `c` struct. Returns
-    |* true if the operation was successful, such that callers
-    |* can do additional operations if they need to.
-    |*
-    |* - `source` : **`object`**
-    |*     a reference to whatever sent the `event`
-    |*
-    |* - `target` : **`Thing`**
-    |*     the object to be acted upon / that will act
-    |*
-    |* - `e` : **`EventArgs`**
-    |*     default event arguments
-    |*
-    |* - `c` : **`Command`**
-    |*     the user-issued command to execute
-    |*
-    |* - `throw` : **`TextException`**
-    |*     An exception to indicate if an action cannot be or
-    |*     should not be taken. These are always caught by the
-    |*     `Parser`, and only indicate errors in game logic.
-    |**/
+     *
+     * This delegate is used for creating multicast callbacks
+     * for certain `Parser` commands. The user input is sent
+     * directly to subscribers in the `c` struct. Returns
+     * true if the operation was successful, such that callers
+     * can do additional operations if they need to.
+     *
+     * - `source` : **`object`**
+     *     a reference to whatever sent the `event`
+     *
+     * - `target` : **`Thing`**
+     *     the object to be acted upon / that will act
+     *
+     * - `e` : **`EventArgs`**
+     *     default event arguments
+     *
+     * - `c` : **`Command`**
+     *     the user-issued command to execute
+     *
+     * - `throw` : **`TextException`**
+     *     An exception to indicate if an action cannot be or
+     *     should not be taken. These are always caught by the
+     *     `Parser`, and only indicate errors in game logic.
+     **/
     delegate bool CommandEvent(
         			object source,
         			adv::Thing target,
@@ -144,97 +144,97 @@ namespace PathwaysEngine.Literature {
 
 
     /** `ILoggable` : **`interface`**
-    |*
-    |* That can be logged by the `Terminal`.
-    |**/
+     *
+     * That can be logged by the `Terminal`.
+     **/
     public interface ILoggable {
 
     	/** `Template` : **`string`**
-    	|*
-    	|* A formatting `string` to specialize the way that the
-    	|* `ILoggable` object is displayed.
-    	|**/
+    	 *
+    	 * A formatting `string` to specialize the way that the
+    	 * `ILoggable` object is displayed.
+    	 **/
     	string Template {get;set;}
 
 
         /** `Entry` : **`string`**
-        |*
-        |* Text to be logged by the `Terminal`. All deriving
-        |* classes should do any formatting computations when
-        |* setting this property for optimal performance.
-        |**/
+         *
+         * Text to be logged by the `Terminal`. All deriving
+         * classes should do any formatting computations when
+         * setting this property for optimal performance.
+         **/
         string Entry {get;set;}
 
 
         /** `styles` : **`Styles[]`**
-        |*
-        |* A list of `Styles` to be applied to the `ILoggable`
-        |* object, (hopefully ahead of time).
-        |**/
+         *
+         * A list of `Styles` to be applied to the `ILoggable`
+         * object, (hopefully ahead of time).
+         **/
         Styles[] styles {get;set;}
 
         /** `Log()` : **`string`**
-        |*
-        |* base string to be `string.Format`-ed by the
-        |* `Terminal` to render it as Markdown.
-        |* Could make the name a header, the text italic,
-        |* or any combination of other effects. There
-        |* should be a specific order of arguments, i.e.,
-        |* name first, then desc, etc.
-        |**/
+         *
+         * base string to be `string.Format`-ed by the
+         * `Terminal` to render it as Markdown.
+         * Could make the name a header, the text italic,
+         * or any combination of other effects. There
+         * should be a specific order of arguments, i.e.,
+         * name first, then desc, etc.
+         **/
         string Log();
     }
 
 
     /** `IDescribable` : **`interface`**
-    |*
-    |* Shared interface for all sorts of describable things.
-    |**/
+     *
+     * Shared interface for all sorts of describable things.
+     **/
     public interface IDescribable : IStorable {
 
 
         /** `description` : **`Description`**
-        |*
-        |* This property encapsulates a `Description` `object`
-        |* that every deriving class (e.g., half of all the
-        |* `class`es in this engine) interfaces with.
-        |**/
+         *
+         * This property encapsulates a `Description` `object`
+         * that every deriving class (e.g., half of all the
+         * `class`es in this engine) interfaces with.
+         **/
         Description description {get;set;}
     }
 
 
     /** `IReadable` : **`interface`**
-    |*
-    |* Interface to anything that can be read.
-    |**/
+     *
+     * Interface to anything that can be read.
+     **/
     public interface IReadable {
 
     	/** `Passage` : **`string`**
-    	|*
-    	|* Represents the body of text to be read
-    	|**/
+    	 *
+    	 * Represents the body of text to be read
+    	 **/
     	string Passage {get;set;}
 
 
         /** `Read()` : **`bool`**
-        |*
-        |* Function to call when reading something.
-        |**/
+         *
+         * Function to call when reading something.
+         **/
         bool Read();
     }
 
 
         /** `proper_name` : **`struct`**
-    |*
-    |* Attempt to formalize names for `Actor`s.
-    |*
-    |* - `name` : **`string`**
-    |*     Full name of the `P_ID` to be used when serializing.
-    |*
-    |* - `first` : **`string`** - First Name
-    |*
-    |* - `last` : **`string`** - Surname
-    |**/
+     *
+     * Attempt to formalize names for `Actor`s.
+     *
+     * - `name` : **`string`**
+     *     Full name of the `P_ID` to be used when serializing.
+     *
+     * - `first` : **`string`** - First Name
+     *
+     * - `last` : **`string`** - Surname
+     **/
     public struct proper_name {
         public string first, last;
 

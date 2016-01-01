@@ -4,25 +4,23 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using lit=PathwaysEngine.Literature;
+//using static PathwaysEngine.Literature.Terminal;
+
 
 namespace PathwaysEngine.Inventory {
 
 
     /** `Backpack` : **`class`**
-    |*
-    |* Acts as the main holdall for the `Player`, and cannot be
-    |* stored, as `Take()`/`Drop()`-ing the backpack will also
-    |* `Wear()`/`Stow()` it, so it can only act as a container
-    |* for the `Player`.
-    |**/
-    public class Backpack : Bag, IWearable {
+     *
+     * Acts as the main holdall for the `Player`, and cannot be
+     * stored, as `Take()`/`Drop()`-ing the backpack will also
+     * `Wear()`/`Stow()` it, so it can only act as a container
+     * for the `Player`.
+     **/
+    class Backpack : Bag, IWearable {
 
-        public bool Worn {
-            get { return worn; }
-            set { worn = value;
-                if (worn) Wear();
-                else Stow(); }
-        } bool worn;
+
+        public bool Worn {get;set;}
 
 
         public override bool Take() { base.Take();
@@ -34,22 +32,22 @@ namespace PathwaysEngine.Inventory {
 
 
         /** `Backpack` : **`destructor`**
-        |*
-        |* Drops all the contained `Item`s if `this` is garbage
-        |* collected for whatever reason (or is `Destroy()`ed).
-        |**/
+         *
+         * Drops all the contained `Item`s if `this` is garbage
+         * collected for whatever reason (or is `Destroy()`ed).
+         **/
         ~Backpack() { DropAll(); }
 
         public bool Wear() {
+            Worn = true;
             gameObject.SetActive(true);
-            lit::Terminal.LogCommand(
-                "You put on the backpack.\n");
+            PathwaysEngine.Literature.Terminal.LogCommand("You put on the backpack.");
             return false;
         }
 
         public bool Stow() {
-            lit::Terminal.LogCommand(
-                "You take off the backpack.\n");
+            Worn = false;
+            PathwaysEngine.Literature.Terminal.LogCommand("You take off the backpack.");
             gameObject.SetActive(false);
             return false;
         }

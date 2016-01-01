@@ -4,16 +4,18 @@ using Exception=System.Exception;
 using adv=PathwaysEngine.Adventure;
 using System.Collections.Generic;
 
+
 namespace PathwaysEngine.Literature {
 
+
     /** `TextException` : **`Exception`**
-    |*
-    |* `Command`s can be malformed or impossible to achieve for
-    |* some logical reason (e.g., you cannot put an item
-    |* container into itself), and therefore need some recourse
-    |* in such situations to indicate to the `event` handlers
-    |* that the action has failed.
-    |**/
+     *
+     * `Command`s can be malformed or impossible to achieve for
+     * some logical reason (e.g., you cannot put an item
+     * container into itself), and therefore need some recourse
+     * in such situations to indicate to the `event` handlers
+     * that the action has failed.
+     **/
     class TextException : Exception {
 
         internal TextException() : this("Do what, exactly?") { }

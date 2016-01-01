@@ -2,13 +2,14 @@
 
 using System.Text.RegularExpressions;
 
+
 namespace PathwaysEngine.Literature {
 
 
     /** `Command` : **`struct`**
-    |*
-    |* Represents any `Player`-issued command.
-    |**/
+     *
+     * Represents any `Player`-issued command.
+     **/
     public struct Command {
         public string uuid, input;
         public Regex regex {get;set;}
@@ -58,10 +59,10 @@ namespace PathwaysEngine.Literature {
             : this(uuid,new Regex(regex),parse,input) { }
 
 
-        public bool Fits(Description d) {
-            return d.Fits(this); }
+        public bool Fits(Description d) =>
+            d.Fits(this);
 
-        public bool Fits(IDescribable d) {
-            return Fits(d.description); }
+        public bool Fits(IDescribable d) =>
+            Fits(d.description);
     }
 }

@@ -5,69 +5,69 @@ using type=System.Type;
 using System.Collections;
 using System.Collections.Generic;
 
+
 namespace PathwaysEngine.Inventory {
 
 
     /** `ItemCollection` : **`class`**
-    |*
-    |* Defines a set of `Item`s, which can be used as any other
-    |* `ICollection`, but deals with `Group`ing similar `Item`s
-    |* and can perform a really fast search on the basis of the
-    |* possibly different and usually quite varied subtypes for
-    |* easy filtering of specific types of `Item`s.
-    |**/
-    public abstract class ItemCollection : Item, IItemSet {
+     *
+     * Defines a set of `Item`s, which can be used as any other
+     * `ICollection`, but deals with `Group`ing similar `Item`s
+     * and can perform a really fast search on the basis of the
+     * possibly different and usually quite varied subtypes for
+     * easy filtering of specific types of `Item`s.
+     **/
+    abstract class ItemCollection : Item, IItemSet {
 
-        public bool IsSynchronized {
-            get { return false; } }
+        public bool IsSynchronized => false;
 
-        public bool IsReadOnly {
-            get { return items.IsReadOnly; } }
+        public bool IsReadOnly => items.IsReadOnly;
 
-        public int Count {
-            get { return items.Count; } }
+        public int Count => items.Count;
 
         public uint maxCount {get;set;}
 
-        public object SyncRoot {
-            get { return default (object); } }
+        public object SyncRoot => default (object);
 
-        public IItemSet items {
-            get { return _items; }
-        } IItemSet _items;
+        public IItemSet items => new ItemList();
 
-        public ItemCollection() {
-            this._items = new ItemList(); }
+        public ItemCollection()
+            : this(new ItemList()) { }
 
         public ItemCollection(List<Item> items) {
-            this._items = new ItemList(items); }
+            this.items.Add(items); }
 
-        IEnumerator IEnumerable.GetEnumerator() {
-            return (IEnumerator) GetEnumerator(); }
+        IEnumerator IEnumerable.GetEnumerator() =>
+            (IEnumerator) GetEnumerator();
 
-        public void Add(Item item) { items.Add(item); }
+        public void Add(Item item) =>
+            items.Add(item);
+
+        public void Add<T>(ICollection<T> list)
+                        where T : Item =>
+            items.Add(list);
 
         public void Clear() {
             foreach (var item in items) item.Drop();
-            _items = new ItemList();
+            items.Clear();
         }
 
-        public IEnumerator<Item> GetEnumerator() {
-            return items.GetEnumerator(); }
+        public IEnumerator<Item> GetEnumerator() =>
+            items.GetEnumerator();
 
-        public bool Contains(Item item) {
-            return items.Contains(item); }
+        public bool Contains(Item item) =>
+            items.Contains(item);
 
-        public void CopyTo(Item[] arr, int n) {
-            items.CopyTo(arr,n); }
+        public void CopyTo(Item[] arr, int n) =>
+            items.CopyTo(arr,n);
 
-        public bool Remove(Item item) {
-            return items.Remove(item); }
+        public bool Remove(Item item) =>
+            items.Remove(item);
 
-        public T GetItem<T>() where T : Item {
-            return items.GetItem<T>(); }
+        public T GetItem<T>() where T : Item =>
+            items.GetItem<T>();
 
-        public List<T> GetItems<T>() where T : Item {
-            return items.GetItems<T>(); }
+        public List<T> GetItems<T>() where T : Item =>
+            items.GetItems<T>();
     }
 }

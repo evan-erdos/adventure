@@ -6,6 +6,7 @@ using System.Configuration;
 using System.Text;
 using System.Text.RegularExpressions;
 
+
 public static class Markdown {
     public static string EmptyElementSuffix {
         get { return _emptyElementSuffix; }

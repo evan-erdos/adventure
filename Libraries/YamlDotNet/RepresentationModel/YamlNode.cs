@@ -1,16 +1,16 @@
 //  This file is part of YamlDotNet - A .NET library for YAML.
 //  Copyright (c) Antoine Aubry and contributors
-    
+
 //  Permission is hereby granted, free of charge, to any person obtaining a copy of
 //  this software and associated documentation files (the "Software"), to deal in
 //  the Software without restriction, including without limitation the rights to
 //  use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
 //  of the Software, and to permit persons to whom the Software is furnished to do
 //  so, subject to the following conditions:
-    
+
 //  The above copyright notice and this permission notice shall be included in all
 //  copies or substantial portions of the Software.
-    
+
 //  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 //  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 //  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -36,13 +36,13 @@ namespace YamlDotNet.RepresentationModel
 		/// Gets or sets the anchor of the node.
 		/// </summary>
 		/// <value>The anchor.</value>
-		public string Anchor { get; set; }
+		public string Anchor {get;set;}
 
 		/// <summary>
 		/// Gets or sets the tag of the node.
 		/// </summary>
 		/// <value>The tag.</value>
-		public string Tag { get; set; }
+		public string Tag {get;set;}
 
 		/// <summary>
 		/// Gets the position in the input stream where the event that originated the node starts.
@@ -142,7 +142,7 @@ namespace YamlDotNet.RepresentationModel
 		public abstract void Accept(IYamlVisitor visitor);
 
 		/// <summary>
-		/// Provides a basic implementation of Object.Equals 
+		/// Provides a basic implementation of Object.Equals
 		/// </summary>
 		protected bool Equals(YamlNode other)
 		{
@@ -182,7 +182,7 @@ namespace YamlDotNet.RepresentationModel
 		}
 
 		/// <summary>
-		/// Gets the hash code of the specified object, or zero if the object is null. 
+		/// Gets the hash code of the specified object, or zero if the object is null.
 		/// </summary>
 		protected static int GetHashCode(object value)
 		{
@@ -190,7 +190,7 @@ namespace YamlDotNet.RepresentationModel
 		}
 
 		/// <summary>
-		/// Combines two hash codes into one. 
+		/// Combines two hash codes into one.
 		/// </summary>
 		protected static int CombineHashCodes(int h1, int h2)
 		{

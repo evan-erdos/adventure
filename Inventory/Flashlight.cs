@@ -2,20 +2,21 @@
 
 using UnityEngine;
 using System.Collections;
-using lit=PathwaysEngine.Literature;
+//using static PathwaysEngine.Literature.Terminal;
+
 
 namespace PathwaysEngine.Inventory {
 
 
-    public class Flashlight : Lamp {
+    class Flashlight : Lamp {
         public override bool Wear() {
-            lit::Terminal.LogCommand(
+            Literature.Terminal.LogCommand(
                 "You turn on your flashlight.");
             return base.Wear();
         }
 
         public override bool Stow() {
-            lit::Terminal.LogCommand(
+            Literature.Terminal.LogCommand(
                 "You put away your flashlight.");
             return base.Stow();
         }

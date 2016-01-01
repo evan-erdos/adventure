@@ -4,7 +4,10 @@ using UnityEngine;
 using System.Collections;
 using util=PathwaysEngine.Utilities;
 
+
 namespace PathwaysEngine.Movement {
+
+
     public class Look : MonoBehaviour {
         public bool recenter, usePrev, inControl;
         uint size, ind;

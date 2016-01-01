@@ -4,7 +4,10 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
+
 namespace PathwaysEngine.Adventure {
+
+
     [RequireComponent(typeof(AudioSource))]
     [RequireComponent(typeof(Collider))]
     [RequireComponent(typeof(Light))]
@@ -15,7 +18,7 @@ namespace PathwaysEngine.Adventure {
         public float interval = 10f;
         public AudioClip[] crystalSounds;
         public AudioClip defaultSound;
-        RandomList<AudioClip> sounds;
+        RandList<AudioClip> sounds;
         AudioSource _audio;
         Renderer _renderer;
         Light _light;
@@ -24,7 +27,7 @@ namespace PathwaysEngine.Adventure {
         public Color color;
         public Crystal[] crystals;
 
-        public bool ring { get; set; }
+        public bool ring {get;set;}
 
         public float Delay {
             get { return delay+Random.Range(-0.01f,0.01f); }
@@ -37,7 +40,7 @@ namespace PathwaysEngine.Adventure {
             _renderer = GetComponent<Renderer>();
             _collider = GetComponent<Collider>();
             _collider.isTrigger = true;
-            sounds = new RandomList<AudioClip>();
+            sounds = new RandList<AudioClip>();
             sounds.AddRange(crystalSounds);
         }
 
@@ -103,7 +106,7 @@ namespace PathwaysEngine.Adventure {
         }
 
         void PlayRing(float volume) {
-            var sound = sounds.Pick();
+            var sound = sounds.Next();
             if (!sound) return;
             _audio.PlayOneShot(sound,volume);
         }

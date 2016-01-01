@@ -5,28 +5,30 @@ using System.Collections;
 using System.Collections.Generic;
 using lit=PathwaysEngine.Literature;
 
+
 namespace PathwaysEngine.Movement {
 
 
 	/** `CameraArea` : **`MonoBehaviour`**
-	|*
-	|* This class provides a way to present static views of an
-	|* area such that the player can interact with controls.
-	|**/
+	 *
+	 * This class provides a way to present static views of an
+	 * area such that the player can interact with controls.
+	 **/
 	[RequireComponent(typeof(Collider))]
 	public class CameraArea : MonoBehaviour {
 		Camera mainCamera;
 		Collider _collider;
 		public Transform target;
 		public float dist = 1f;
+		public float nearClip = 0.1f;
 		float time = 1f;
 		bool wait = false;
 
 		/** `IsActive` : **`bool`**
-		|*
-		|* This property keeps a bunch of things in sync, and
-		|* represents if the `CameraArea` is currently enabled.
-		|**/
+		 *
+		 * This property keeps a bunch of things in sync, and
+		 * represents if the `CameraArea` is currently enabled.
+		 **/
 		public bool IsActive {
 			get { return isActive; }
 			set { if (isActive==value) return;
@@ -46,13 +48,13 @@ namespace PathwaysEngine.Movement {
 
 
 		/** `Entering` : **`coroutine`**
-		|*
-		|* This is the usual kind of "guarded" `coroutine` I've
-		|* been using to ensure that repeated calls won't start
-		|* an enormous number of unique `coroutines` instead of
-		|* simply keeping one going. Also provides a buffer to
-		|* the `Terminal` via the `yield`ed `WaitForSeconds`.
-		|**/
+		 *
+		 * This is the usual kind of "guarded" `coroutine` I've
+		 * been using to ensure that repeated calls won't start
+		 * an enormous number of unique `coroutines` instead of
+		 * simply keeping one going. Also provides a buffer to
+		 * the `Terminal` via the `yield`ed `WaitForSeconds`.
+		 **/
 		IEnumerator Entering(bool t) {
 			if (!wait) {
 				wait = true;
@@ -91,7 +93,7 @@ namespace PathwaysEngine.Movement {
 				Pathways.CursorGraphic = Cursors.Pick;
 		}
 
-		IEnumerator OnMouseOver() {
+		IEnumerator OnMouseEnter() {
             if (Vector3.Distance(transform.position,Player.Position)>dist) {
                 Pathways.CursorGraphic = Cursors.None; yield break; }
             Pathways.CursorGraphic = Cursors.Look;

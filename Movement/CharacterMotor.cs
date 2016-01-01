@@ -5,7 +5,10 @@ using System.Collections;
 using System.Collections.Generic;
 using util=PathwaysEngine.Utilities;
 
+
 namespace PathwaysEngine.Movement {
+
+
     [RequireComponent(typeof(CharacterController))]
     public class CharacterMotor : MonoBehaviour, IMotor {
         public enum transfer { None, initial, PermaTransfer, PermaLocked }
@@ -48,7 +51,7 @@ namespace PathwaysEngine.Movement {
             }
         } bool isJumping = false;
 
-        public bool WasJumping { get; set; }
+        public bool WasJumping {get;set;}
 
         public bool IsGrounded {
             get { return isGrounded; }
@@ -58,7 +61,7 @@ namespace PathwaysEngine.Movement {
             }
         } bool isGrounded = false;
 
-        public bool WasGrounded { get; set; }
+        public bool WasGrounded {get;set;}
 
         public bool grounded {
             get { return (groundNormal.y>0.01); }
@@ -91,7 +94,7 @@ namespace PathwaysEngine.Movement {
             }
         } Vector3 velocity = Vector3.zero;
 
-        public Vector3 lastVelocity { get; set; }
+        public Vector3 lastVelocity {get;set;}
 
         internal CharacterMotor() {
             maxSpeed        = 57.2f;        massPlayer          = 80;

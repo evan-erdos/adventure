@@ -18,22 +18,22 @@ using util=PathwaysEngine.Utilities;
 
 
 /** `YAML`
-|*
-|* These classes act as adapters for the `MonoBehaviour`-
-|* derived classes, which `YamlDotNet` cannot instantiate.
-|* Instances of these classes are instantiated instead, and
-|* then populate the main classes in `Awake()`.
-|**/
+ *
+ * These classes act as adapters for the `MonoBehaviour`-
+ * derived classes, which `YamlDotNet` cannot instantiate.
+ * Instances of these classes are instantiated instead, and
+ * then populate the main classes in `Awake()`.
+ **/
 namespace PathwaysEngine {
 
 
     /** `YAML`
-    |*
-    |* These classes act as adapters for the `MonoBehaviour`-
-    |* derived classes, which `YamlDotNet` cannot instantiate.
-    |* Instances of these classes are instantiated instead, and
-    |* then populate the main classes on `Awake()`.
-    |**/
+     *
+     * These classes act as adapters for the `MonoBehaviour`-
+     * derived classes, which `YamlDotNet` cannot instantiate.
+     * Instances of these classes are instantiated instead, and
+     * then populate the main classes on `Awake()`.
+     **/
     public static partial class Pathways {
 
         public static Dictionary<string,object> data =
@@ -50,20 +50,20 @@ namespace PathwaysEngine {
 
 
         /** `Deserialize<T,U>()` : **`function`**
-        |*
-        |* Deserialize loads data, serialized from `yml`, into
-        |* an instance of `Thing`. Should probably make use of
-        |* type contravariance, but hey, what can you do?
-        |*
-        |* - `<T>` : **`Type`**
-        |*     real type, usually derives from `Monobehaviour`
-        |*
-        |* - `<U>` : **`Type`**
-        |*     nested type, usually named `yml`
-        |*
-        |* - `o` : **`<T>`**
-        |*     object of type `T` to look for
-        |**/
+         *
+         * Deserialize loads data, serialized from `yml`, into
+         * an instance of `Thing`. Should probably make use of
+         * type contravariance, but hey, what can you do?
+         *
+         * - `<T>` : **`Type`**
+         *     real type, usually derives from `Monobehaviour`
+         *
+         * - `<U>` : **`Type`**
+         *     nested type, usually named `yml`
+         *
+         * - `o` : **`<T>`**
+         *     object of type `T` to look for
+         **/
         public static void Deserialize<T,U>(T o)
                         where T : IStorable
                         where U : ISerializable<T> {
@@ -71,10 +71,10 @@ namespace PathwaysEngine {
 
 
         /** `yml` : **`class`**
-        |*
-        |* Nested class that deals with serializing &
-        |* deserializing data from `*.yml` files.
-        |**/
+         *
+         * Nested class that deals with serializing &
+         * deserializing data from `*.yml` files.
+         **/
         public static class yml {
 
             static Deserializer deserializer =
@@ -82,14 +82,14 @@ namespace PathwaysEngine {
 
 
             /** `yml` : **`constructor`**
-            |*
-            |* Instantiates a `Deserializer`, registers tags, &
-            |* reads data from the specified files. While the
-            |* usage of `static`s *and*  `constructor`s aren't
-            |* kosher in `Unity`, but in this case, it's ok, as
-            |* this has nothing to do with the `MonoBehaviour`
-            |* loading / instantiation process.
-            |**/
+             *
+             * Instantiates a `Deserializer`, registers tags, &
+             * reads data from the specified files. While the
+             * usage of `static`s *and*  `constructor`s aren't
+             * kosher in `Unity`, but in this case, it's ok, as
+             * this has nothing to do with the `MonoBehaviour`
+             * loading / instantiation process.
+             **/
             static yml() {
                 string  pre = "tag:yaml.org,2002:",
                         ext = ".yml",
@@ -107,7 +107,7 @@ namespace PathwaysEngine {
                     { "date", typeof(DateTime) },
 
                     // Adventure Tags
-                    { "thing", typeof(adv::Thing.yml) },
+                    { "thing", typeof(adv::Thing_yml) },
                     { "creature", typeof(adv::Creature.yml) },
                     { "person", typeof(adv::Person.yml) },
                     { "player", typeof(Player.yml) },
@@ -118,6 +118,7 @@ namespace PathwaysEngine {
                     { "door", typeof(map::Door.yml) },
 
                     // Literature Tags
+                    { "parse", typeof(lit::Parse) },
                     { "message", typeof(lit::Message) },
                     { "encounter", typeof(lit::Encounter.yml) },
 
@@ -134,7 +135,7 @@ namespace PathwaysEngine {
                     { "gun", typeof(inv::Gun.yml) },
 
                     // Puzzle Tags
-                    { "piece", typeof(puzl::Piece.yml) },
+                    //{ "piece", typeof(puzl::Piece.yml) },
                     { "button", typeof(puzl::Button.yml) },
                     { "lever", typeof(puzl::Lever.yml) }};
 
@@ -147,24 +148,24 @@ namespace PathwaysEngine {
 
                 var files = new[] { // special files
                     "commands", // list of commands
-                    "defaults", // base descriptions & values
-                    "pathways", // system-wide messages
+                    "defaults", // default data
+                    "pathways", // system messages
                     "settings"}; // project settings
 
                 foreach (var file in files) {
-                    var sr = GetReader(Path.Combine(dir,file)+ext);
+                    var r = GetReader(Path.Combine(dir,file)+ext);
                     switch (file) {
                         case "commands" :
-                            foreach (var kvp in deserializer.Deserialize<Dictionary<string,lit::Command_yml>>(sr))
+                            foreach (var kvp in deserializer.Deserialize<Dictionary<string,lit::Command_yml>>(r))
                                 Pathways.commands[kvp.Key] = kvp.Value.Deserialize(kvp.Key);
                             break;
                         case "defaults" :
-                            foreach (var elem in deserializer.Deserialize<Dictionary<string,Dictionary<string,object>>>(sr))
+                            foreach (var elem in deserializer.Deserialize<Dictionary<string,Dictionary<string,object>>>(r))
                                 foreach (var kvp in elem.Value)
                                     Pathways.defaults[GetTypeYAML(elem.Key,kvp.Key)] = kvp.Value;
                             break;
                         case "pathways" :
-                            foreach (var kvp in deserializer.Deserialize<Dictionary<string,lit::Message>>(sr))
+                            foreach (var kvp in deserializer.Deserialize<Dictionary<string,lit::Message>>(r))
                                 Pathways.messages[kvp.Key] = kvp.Value;
                             break;
                     }
@@ -179,13 +180,13 @@ namespace PathwaysEngine {
 
 
             /** `GetReader()` : **`StringReader`**
-            |*
-            |* Gets the `*.yml` file in the main directory only
-            |* if it exists and has the proper extension.
-            |*
-            |* - `throw` : **`Exception`**
-            |*     if the file does not exist
-            |**/
+             *
+             * Gets the `*.yml` file in the main directory only
+             * if it exists and has the proper extension.
+             *
+             * - `throw` : **`Exception`**
+             *     if the file does not exist
+             **/
             static StringReader GetReader(string file) {
                 if (!File.Exists(file))
                     throw new System.Exception("YAML 404: "+file);
@@ -197,55 +198,55 @@ namespace PathwaysEngine {
 
 
             /** `GetTypeYAML()` : **`Type`**
-            |*
-            |* Tries to find a `Type` in `PathwaysEngine` which
-            |* is a match for the supplied `string`.
-            |*
-            |* - `ns` : **`string`**
-            |*     `string`ified namespace to look in
-            |*
-            |* - `s` : **`string`**
-            |*     `string`ified name of a `Type` to look for
-            |**/
+             *
+             * Tries to find a `Type` in `PathwaysEngine` which
+             * is a match for the supplied `string`.
+             *
+             * - `ns` : **`string`**
+             *     `string`ified namespace to look in
+             *
+             * - `s` : **`string`**
+             *     `string`ified name of a `Type` to look for
+             **/
             public static Type GetTypeYAML(string ns, string s) {
                 //Debug.Log("type: "+type+"  string: "+ns+s+"+yml");
                 return Type.GetType("PathwaysEngine."+ns+"."+s+"+yml"); }
 
 
             /** `Deserialize()` : **`function`**
-            |*
-            |* Called without type arguments, this will simply
-            |* deserialize into the `data` object. This is used
-            |* only by the `static` constructor to get data out
-            |* of the rest of the files (skipping the few files
-            |* which are specified above).
-            |*
-            |* - `file` : **`string`**
-            |*     filename to look for
-            |*
-            |* - `throw` : **`IOException`**
-            |**/
+             *
+             * Called without type arguments, this will simply
+             * deserialize into the `data` object. This is used
+             * only by the `static` constructor to get data out
+             * of the rest of the files (skipping the few files
+             * which are specified above).
+             *
+             * - `file` : **`string`**
+             *     filename to look for
+             *
+             * - `throw` : **`IOException`**
+             **/
             static void Deserialize(string file) {
                 foreach (var kvp in deserializer.Deserialize<Dictionary<string,object>>(GetReader(file))) data[kvp.Key] = kvp.Value; }
 
 
             /** `Deserialize<T>()` : **`<T>`**
-            |*
-            |* Returns an object of type `<T>` from the
-            |* dictionary if it exists.
-            |*
-            |* - `<T>` : **`Type`**
-            |*      type to look for, and then to cast to, when
-            |*      deserializing the data from the file.
-            |*
-            |* - `s` : **`string`**
-            |*     key to look for
-            |*
-            |* - `throw` : **`Exception`**
-            |*     There is no key at `data[s]`, or some other
-            |*     problem occurs when attempting to cast the
-            |*     object to `<T>`.
-            |**/
+             *
+             * Returns an object of type `<T>` from the
+             * dictionary if it exists.
+             *
+             * - `<T>` : **`Type`**
+             *      type to look for, and then to cast to, when
+             *      deserializing the data from the file.
+             *
+             * - `s` : **`string`**
+             *     key to look for
+             *
+             * - `throw` : **`Exception`**
+             *     There is no key at `data[s]`, or some other
+             *     problem occurs when attempting to cast the
+             *     object to `<T>`.
+             **/
             public static T Deserialize<T>(string s) {
                 object o;
                 if (!data.TryGetValue(s,out o))
@@ -257,9 +258,9 @@ namespace PathwaysEngine {
             }
 
             /** `DeserializeDefault<T>()` : **`<T>`**
-            |*
-            |* Returns the default object of type `<T>`.
-            |**/
+             *
+             * Returns the default object of type `<T>`.
+             **/
             public static T DeserializeDefault<T>() {
                 object o;
                 if (!defaults.TryGetValue(typeof(T),out o))
@@ -280,33 +281,33 @@ namespace PathwaysEngine {
 
 
     /** `IStorable` : **`interface`**
-    |*
-    |* Interface for anything that needs to be serialized
-    |* from the `yml` dictionary.
-    |**/
+     *
+     * Interface for anything that needs to be serialized
+     * from the `yml` dictionary.
+     **/
     public interface IStorable {
 
 
         /** `Name` : **`string`**
-        |*
-        |* This should be an unique identifier that the `*.yml`
-        |* `Deserializer` should look for in files.
-        |**/
+         *
+         * This should be an unique identifier that the `*.yml`
+         * `Deserializer` should look for in files.
+         **/
         string Name { get; }
     }
 
 
     /** `ISerializeable<T>` : **`interface`**
-    |*
-    |* Typically implemented by nested classes named `yml`, the
-    |* main function of this interface is to ensure that there
-    |* is a method called `Deserialize` which gets the correct
-    |* class to deserialize to at startup.
-    |*
-    |* - `<T>` : **`type`**
-    |*    the type of object to deserialize to, usually just
-    |*    the class that this is nested in.
-    |**/
+     *
+     * Typically implemented by nested classes named `yml`, the
+     * main function of this interface is to ensure that there
+     * is a method called `Deserialize` which gets the correct
+     * class to deserialize to at startup.
+     *
+     * - `<T>` : **`type`**
+     *    the type of object to deserialize to, usually just
+     *    the class that this is nested in.
+     **/
     public interface ISerializable<T>
                     where T : IStorable {
 
@@ -331,29 +332,23 @@ namespace PathwaysEngine {
 
     namespace Adventure {
 
-        public partial class Thing {
+        public class Thing_yml : ISerializable<Thing> {
+            public bool seen {get;set;}
+            public string Name {get;set;}
+            public lit::Description description {get;set;}
 
-            public virtual void Deserialize() {
-                Pathways.Deserialize<Thing,Thing.yml>(this); }
+            public void ApplyDefaults<T>(Thing o) {
+                var d = Pathways.yml.DeserializeDefault<Thing_yml>();
+                o.Seen = d.seen;
+                o.description = d.description;
+            }
 
-            public class yml : ISerializable<Thing> {
-                public bool seen {get;set;}
-                public string Name {get;set;}
-                public lit::Description description {get;set;}
-
-                public void ApplyDefaults<T>(Thing o) {
-                    var d = Pathways.yml.DeserializeDefault<Thing.yml>();
-                    o.Seen = d.seen;
-                    o.description = d.description;
-                }
-
-                public void Deserialize(Thing o) {
-                    ApplyDefaults<Thing>(o);
-                    o.Seen = this.seen;
-                    o.description.Name = o.Name;
-                    o.description = lit::Description.Merge(
-                        this.description, o.description);
-                }
+            public void Deserialize(Thing o) {
+                ApplyDefaults<Thing>(o);
+                o.Seen = this.seen;
+                o.description.Name = o.Name;
+                o.description = lit::Description.Merge(
+                    this.description, o.description);
             }
         }
 
@@ -363,11 +358,11 @@ namespace PathwaysEngine {
             public override void Deserialize() {
                 Pathways.Deserialize<Creature,Creature.yml>(this); }
 
-            public new class yml : Thing.yml, ISerializable<Creature> {
+            public class yml : ISerializable<Creature> {//Thing_yml,
                 public bool isDead {get;set;}
 
                 public void Deserialize(Creature o) {
-                    Deserialize((Thing) o);
+                    //Deserialize((Thing) o);
                     o.isDead = isDead;
                 }
             }
@@ -396,7 +391,7 @@ namespace PathwaysEngine {
                 public override void Deserialize() {
                     Pathways.Deserialize<Room,Room.yml>(this); }
 
-                public new class yml : Thing.yml, ISerializable<Room> {
+                public class yml : Thing_yml, ISerializable<Room> {
                     public int depth {get;set;}
                     public List<Thing> things {get;set;}
                     public List<Room> nearbyRooms {get;set;}
@@ -414,7 +409,7 @@ namespace PathwaysEngine {
                 public override void Deserialize() {
                     Pathways.Deserialize<Area,Area.yml>(this); }
 
-                public new class yml : Thing.yml, ISerializable<Area> {
+                public class yml : Thing_yml, ISerializable<Area> {
                     public bool safe {get;set;}
                     public int level {get;set;}
                     public List<Room.yml> rooms {get;set;}
@@ -435,7 +430,7 @@ namespace PathwaysEngine {
                 public override void Deserialize() {
                     Pathways.Deserialize<Door,Door.yml>(this); }
 
-                public new class yml : Thing.yml, ISerializable<Door> {
+                public class yml : Thing_yml, ISerializable<Door> {
 
                     [YamlMember(Alias="opened")]
                     public bool IsOpen {get;set;}
@@ -476,7 +471,7 @@ namespace PathwaysEngine {
             public override void Deserialize() {
                 Pathways.Deserialize<Item,Item.yml>(this); }
 
-            public new class yml : adv::Thing.yml, ISerializable<Item> {
+            public class yml : adv::Thing_yml, ISerializable<Item> {
                 public int cost {get;set;}
                 public float mass {get;set;}
 
@@ -529,7 +524,7 @@ namespace PathwaysEngine {
             public override void Deserialize() {
                 Pathways.Deserialize<Book,Book.yml>(this); }
 
-            public new class yml : adv::Thing.yml, ISerializable<Book> {
+            public new class yml : adv::Thing_yml, ISerializable<Book> {
                 public string passage {get;set;}
 
                 public void ApplyDefaults(Book o) {
@@ -591,71 +586,71 @@ namespace PathwaysEngine {
 
 
             /** `ParserEvents` : **`enum`**
-            |*
-            |* This local `enum` defines the `Parse` delegates
-            |* that the `Parser` should call for each verb and
-            |* command entered. This is awful.
-            |*
-            |* - `Sudo` : **`ParserEvents`**
-            |*     `Pathways.Sudo` overrides commands
-            |*
-            |* - `Quit` : **`ParserEvents`**
-            |*     `Pathways.Quit` begins the quitting routine
-            |*
-            |* - `Redo` : **`ParserEvents`**
-            |*     `Pathways.Redo` repeats the last command
-            |*
-            |* - `Save` : **`ParserEvents`**
-            |*     `Pathways.Save` saves the game
-            |*
-            |* - `Load` : **`ParserEvents`**
-            |*     `Pathways.Load` loads from a `*.yml` file
-            |*
-            |* - `Help` : **`ParserEvents`**
-            |*     `Pathways.Help` displays a simple help text
-            |*
-            |* - `View` : **`ParserEvents`**
-            |*     `Player.View` examines some object
-            |*
-            |* - `Look` : **`ParserEvents`**
-            |*     `Player.Look` looks around/examines a room
-            |*
-            |* - `Goto` : **`ParserEvents`**
-            |*     `Player.Goto` sends the `Player` somewhere
-            |*
-            |* - `Move` : **`ParserEvents`**
-            |*     `Player.Goto` can be called to move objects
-            |*
-            |* - `Invt` : **`ParserEvents`**
-            |*     `Player.Invt` opens the inventory menu
-            |*
-            |* - `Take` : **`ParserEvents`**
-            |*     `Player.Take` takes an item
-            |*
-            |* - `Drop` : **`ParserEvents`**
-            |*     `Player.Drop` drops an item
-            |*
-            |* - `Wear` : **`ParserEvents`**
-            |*     `Player.Wear` has the player wear something
-            |*
-            |* - `Stow` : **`ParserEvents`**
-            |*     `Player.Stow` has the player stow something
-            |*
-            |* - `Read` : **`ParserEvents`**
-            |*     `Player.Read` reads an `IReadable` thing
-            |*
-            |* - `Open` : **`ParserEvents`**
-            |*     `Player.Open` opens something
-            |*
-            |* - `Shut` : **`ParserEvents`**
-            |*     `Player.Shut` closes something
-            |*
-            |* - `Push` : **`ParserEvents`**
-            |*     `Player.Push` pushes something
-            |*
-            |* - `Pull` : **`ParserEvents`**
-            |*     `Player.Pull` pulls something
-            |**/
+             *
+             * This local `enum` defines the `Parse` delegates
+             * that the `Parser` should call for each verb and
+             * command entered. This is awful.
+             *
+             * - `Sudo` : **`ParserEvents`**
+             *     `Pathways.Sudo` overrides commands
+             *
+             * - `Quit` : **`ParserEvents`**
+             *     `Pathways.Quit` begins the quitting routine
+             *
+             * - `Redo` : **`ParserEvents`**
+             *     `Pathways.Redo` repeats the last command
+             *
+             * - `Save` : **`ParserEvents`**
+             *     `Pathways.Save` saves the game
+             *
+             * - `Load` : **`ParserEvents`**
+             *     `Pathways.Load` loads from a `*.yml` file
+             *
+             * - `Help` : **`ParserEvents`**
+             *     `Pathways.Help` displays a simple help text
+             *
+             * - `View` : **`ParserEvents`**
+             *     `Player.View` examines some object
+             *
+             * - `Look` : **`ParserEvents`**
+             *     `Player.Look` looks around/examines a room
+             *
+             * - `Goto` : **`ParserEvents`**
+             *     `Player.Goto` sends the `Player` somewhere
+             *
+             * - `Move` : **`ParserEvents`**
+             *     `Player.Goto` can be called to move objects
+             *
+             * - `Invt` : **`ParserEvents`**
+             *     `Player.Invt` opens the inventory menu
+             *
+             * - `Take` : **`ParserEvents`**
+             *     `Player.Take` takes an item
+             *
+             * - `Drop` : **`ParserEvents`**
+             *     `Player.Drop` drops an item
+             *
+             * - `Wear` : **`ParserEvents`**
+             *     `Player.Wear` has the player wear something
+             *
+             * - `Stow` : **`ParserEvents`**
+             *     `Player.Stow` has the player stow something
+             *
+             * - `Read` : **`ParserEvents`**
+             *     `Player.Read` reads an `IReadable` thing
+             *
+             * - `Open` : **`ParserEvents`**
+             *     `Player.Open` opens something
+             *
+             * - `Shut` : **`ParserEvents`**
+             *     `Player.Shut` closes something
+             *
+             * - `Push` : **`ParserEvents`**
+             *     `Player.Push` pushes something
+             *
+             * - `Pull` : **`ParserEvents`**
+             *     `Player.Pull` pulls something
+             **/
             public enum ParserEvents {
                 Sudo, Quit, Redo, Save, Load, Help,
                 View, Look, Goto, Move, Invt, Take,
@@ -737,7 +732,7 @@ namespace PathwaysEngine {
             public override void Deserialize() {
                 Pathways.Deserialize<Encounter,Encounter.yml>(this); }
 
-            public new class yml : adv::Thing.yml, ISerializable<Encounter> {
+            public class yml : adv::Thing_yml, ISerializable<Encounter> {
                 public bool reuse {get;set;}
                 public float time {get;set;}
                 public Inputs input {get;set;}
@@ -755,48 +750,48 @@ namespace PathwaysEngine {
 
     namespace Puzzle {
 
-        public partial class Piece : adv::Thing, IPiece {
+        abstract partial class Piece<T> : adv::Thing, IPiece<T> {
 
             public override void Deserialize() {
-                Pathways.Deserialize<Piece,Piece.yml>(this); }
+                Pathways.Deserialize<Piece<T>,Piece<T>.yml>(this); }
 
-            public new class yml : adv::Thing.yml, ISerializable<Piece> {
-                public bool IsSolved {get;set;}
+            public class yml : adv::Thing_yml, ISerializable<Piece<T>> {
 
-                public void Deserialize(Piece o) {
+                public T condition {get;set;}
+
+                public T solution {get;set;}
+
+                public void Deserialize(Piece<T> o) {
                     Deserialize((adv::Thing) o);
-                    o.IsSolved = this.IsSolved;
+                    o.Condition = condition;
+                    o.Solution = solution;
                 }
             }
         }
 
-        partial class Button : Piece {
+        partial class Button : Piece<bool> {
 
             public override void Deserialize() {
                 Pathways.Deserialize<Button,Button.yml>(this); }
 
-            public new class yml : Piece.yml, ISerializable<Button> {
-                [YamlMember(Alias="pressed")]
-                public bool IsPressed {get;set;}
+            public new class yml : Piece<bool>.yml, ISerializable<Button> {
 
                 public void Deserialize(Button o) {
-                    Deserialize((Piece) o);
-                    o.IsPressed = this.IsPressed;
+                    Deserialize((Piece<bool>) o);
                 }
             }
          }
 
-        partial class Lever : adv::Thing, IPiece {
+        partial class Lever : adv::Thing, IPiece<int> {
 
             public override void Deserialize() {
                 Pathways.Deserialize<Lever,Lever.yml>(this); }
 
-            public new class yml : adv::Thing.yml, ISerializable<Lever> {
+            public class yml : adv::Thing_yml, ISerializable<Lever> {
                 public bool IsSolved {get;set;}
 
                 public void Deserialize(Lever o) {
                     Deserialize((adv::Thing) o);
-                    o.IsSolved = this.IsSolved;
                 }
             }
         }

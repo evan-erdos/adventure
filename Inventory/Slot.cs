@@ -5,6 +5,7 @@ using PathwaysEngine;
 using inv=PathwaysEngine.Inventory;
 using System.Collections;
 
+
 [RequireComponent(typeof(ui::Button))]
 [RequireComponent(typeof(ui::Image))]
 class Slot : MonoBehaviour {

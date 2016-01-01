@@ -7,12 +7,17 @@ using System.Collections.Generic;
 using adv=PathwaysEngine.Adventure;
 using util=PathwaysEngine.Utilities;
 
+
 namespace PathwaysEngine.Literature {
+
+
     public class Window : MonoBehaviour {
+
         bool wait;
         static float delay = 0.5f;
         static ui::Text message_title, message_body;
         public util::key accept;
+
 
         public Window() {
             accept = new util::key((n)=> {
@@ -21,6 +26,7 @@ namespace PathwaysEngine.Literature {
                     Disable();
                 } else if (!n) accept.input = n; });
         }
+
 
         void Awake() {
             Pathways.StateChange += this.EventListener;
@@ -33,6 +39,7 @@ namespace PathwaysEngine.Literature {
             if (!message_title || !message_body)
                 Debug.LogError("missing title / body");
         }
+
 
         void Start() {
             util::Controls.AddInputListener(this);

@@ -6,15 +6,16 @@ using System.Text.RegularExpressions;
 using adv=PathwaysEngine.Adventure;
 using Buffer=System.Text.StringBuilder;
 
+
 namespace PathwaysEngine.Literature {
 
 
     /** `Parser` : **`class`**
-    |*
-    |* Main class for dealing with natural language commands,
-    |* the verbs that can be used on their particular "nouns",
-    |* and all manner of other user-issued commands.
-    |**/
+     *
+     * Main class for dealing with natural language commands,
+     * the verbs that can be used on their particular "nouns",
+     * and all manner of other user-issued commands.
+     **/
     public static class Parser {
 
         static bool interceptNext;
@@ -33,25 +34,25 @@ namespace PathwaysEngine.Literature {
 
 
         /** `Parser` : **`constructor`**
-        |*
-        |* Initializes all the commands and their regexes
-        |* into a dictionary.
-        |**/
+         *
+         * Initializes all the commands and their regexes
+         * into a dictionary.
+         **/
         static Parser() {
             commands = Pathways.commands;
         }
 
 
         /** `Process()` : **`string[]`**
-        |*
-        |* Input taken directly from the user cannot be used to
-        |* issue `Command`s without being organized first. This
-        |* function takes the raw input `string`, and returns a
-        |* more rigorously organized structure.
-        |*
-        |* - `s` : **`string`**
-        |*     raw user input from the `Terminal`
-        |**/
+         *
+         * Input taken directly from the user cannot be used to
+         * issue `Command`s without being organized first. This
+         * function takes the raw input `string`, and returns a
+         * more rigorously organized structure.
+         *
+         * - `s` : **`string`**
+         *     raw user input from the `Terminal`
+         **/
         static List<string> Process(string s) {
             var raw = new List<string>(s.Strip().Split('.'));
             var list = new List<string>();
@@ -69,11 +70,11 @@ namespace PathwaysEngine.Literature {
             return false;
         }
 
-        public static bool Failure(Command c, string s) {
-            return Failure(c.input,s); }
+        public static bool Failure(Command c, string s) =>
+            Failure(c.input,s);
 
-        public static bool Failure(string s) {
-            return Failure(s,confused.Next()); }
+        public static bool Failure(string s) =>
+            Failure(s,confused.Next());
 
         public static bool Intercept(
                         Command c,
@@ -99,33 +100,33 @@ namespace PathwaysEngine.Literature {
         }
 
 
-        public static bool Intercept(string s) {
-            return Intercept(lastCommand,s); }
+        public static bool Intercept(string s) =>
+            Intercept(lastCommand,s);
 
         //public static bool Report(Command c) { }
 
 
         /** `Execute()` : **`function`**
-        |*
-        |* When a command is parsed in and `Evaluate()`d, it is
-        |* sent here, and a `Command` is created, dispatched to
-        |* its `Parse` function for processing, and in the case
-        |* of a `TextException`, it is `Resolve()`d, such that
-        |* an appropriate action might be taken. Any kind of
-        |* text command `Exception` ends here, as they are used
-        |* only for indicating errors in game logic, not errors
-        |* relating to anything actually wrong with the code.
-        |*
-        |* - `c` : **`Command`**
-        |*     the command struct without input       |*
-        |*
-        |* - `s` : **`string`**
-        |*     the raw, user-issued command
-        |*
-        |* - `throw` : **`TextException`**
-        |*     thrown when command is incoherent. It is caught
-        |*     locally, and the default behaviour is taken.
-        |**/
+         *
+         * When a command is parsed in and `Evaluate()`d, it is
+         * sent here, and a `Command` is created, dispatched to
+         * its `Parse` function for processing, and in the case
+         * of a `TextException`, it is `Resolve()`d, such that
+         * an appropriate action might be taken. Any kind of
+         * text command `Exception` ends here, as they are used
+         * only for indicating errors in game logic, not errors
+         * relating to anything actually wrong with the code.
+         *
+         * - `c` : **`Command`**
+         *     the command struct without input        *
+         *
+         * - `s` : **`string`**
+         *     the raw, user-issued command
+         *
+         * - `throw` : **`TextException`**
+         *     thrown when command is incoherent. It is caught
+         *     locally, and the default behaviour is taken.
+         **/
         public static bool Execute(Command c,string input) {
             c.input = input;
             try {
@@ -161,11 +162,11 @@ namespace PathwaysEngine.Literature {
 
 
         /** `Evaluate()` : **`function`**
-        |*
-        |* Parses the sent `string`, creates a `Command`
-        |* and dispatches it to its `Parse` function for
-        |* processing.
-        |**/
+         *
+         * Parses the sent `string`, creates a `Command`
+         * and dispatches it to its `Parse` function for
+         * processing.
+         **/
         public static bool Evaluate(string s) {
             if (interceptNext) return Intercept(s);
             foreach (var elem in Process(s))
@@ -177,10 +178,10 @@ namespace PathwaysEngine.Literature {
 
 
         /** `Resolve<T>()` : **`function`**
-        |*
-        |* When a `Command` is ambiguous or doesn't make any
-        |* sense, this prompts the user for some explanation.
-        |**/
+         *
+         * When a `Command` is ambiguous or doesn't make any
+         * sense, this prompts the user for some explanation.
+         **/
         public static void Resolve<T>(Command c,List<T> list) {
             Terminal.LogCommand("Which do you mean: ");
             foreach (var elem in list)

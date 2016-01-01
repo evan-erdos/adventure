@@ -9,13 +9,13 @@ namespace PathwaysEngine.Adventure {
 
 
     /** `DeathArea` : **`class`**
-    |*
-    |* Anything which derives from `ILiving` will be instantly
-    |* killed when entering any trigger `Collider` attached to
-    |* this `GameObject` or any child if there is a `Rigidbody`
-    |* attached to this `GameObject`. Also optionally displays
-    |* a cute death message in the `Terminal`.
-    |**/
+     *
+     * Anything which derives from `ILiving` will be instantly
+     * killed when entering any trigger `Collider` attached to
+     * this `GameObject` or any child if there is a `Rigidbody`
+     * attached to this `GameObject`. Also optionally displays
+     * a cute death message in the `Terminal`.
+     **/
     public class DeathArea : MonoBehaviour {
         bool wait = false;
         public string message = "Yikes.";
@@ -25,8 +25,8 @@ namespace PathwaysEngine.Adventure {
 
 
         /** `Kill` : **`coroutine`**
-        |*
-        |* Kills the `Player` that entered the `Collider`.
+         *
+         * Kills the `Player` that entered the `Collider`.
         **/
         public IEnumerator Kill() {
             if (!wait) {
