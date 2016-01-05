@@ -25,21 +25,15 @@ namespace PathwaysEngine.Adventure {
 
         public virtual bool Seen {get;set;}
 
+        public virtual float Radius => 5f;
+
         public string Name => gameObject.name;
 
         public virtual lit::Description description {get;set;}
 
-        static event lit::CommandEvent ViewEvent;
+        public virtual Vector3 Position => transform.position;
 
-
-        /** `Thing` : **`constructor`**
-         *
-         * Currently unused, as `Unity` doesn't play very well
-         * with the usual methods of instantiating classes, and
-         * prefers to use whatever it uses to create its native
-         * script type, `MonoBehaviour`.
-         **/
-        public Thing() { }
+        static event lit::Parse ViewEvent;
 
 
         /** `AddListener()` : **`function`**
@@ -63,28 +57,28 @@ namespace PathwaysEngine.Adventure {
         public static void RemoveListener(Thing thing) =>
             ViewEvent -= thing.View;
 
-        public virtual bool Find() => false;
 
         public virtual bool View(
-                        object source,
-                        Thing target,
+                        Person sender,
                         EventArgs e,
-                        lit::Command c) {
+                        lit::Command c,
+                        string input) => View();
+
+        public virtual bool View() {
             lit::Terminal.Log(description);
             return true;
         }
 
-        public virtual bool View() =>
-            View(null,this,EventArgs.Empty,new lit::Command());
+        public virtual bool Find() => false;
 
 
-        public virtual bool IsMatch(string s) =>
+        public virtual bool Fits(string s) =>
             description.Nouns.IsMatch(s);
 
 
         IEnumerator Viewing() {
             waitViewing = true;
-            View(this,this,EventArgs.Empty,new lit::Command());
+            View();
             yield return new WaitForSeconds(1f);
             waitViewing = false;
         }
@@ -104,13 +98,9 @@ namespace PathwaysEngine.Adventure {
 
         public virtual void Start() { }
 
-        //public virtual void OnMouseEnter() {
-        //    if (3f>(Player.Position-transform.position).sqrMagnitude)
-        //        Pathways.CursorGraphic = Cursors.Pick;
-        //}
 
         public virtual IEnumerator OnMouseOver() {
-            while (5f>(Player.Position-transform.position).sqrMagnitude) {
+            while (Player.IsNear(this)) {
                 Pathways.CursorGraphic = Cursors.Pick;
                 if (Input.GetButtonUp("Fire1") && !waitViewing)
                     yield return StartCoroutine(Viewing());

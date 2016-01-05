@@ -184,11 +184,8 @@ namespace PathwaysEngine.Literature {
                 .Replace("{").Replace("}");
         }
 
-        public bool Fits(string s) =>
-            nouns.IsMatch(s);
 
-        public bool Fits(Command c) =>
-            nouns.IsMatch(c.input);
+        public bool Fits(string s) => nouns.IsMatch(s);
 
 
         /** `Merge()` : **`Description`**

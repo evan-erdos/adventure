@@ -1,5 +1,5 @@
 %YAML 1.1
---- # Commands
+--- # commands
 
 sudo: !!command
   parse: Sudo
@@ -34,9 +34,9 @@ look: !!command
   parse: Look
   regex: /diagnos(e|tic)|status/
 
-goto: !!command
-  parse: Goto
-  regex: /go(to)?/
+#goto: !!command
+#  parse: Goto
+# regex: /go(to)?/
 
 #status:
 #  parse: View

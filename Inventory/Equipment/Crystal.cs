@@ -5,7 +5,7 @@ using System.Collections;
 using System.Collections.Generic;
 
 namespace PathwaysEngine.Inventory {
-	public partial class Crystal : Item, IWieldable {
+	public class Crystal : Item, IWieldable {
 		public bool isAuto, isBurst, isPrimary;
 		public uint countAmmo, sizeClip, countLoaded,
 			countBursts, fovDefault, fovScoped, range;
@@ -211,5 +211,8 @@ namespace PathwaysEngine.Inventory {
 
 	//	public override void Use ( bool useWeapon ) { Enable(useWeapon); }
 		//*/
+
+		public override void Deserialize() =>
+            Pathways.Deserialize<Crystal,Crystal_yml>(this);
 	}
 }

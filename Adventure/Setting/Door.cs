@@ -19,21 +19,21 @@ namespace PathwaysEngine.Adventure.Setting {
     [RequireComponent(typeof(AudioSource))]
     [RequireComponent(typeof(Collider))]
     [RequireComponent(typeof(Rigidbody))]
-    partial class Door : Thing, IOpenable, ILockable {
+    public class Door : Thing, IOpenable, ILockable {
         bool wait, wait_open;
-        byte frameOpen;
-        float time = 4f;
-        protected float dist = 4f;
-        internal float speedDelta, delay = 0.2f;
         public bool isSwitching, isStuck, isMoving,
             isReverse, isAutomatic, isInitOnly, autoClose;
-        Vector3 dirInit, dirOpen, dirFrame, dirTarget, dirDelta;
+        byte frameOpen;
+        float time = 4f;
+        internal float speedDelta, delay = 0.2f;
+        Vector3 dirInit, dirOpen,
+                dirFrame, dirTarget, dirDelta;
         protected new AudioSource audio;
         public AudioClip soundClick, soundOpen;
         public GameObject door;
         public Transform tgt;
 
-        static event lit::CommandEvent OpenEvent, ShutEvent;
+        static event lit::Parse OpenEvent, ShutEvent;
 
 
         /** `IsOpen` : **`bool`**
@@ -73,8 +73,6 @@ namespace PathwaysEngine.Adventure.Setting {
             set { isInitOpened = value; }
         } [SerializeField] bool isInitOpened;
 
-        public bool Near {get;set;}
-
 
         /** `LockMessage` : **`string`**
          *
@@ -84,12 +82,12 @@ namespace PathwaysEngine.Adventure.Setting {
         public string LockMessage {get;set;}
 
 
-        /** `Position` : **`<real,real,real>`**
+        /** `LocalPosition` : **`<real,real,real>`**
          *
          * Represents the `door` object's local position, and
          * stops it if it takes the `door` out of bounds.
          **/
-        public Vector3 Position {
+        public Vector3 LocalPosition {
             get { return door.transform.localPosition; }
             set {
                 if (IsLocked || wait) return;
@@ -97,8 +95,10 @@ namespace PathwaysEngine.Adventure.Setting {
                 var x = Mathf.Min(Mathf.Max(
                     door.transform.localPosition.x,
                     tgt.localPosition.x),0f);
-                door.transform.localPosition = new Vector3(x,0f,0f);
-                if (x>=(3f*tgt.localPosition.x)/4f && IsOpen) Shut();
+                door.transform.localPosition = new Vector3(
+                    x,0f,0f);
+                if (x>=(3f*tgt.localPosition.x)/4f && IsOpen)
+                    Shut();
                 else if (x<=tgt.localPosition.x/4f && !IsOpen)
                     Open(); //only?
             }
@@ -125,10 +125,12 @@ namespace PathwaysEngine.Adventure.Setting {
          * function, `Open()`, when the `Player` or anyone else
          * enters a command to open doors.
          **/
-        public static void Open(lit::Command c) {
-            if (OpenEvent==null) return;
-            OpenEvent(null,null,EventArgs.Empty,c);
-        }
+        public static void Open(
+                        Person sender,
+                        EventArgs e,
+                        lit::Command c,
+                        string input) =>
+            OpenEvent?.Invoke(sender,e,c,input);
 
 
         /** `Shut()` : **`function`**
@@ -137,10 +139,12 @@ namespace PathwaysEngine.Adventure.Setting {
          * other event, & does the same thing that `Open()`
          * does, but instead closes the `Door`.
          **/
-        public static void Shut(lit::Command c) {
-            if (ShutEvent==null) return;
-            ShutEvent(null,null,EventArgs.Empty,c);
-        }
+        public static void Shut(
+                        Person sender,
+                        EventArgs e,
+                        lit::Command c,
+                        string input) =>
+            ShutEvent?.Invoke(sender,e,c,input);
 
         public override void Awake() { base.Awake();
             audio = GetComponent<AudioSource>();
@@ -185,8 +189,7 @@ namespace PathwaysEngine.Adventure.Setting {
 #endif
 
         public void OnTriggerExit(Collider o) {
-            if (isAutomatic && frameOpen>0
-            && o.gameObject.layer==LayerMask.NameToLayer("Player"))
+            if (isAutomatic && frameOpen>0 && Player.Is(o))
                 frameOpen = 0x0;
         }
 
@@ -203,7 +206,6 @@ namespace PathwaysEngine.Adventure.Setting {
         IEnumerator Opening(bool t) {
             if (!wait) {
                 wait = true;
-                Near = false;
                 collider.enabled = false;
                 dirTarget = (t)?(dirOpen):(dirInit);
                 PathwaysEngine.Literature.Terminal.LogCommand(
@@ -229,16 +231,16 @@ namespace PathwaysEngine.Adventure.Setting {
          * command, `Open`.
          **/
         public bool Open(
-                        object source,
-                        Thing target,
+                        Player player,
                         EventArgs e,
-                        lit::Command c) {
+                        lit::Command c,
+                        string input) {
             if (IsOpen) {
-                PathwaysEngine.Literature.Terminal.LogCommand(
+                lit::Terminal.LogCommand(
                     "It's already opened.");
                 return true;
             } else if (IsLocked)
-                return Player.Unlock(this);
+                return player.Unlock(this);
             else return this.Open();
         }
 
@@ -265,7 +267,7 @@ namespace PathwaysEngine.Adventure.Setting {
                         lit::Command c) {
             if (dirTarget!=dirInit)
                 return this.Shut();
-            PathwaysEngine.Literature.Terminal.LogCommand(
+            lit::Terminal.LogCommand(
                 "It's already closed.");
             return true;
         }
@@ -301,14 +303,15 @@ namespace PathwaysEngine.Adventure.Setting {
         }
 
         public override IEnumerator OnMouseOver() {
-            var d = Vector3.Distance(transform.position,Player.Position);
-            if (d>dist || IsOpen) {
-                Pathways.CursorGraphic = Cursors.None; yield break; }
+            if (IsOpen || !Player.IsNear(this)) {
+                Pathways.CursorGraphic = Cursors.None;
+                yield break; }
             Pathways.CursorGraphic = Cursors.Hand;
-            if (Input.GetButton("Fire1") && !IsLocked && !IsOpen)
+            if (!IsLocked && !IsOpen
+                            && Input.GetButton("Fire1"))
                 yield return StartCoroutine(Unlocking());
-            while (Input.GetButton("Fire1") && d<dist && !IsLocked) {
-                d = Vector3.Distance(transform.position,Player.Position);
+            while (!IsLocked && Player.IsNear(this)
+                            && Input.GetButton("Fire1")) {
                 var v0 = Input.mousePosition;
                 Pathways.CursorGraphic = Cursors.Grab;
                 var v1 = Camera.main.ScreenToWorldPoint(v0);
@@ -316,9 +319,13 @@ namespace PathwaysEngine.Adventure.Setting {
                     Input.mousePosition.x,
                     Input.mousePosition.y,
                     Vector3.Distance(v1,transform.position));
-                Position = Camera.main.ScreenToWorldPoint(v0);
+                LocalPosition = Camera.main.ScreenToWorldPoint(v0);
                 yield return new WaitForEndOfFrame();
             } wait_open = false;
         }
+
+
+        public override void Deserialize() =>
+            Pathways.Deserialize<Door,Door_yml>(this);
     }
 }

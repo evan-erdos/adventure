@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using adv=PathwaysEngine.Adventure;
 //using static PathwaysEngine.Literature.Terminal;
+using lit=PathwaysEngine.Literature;
 
 
 namespace PathwaysEngine.Inventory {
@@ -18,18 +19,12 @@ namespace PathwaysEngine.Inventory {
      * entities that the `Player` can't take with them.
      **/
     [RequireComponent(typeof(Rigidbody))]
-    public partial class Item : adv::Thing, IGainful {
-        float volume = 0.9f, dist = 4f;
+    public class Item : adv::Thing, IGainful {
+        float volume = 0.9f;
         [SerializeField] AudioClip sound;
         [SerializeField] public Sprite Icon;
 
 
-        /** `Held` : **`bool`**
-         *
-         * While the `Item` does not neccesarily know if the
-         * `Player` is holding it, but does need to know, and
-         * will disable its components on this basis.
-         **/
         public virtual bool Held {
             get { return held; }
             set { held = value;
@@ -40,22 +35,14 @@ namespace PathwaysEngine.Inventory {
             }
         } protected bool held = false;
 
-        //public uint Uses {get;set;}
-
-        /** `Cost` : **`int`**
-         *
-         * Clearly, this represents the price of an `Item`s.
-         **/
         public int Cost {get;set;}
 
+        public override float Radius => 4f;
 
-        /** `Mass` : **`real`**
-         *
-         * This simply extends `Rigidbody.mass`.
-         **/
         public float Mass {
             get { return rigidbody.mass; }
-            set { rigidbody.mass = value; } }
+            set { rigidbody.mass = value; }
+        }
 
 
         public virtual bool Use() => Drop();
@@ -68,7 +55,8 @@ namespace PathwaysEngine.Inventory {
          * to `Unity3D`, such as reparenting to the `Player`.
          **/
         public virtual bool Take() {
-            PathwaysEngine.Literature.Terminal.LogCommand($"You take the {Name}.");
+            lit::Terminal.LogCommand(
+                $"You take the {Name}.");
             transform.localPosition = Vector3.zero;
             transform.localRotation = Quaternion.identity;
             Held = true;
@@ -84,15 +72,11 @@ namespace PathwaysEngine.Inventory {
          **/
         public virtual bool Drop() {
             gameObject.SetActive(true);
-            if (sound)
-                AudioSource.PlayClipAtPoint(
-                    sound,transform.position,volume);
-            Literature.Terminal.LogCommand(
+            AudioSource.PlayClipAtPoint(
+                sound,transform.position,volume);
+            lit::Terminal.LogCommand(
                 $"You drop the {Name}.");
             Held = false;
-            //transform.localPosition = new Vector3(0f,1f,0.5f);
-            transform.parent = null;
-            transform.position = Player.Position;
             rigidbody.AddForce(
                 Quaternion.identity.eulerAngles*4,
                 ForceMode.VelocityChange);
@@ -103,6 +87,7 @@ namespace PathwaysEngine.Inventory {
 
         public virtual bool Sell() => false;
 
+
         public override void Awake() { base.Awake();
             gameObject.layer = LayerMask.NameToLayer("Item");
             var wasKinematic = rigidbody.isKinematic;
@@ -111,31 +96,21 @@ namespace PathwaysEngine.Inventory {
                 rigidbody.isKinematic = true;
         }
 
+
         public override IEnumerator OnMouseOver() {
-            while ((transform.position-Player.Position).sqrMagnitude<dist) {
-                //if (Vector3.Distance(transform.position,Player.Position)>dist) {
-                    //Pathways.CursorGraphic = Cursors.None;
-                    //yield break;
-                //}
+            while (Player.IsNear(this)) {
                 Pathways.CursorGraphic = Cursors.Hand;
                 if (Input.GetButton("Fire1")) {
                     Pathways.CursorGraphic = Cursors.Grab;
                     yield return new WaitForSeconds(0.1f);
                     OnMouseExit();
-                    Player.Take(this);
+                    Player.NearestTo(this).Take(this);
                 } else yield return new WaitForSeconds(0.05f);
             } OnMouseExit();
         }
 
-#if HACK
 
-        public override bool Equals(object obj) { return (base.Equals(obj)); }
-
-        public override int GetHashCode() { return (base.GetHashCode()); }
-        public static bool operator ==(Item a, Item b) {
-            return ((a==null && b==null) || !(a.GetType()!=b.GetType() || a.Name!=b.Name)); }
-
-        public static bool operator !=(Item a, Item b) { return (!(a==b)); }
-#endif
+        public override void Deserialize() =>
+            Pathways.Deserialize<Item,Item_yml>(this);
     }
 }

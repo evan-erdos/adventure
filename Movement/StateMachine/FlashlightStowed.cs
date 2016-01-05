@@ -16,8 +16,6 @@ namespace PathwaysEngine.Movement.StateMachine {
         				Animator a,
         				AnimatorStateInfo asi,
         				int i) {
-            ((inv::Flashlight) ((adv::Person) Pathways.player)
-            	.left.objHand.GetComponent<inv::Flashlight>()).on = false;
         }
     }
 }

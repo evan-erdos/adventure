@@ -2,9 +2,9 @@
 
 using UnityEngine; // Well, here we are! The main file!
 using UnityEngine.SceneManagement; // The big one!
-using System.Linq; // It's the Pathways Engine!
-using System.Collections; // just like I pictured it!
-using System.Collections.Generic;
+using System.Collections; // It's the Pathways Engine!
+using System.Collections.Generic; // just like I pictured it!
+using System.Linq;
 using System.IO;
 using System.Text.RegularExpressions;
 using DateTime=System.DateTime;
@@ -67,7 +67,8 @@ namespace PathwaysEngine {
      *     Active when the `Menu` is active. Disables almost
      *     all components & inputs, and shows the `Menu` UI.
      **/
-    public enum GameStates { None, Game, View, Term, Msgs, Menu }
+    public enum GameStates {
+        None, Game, View, Term, Msgs, Menu }
 
 
     /** `Cursors` : **`enum`**
@@ -97,7 +98,7 @@ namespace PathwaysEngine {
      **/
     delegate void StateHandler(
                     object sender,
-                    System.EventArgs e,
+                    EventArgs e,
                     GameStates gameState);
 
 
@@ -114,7 +115,6 @@ namespace PathwaysEngine {
     public static partial class Pathways {
         public static DateTime gameDate, finalDate;
         public static Camera mainCamera;
-        public static Player player;
         public static lit::Terminal terminal;
         public static lit::Window window;
         public static CursorMode cursorMode = CursorMode.ForceSoftware;
@@ -122,8 +122,9 @@ namespace PathwaysEngine {
         public static Texture2D[] cursors;
         public static Vector2 hotSpot = new Vector2(32,32);
 
-        internal static event StateHandler StateChange;
+        public static Settings Config {get;set;}
 
+        internal static event StateHandler StateChange;
 
         /** `GameState` : **`GameStates`**
          *
@@ -136,7 +137,7 @@ namespace PathwaysEngine {
             set { if (gameState==value) return;
                 lastState = gameState;
                 gameState = value;
-                StateChange(null,System.EventArgs.Empty,gameState);
+                StateChange(null,EventArgs.Empty,gameState);
             }
         } static GameStates gameState = GameStates.None;
 
@@ -211,7 +212,7 @@ namespace PathwaysEngine {
          **/
         public static void EventListener(
                         object sender,
-                        System.EventArgs e,
+                        EventArgs e,
                         GameStates state) {
             Cursor.visible = (state==GameStates.Msgs
                 || state==GameStates.Menu
@@ -225,108 +226,6 @@ namespace PathwaysEngine {
 
         public static void Reset() {
 
-        }
-
-
-        /** `Sudo()` : **`Parse`**
-         *
-         * For special user commands. Unused, so far.
-         *
-         * - `c` : **`Command`**
-         *     Default `Command` struct, sometimes unused, but
-         *     means that this function is a `Parse` delegate.
-         **/
-        public static bool Sudo(lit::Command c) { return true; }
-
-
-        /** `Redo()` : **`Parse`**
-         *
-         * Runs the prior command issued to the `Parser` again.
-         *
-         * - `c` : **`Command`**
-         *     Default `Command` struct, sometimes unused, but
-         *     means that this function is a `Parse` delegate.
-         **/
-        public static bool Redo(lit::Command c) { return true; }
-            //adv::Parser.eval(c.input); } infinite loop!
-
-
-        /** `Quit()` : **`Parse`**
-         *
-         * Prompts user through `Terminal` to quit the game.
-         *
-         * - `c` : **`command`**
-         *     Default `command` struct, sometimes unused, but
-         *     means that this function is a `Parse` delegate.
-         **/
-        public static bool Quit(lit::Command c) {
-            lit::Terminal.Alert(messages["quit"]);
-            return true;
-        }
-
-
-        /** `Load()` : **`Parse`**
-         *
-         * Loads a game from a `*.yml` file. Currently broken.
-         *
-         * - `c` : **`Command`**
-         *     Default `Command` struct, sometimes unused, but
-         *     means that this function is a `Parse` delegate.
-         **/
-        public static bool Load(lit::Command c) {
-            lit::Terminal.Clear();
-            lit::Terminal.LogImmediate("I/O Disabled, restarting level.");
-            SceneManager.LoadScene(0);
-            return true;
-        }
-
-
-        /** `Save()` : **`Parse`**
-         *
-         * Saves a game from a `*.yml` file. Currently broken.
-         *
-         * - `c` : **`Command`**
-         *     Default `Command` struct, sometimes unused, but
-         *     means that this function is a `Parse` delegate.
-         **/
-        public static bool Save(lit::Command c) {
-            if (File.Exists(c.input))
-                lit::Terminal.Alert("Overwriting file...");
-            using (StreamWriter file = new StreamWriter(c.input)) {
-                file.WriteLine("%YAML 1.1");
-                file.WriteLine("%TAG !invt! _PathwaysEngine.Inventory.");
-                file.WriteLine("%TAG !maps! _PathwaysEngine.Adventure.Setting.");
-                file.WriteLine(string.Format("---  # {0}\n",
-                    new P_ID("Saved_Game_00000",DateTime.Now)));
-                file.WriteLine("player:");
-                file.WriteLine(string.Format("  position: {0}",
-                    new Vector3(
-                        Player.Position.x,
-                        Player.Position.y,
-                        Player.Position.z)));
-                file.WriteLine(string.Format(
-                    "  area: {0}",Player.area));
-                file.WriteLine(string.Format(
-                    "  room: {0}",Player.Room));
-                file.WriteLine("  items:\n");
-                foreach (var elem in Player.Items)
-                    file.WriteLine(string.Format("  - {0}",elem.Name));
-                file.WriteLine("\n...\n");
-            } return true;
-        } /*(s) => (s.Length>100)?(s.Substring(0,100)+"&hellip;"):(s); */
-
-
-        /** `Help()` : **`Parse`**
-         *
-         * Shows the help menu via `Window`.
-         *
-         * - `c` : **`Command`**
-         *     Default `Command` struct, sometimes unused, but
-         *     means that this function is a `Parse` delegate.
-         **/
-        public static bool Help(lit::Command c) {
-            lit::Window.Display(messages["help"]);
-            return true;
         }
     }
 
@@ -347,8 +246,7 @@ namespace PathwaysEngine {
     public struct P_ID { // hehe, get it? PiD!
         public DateTime date;
         public string @name { // ! enforce length
-            get { return string.Format(
-                "pathways-{1:yyyy-mm-dd}-{0}",_name,date); }
+            get { return $"pathways-{date:yyyy-mm-dd}-{_name}"; }
             private set { _name = value; }
         } private string _name;
 

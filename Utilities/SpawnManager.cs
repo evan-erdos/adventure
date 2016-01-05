@@ -28,8 +28,8 @@ namespace PathwaysEngine.Utilities {
          * Puts the `source` at a randomly-chosen `SpawnPoint`.
          **/
         void Spawn() {
-            if (Pathways.player)
-                Pathways.player.ResetPlayerLocalPosition();
+            if (Player.Current)
+                Player.Current.ResetPlayerLocalPosition();
             var i = new Rand().Next(0,targets.Length);
             source.position = targets[i].position;
             source.rotation = targets[i].rotation;
@@ -44,8 +44,8 @@ namespace PathwaysEngine.Utilities {
         }
 
         void Start() {
-            if (isPlayer && Pathways.player)
-                source = Pathways.player.transform;
+            if (isPlayer && Player.Current)
+                source = Player.Current.transform;
             Spawn();
         }
     }

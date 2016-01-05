@@ -1,9 +1,12 @@
 %YAML 1.1
----
+--- !config
 
-name: Gedenkstätte
-version: 1.0.3
-link: bescott.org/gedenkstatte/
-year: 2015
+title: A Change in the Weather
+#name: Gedenkstätte
+date: 2016-01-04
+version: 1.0.4
+author: Ben Scott
+email: bescott@andrew.cmu.edu
+link: "bescott.org/a-change-in-the-weather/"
 
 ...

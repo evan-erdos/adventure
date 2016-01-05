@@ -3,8 +3,9 @@
 using UnityEngine;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
-using adv=PathwaysEngine.Adventure;
+using EventArgs=System.EventArgs;
 using Buffer=System.Text.StringBuilder;
+using adv=PathwaysEngine.Adventure;
 
 
 namespace PathwaysEngine.Literature {
@@ -63,15 +64,11 @@ namespace PathwaysEngine.Literature {
         }
 
         public static bool Failure(string input, string s) {
-            Terminal.LogCommand(string.Format(
-                @" \> **{0}**: {1}",input,s));
+            Terminal.LogCommand($@" \> **{input}**: {s}");
             interceptNext = false;
             Pathways.GameState = Pathways.LastState;
             return false;
         }
-
-        public static bool Failure(Command c, string s) =>
-            Failure(c.input,s);
 
         public static bool Failure(string s) =>
             Failure(s,confused.Next());
@@ -89,14 +86,14 @@ namespace PathwaysEngine.Literature {
         public static bool Intercept(Command c, string s) {
             var input = Process(s);
             if (input.Count<1)
-                return Failure(c,"You don't see that here.");
+                return Failure(s,"You don't see that here.");
             int n;
             if (!System.Int32.TryParse(input[0], out n))
-                return Failure(c.input,
+                return Failure(s,
                     "I couldn't figure out what you meant.");
             if (0<n && n<options.Count)
                 return Execute(c,options[n].Name);
-            return Failure(c.input);
+            return Failure(s);
         }
 
 
@@ -127,15 +124,17 @@ namespace PathwaysEngine.Literature {
          *     thrown when command is incoherent. It is caught
          *     locally, and the default behaviour is taken.
          **/
-        public static bool Execute(Command c,string input) {
-            c.input = input;
+        public static bool Execute(
+                        Command c,
+                        string input) {
             try {
-                if (!string.IsNullOrEmpty(c.input.Trim()))
+                if (!string.IsNullOrEmpty(input.Trim()))
                     Terminal.LogImmediate(
-                        new Message(string.Format(
-                            @" \> **{0}**: ",c.input),
+                        new Message(
+                            $@" \> **{input}**: ",
                             Styles.Command));
-                var result = c.parse(c);
+                var result = c.parse(
+                    null,EventArgs.Empty,c,input);
                 interceptNext = false;
                 Pathways.GameState = Pathways.LastState;
                 return result;
@@ -143,21 +142,18 @@ namespace PathwaysEngine.Literature {
                 var sb = new Buffer();
                 sb.AppendLine(e.Message);
                 foreach (var elem in e.options)
-                    sb.AppendLine(string.Format(
-                        "- ({1:d}) : {0} ",
-                        elem.Name,
-                        e.options.IndexOf(elem)));
+                    sb.AppendLine(
+                        $"- ({e.options.IndexOf(elem):d}) : {elem.Name} ");
                 Terminal.LogImmediate(Terminal.Format(
                     sb.ToString(),Styles.Command));
                 if (interceptNext)
-                    return Failure(c,
-                        "I couldn't determine what you meant.");
+                    return Failure(input,"I couldn't determine what you meant.");
                     //throw e.InnerException;
                 Pathways.GameState = GameStates.Term;
                 Terminal.focus = true;
                 return Intercept(c,e.options);
             } catch (TextException e) {
-                return Failure(c,e.Message); }
+                return Failure(input,e.Message); }
         }
 
 

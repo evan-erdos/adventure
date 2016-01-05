@@ -16,15 +16,15 @@ namespace PathwaysEngine.Puzzle {
      **/
     class LeverCombinator : Combinator<int> {
 
-        [SerializeField] bool[] flags;
         //[SerializeField] LightResponder responder;
 
 
         public override bool IsSolved {
-            get { if (flags==null || flags.Length<=0) return false;
+            get { if (solveState==null || solveState.Length<=0)
+                    return false;
                 var i = 0;
                 foreach (var elem in Pieces.Keys) {
-                    if (flags[i]!=elem.IsSolved)
+                    if (solveState[i]!=elem.Solution)
                         return false;
                     i++;
                 } return true;
@@ -49,8 +49,8 @@ namespace PathwaysEngine.Puzzle {
 
 
         public override void Awake() { base.Awake();
-            if (flags.Length!=pieces.Count)
-                throw new System.Exception("Miscounted Levers!");
+            if (solveState.Length!=pieces.Count)
+                throw new System.Exception("Miscounted!");
             foreach (var piece in pieces.Keys)
                 piece.SolveEvent += this.OnSolve;
         }

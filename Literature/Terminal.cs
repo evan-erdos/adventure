@@ -177,8 +177,7 @@ namespace PathwaysEngine.Literature {
             if (list==null || list.Count<1) return;
             var sb = new Buffer();
             foreach(var elem in list)
-                sb.AppendLine(string.Format(
-                    " - {0} ", elem.Entry));
+                sb.AppendLine($" - {elem.Entry} ");
             LogImmediate(Terminal.Format(sb.ToString(),f));
         }
 
@@ -238,9 +237,7 @@ namespace PathwaysEngine.Literature {
                 || elem==Styles.State
                 || elem==Styles.Change
                 || elem==Styles.Alert) {
-                    s = string.Format(
-                        "<color=#{0:X}>{1}</color>",
-                        (int) elem,s.Trim());
+                    s = $"<color=#{(int) elem:X}>{s.Trim()}</color>";
                     break; }
 
             foreach (var elem in f) {
@@ -249,19 +246,15 @@ namespace PathwaysEngine.Literature {
                     case Styles.h2:
                     case Styles.h3:
                     case Styles.h4:
-                        s = string.Format(
-                            "\n\n<size={0}>{1}</size>\n",
-                            elem,s.Trim());
+                        s = $"\n\n<size={elem}>{s.Trim()}</size>\n";
                         break;
                     case Styles.Inline:
                         s = s.Trim(); break;
                     case Styles.Paragraph:
-                        s = string.Format(
-                            "\n\n{0}",s.Trim());
+                        s = $"\n\n{s.Trim()}";
                         break;
                     case Styles.Newline:
-                        s = string.Format(
-                            "\n{0}",s.Trim());
+                        s = $"\n{s.Trim()}";
                         break;
                 }
             } return s;
@@ -295,7 +288,7 @@ namespace PathwaysEngine.Literature {
         // Unity Events
 
         void Awake() {
-            Pathways.StateChange += new StateHandler(EventListener);
+            Pathways.StateChange += EventListener;
             term = new util::key((n)=> {
                 if (!wait && n && !focus
                 && Pathways.GameState!=GameStates.Term)
@@ -318,6 +311,10 @@ namespace PathwaysEngine.Literature {
             isLocked = false;
             Clear();
             StopAllCoroutines();
+            LogImmediate($@"
+## {Pathways.Config.Title} v{Pathways.Config.Version} ##
+© {Pathways.Config.Date}, {Pathways.Config.Author} <{Pathways.Config.Email}>
+{Pathways.Config.Link}");
             LogImmediate(Pathways.messages["init"]);
             StartCoroutine(Logging());
             StartCoroutine(LockLog(initTime));

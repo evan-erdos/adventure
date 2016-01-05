@@ -17,7 +17,7 @@ namespace PathwaysEngine.Inventory {
      * possibly different and usually quite varied subtypes for
      * easy filtering of specific types of `Item`s.
      **/
-    abstract class ItemCollection : Item, IItemSet {
+    public abstract class ItemCollection : Item, IItemSet {
 
         public bool IsSynchronized => false;
 

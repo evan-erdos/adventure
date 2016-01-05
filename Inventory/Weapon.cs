@@ -9,8 +9,9 @@ using System.Collections.Generic;
 namespace PathwaysEngine.Inventory {
 
 
-    public partial class Weapon : Item, IWieldable {
-        public enum WeaponStates : byte { Stowed, Held, Aimed, Crossed };
+    public class Weapon : Item, IWieldable {
+        public enum WeaponStates : byte {
+            Stowed, Held, Aimed, Crossed };
         public WeaponStates WeaponState = WeaponStates.Held;
         public float rate;
         public AudioClip[] attackSounds;
@@ -29,5 +30,8 @@ namespace PathwaysEngine.Inventory {
         public bool Stow() => false;
 
         public bool Wear() => false;
+
+        public override void Deserialize() =>
+            Pathways.Deserialize<Weapon,Weapon_yml>(this);
     }
 }

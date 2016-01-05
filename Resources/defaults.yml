@@ -1,5 +1,5 @@
 %YAML 1.1
---- # Defaults
+--- # defaults
 
 
 Adventure:
@@ -8,8 +8,12 @@ Adventure:
     description:
       name: thing
       styles: [ Paragraph ]
-      template: "### {name} ###\n{init}{desc}\n\n{help}"
       nouns: /thing|object/
+      template: |
+        ### {name} ###
+        {init}{desc}
+        {help}
+
       help: |
         (You can click on this, or type **examine thing** or **search object**.)
 

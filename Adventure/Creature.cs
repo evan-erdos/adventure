@@ -16,7 +16,7 @@ namespace PathwaysEngine.Adventure {
      * be killed. Some pretty important classes derive from it,
      * such as `Person`, `Player`, and all sorts of things!
      **/
-    partial class Creature : Thing, ILiving {
+    public class Creature : Thing, ILiving {
         public virtual stat::Set stats {get;set;}
 
 
@@ -27,10 +27,7 @@ namespace PathwaysEngine.Adventure {
          * assigned to. This allows for a quite clean assigning
          * syntax, i.e., `creature.IsDead = true;`.
          **/
-        public virtual bool IsDead {
-            get { return isDead; }
-            set { isDead = value; }
-        } protected bool isDead = false;
+        public virtual bool IsDead {get;set;}
 
 
         /** `ApplyDamage` : **`function`**
@@ -48,10 +45,15 @@ namespace PathwaysEngine.Adventure {
          *
          * Kills the `Creature` and logs a message.
          **/
-        public virtual void Kill() {
+        public virtual bool Kill() {
             IsDead = true;
-            PathwaysEngine.Literature.Terminal.LogCommand(
+            Literature.Terminal.LogCommand(
                 $"{Name} has died.");
+            return IsDead;
         }
+
+
+        public override void Deserialize() =>
+            Pathways.Deserialize<Creature,Creature_yml>(this);
     }
 }

@@ -19,9 +19,9 @@ class SimpleInventory : MonoBehaviour {
 	public void Update() {
 		var i = 0;
 		foreach (var slot in slots)
-			if (!Player.Items.Contains(slot.item))
+			if (!Player.Current.Items.Contains(slot.item))
 				slot.item = null;
-		foreach (var item in Player.Items) {
+		foreach (var item in Player.Current.Items) {
 			if (i>=slots.Count) break;
 			slots[i].item = item;
 			i++;

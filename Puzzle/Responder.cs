@@ -14,8 +14,8 @@ namespace PathwaysEngine.Puzzle {
      * Represents an instance of a puzzle piece, which must be
      * `Solve`d to finish a puzzle.
      **/
-    class Responder<T> : Piece<T>, IResponder<T>
-               where T : Component {
+    public class Responder<T> : Piece<T>, IResponder<T>
+                      where T : Component {
 
         [SerializeField] protected T[] list;
 

@@ -1,5 +1,5 @@
 %YAML 1.1
----  #creatures
+--- # creatures
 
 Headless_0: !!creature
   description:

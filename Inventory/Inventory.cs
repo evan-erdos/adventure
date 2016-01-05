@@ -39,23 +39,28 @@ namespace PathwaysEngine.Inventory {
 
         /** `Held` : **`bool`**
          *
-         * is the current `Item` held in inventory?
+         * Is `this` held in inventory?
          **/
         bool Held {get;set;}
 
 
+        /** `Mass` : **`real`**
+         *
+         * The physical mass of `this`.
+         **/
+        float Mass {get;set;}
+
+
         /** `Take()` : **`bool`**
          *
-         * Called to inform the `IItem` that it's been
-         * taken. Sets `Rigidbody.isKinematic`, etc.
+         * Called to inform `this` that it's been taken.
          **/
         bool Take();
 
 
         /** `Drop()` : **`bool`**
          *
-         * Called to inform the `IItem` that it's been
-         * dropped. Sets `Rigidbody.isKinematic`, etc.
+         * Called to inform `this` that it's been dropped.
          **/
         bool Drop();
     }

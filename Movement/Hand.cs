@@ -12,7 +12,7 @@ namespace PathwaysEngine.Movement {
     public class Hand : MonoBehaviour {
         public bool ikActive;
         public Transform objHand;
-        public Animator animator;
+        //public Animator animator;
         public AvatarIKGoal handGoal;
         public Hands hand = Hands.Left;
         public inv::IWieldable heldItem;
@@ -36,9 +36,10 @@ namespace PathwaysEngine.Movement {
         }
 
         void Start() {
-            animator = Pathways.player.GetComponent<Animator>();
-            handGoal = (hand==Hands.Left)?
-                (AvatarIKGoal.LeftHand):(AvatarIKGoal.RightHand);
+            //animator = Pathways.player.GetComponent<Animator>();
+            handGoal = (hand==Hands.Left)
+                ? (AvatarIKGoal.LeftHand)
+                :(AvatarIKGoal.RightHand);
         }
 
         public void Update() {

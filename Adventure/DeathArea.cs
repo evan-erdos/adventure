@@ -21,14 +21,14 @@ namespace PathwaysEngine.Adventure {
         public string message = "Yikes.";
 
         public void OnTriggerEnter(Collider o) {
-            if (Player.IsCollider(o)) StartCoroutine(Kill()); }
+            if (Player.Is(o)) StartCoroutine(Kill(Player.InstanceFor(o))); }
 
 
         /** `Kill` : **`coroutine`**
          *
          * Kills the `Player` that entered the `Collider`.
         **/
-        public IEnumerator Kill() {
+        public IEnumerator Kill(Player player) {
             if (!wait) {
                 wait = true;
                 yield return new WaitForSeconds(2f);
@@ -41,7 +41,7 @@ namespace PathwaysEngine.Adventure {
                             CameraClearFlags.SolidColor;
                         Pathways.mainCamera.backgroundColor =
                             new Color(255,255,255); });
-                Player.Kill(message);
+                player.Kill(message);
                 yield return new WaitForSeconds(12f);
                 wait = false;
             }

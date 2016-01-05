@@ -58,9 +58,6 @@ namespace PathwaysEngine.Inventory {
             get { return worn; }
             set { if (worn==value) return;
                 worn = value;
-                transform.parent = (worn)
-                    ? Pathways.player.left.transform
-                    : Pathways.player.transform;
                 foreach (Transform child in transform)
                     child.gameObject.SetActive(worn);
                 transform.localPosition = Vector3.zero;
@@ -135,6 +132,9 @@ namespace PathwaysEngine.Inventory {
             on = true;
             lights = new List<Light>(GetComponentsInChildren<Light>());
         }
+
+        public override void Deserialize() =>
+            Pathways.Deserialize<Lamp,Lamp_yml>(this);
 
     }
 }

@@ -22,15 +22,14 @@ namespace PathwaysEngine.Adventure.Setting {
 		public override lit::Description description {get;set;}
 
 		public string desc_type {
-			get { return string.Format(
-					"{0} {1}",_desc_type,(src!=null && tgt!=null)
-						? string.Format(
-							"It goes between {0} and {1}.",src,tgt)
-						: "It doesn't seem to go anywhere."); }
+			get { return $"{_desc_type}"+
+				((src!=null && tgt!=null)
+					? $"It goes between {src} and {tgt}."
+					: "It doesn't seem to go anywhere."); }
 			set { _desc_type = value; }
 		} string _desc_type;
 
 		void OnTriggerEnter(Collider o) {
-			if (Player.IsCollider(o)) PathwaysEngine.Literature.Terminal.Log(this); }
+			if (Player.Is(o)) lit::Terminal.Log(this); }
 	}
 }

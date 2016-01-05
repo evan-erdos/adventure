@@ -23,12 +23,12 @@ namespace PathwaysEngine.Inventory {
         public bool Worn {get;set;}
 
 
-        public override bool Take() { base.Take();
-            return Player.Wear(this); }
+        //public override bool Take() { base.Take();
+        //    return Player.Wear(this); }
 
 
-        public override bool Drop() { base.Drop();
-            return Player.Stow(this); }
+        //public override bool Drop() { base.Drop();
+        //    return Player.Stow(this); }
 
 
         /** `Backpack` : **`destructor`**
@@ -41,15 +41,18 @@ namespace PathwaysEngine.Inventory {
         public bool Wear() {
             Worn = true;
             gameObject.SetActive(true);
-            PathwaysEngine.Literature.Terminal.LogCommand("You put on the backpack.");
+            Literature.Terminal.LogCommand("You put on the backpack.");
             return false;
         }
 
         public bool Stow() {
             Worn = false;
-            PathwaysEngine.Literature.Terminal.LogCommand("You take off the backpack.");
+            Literature.Terminal.LogCommand("You take off the backpack.");
             gameObject.SetActive(false);
             return false;
         }
+
+        //public override void Deserialize() =>
+        //    Pathways.Deserialize<Key,Key_yml>(this);
     }
 }

@@ -29,8 +29,7 @@ namespace PathwaysEngine.Puzzle {
         }
 
         IEnumerator OnMouseEnter() {
-            var d = Vector3.Distance(transform.position,Player.Position);
-            if (d>distance) {
+            if (Player.IsNear(transform.position,distance)) {
                 Pathways.CursorGraphic = Cursors.None; yield break; }
             Pathways.CursorGraphic = cursor;
             if (Input.GetButton("Fire1") && !first) {

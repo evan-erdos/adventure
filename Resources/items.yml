@@ -1,6 +1,5 @@
 %YAML 1.1
----
-
+--- # items
 
 knob: !!key
   mass: 1

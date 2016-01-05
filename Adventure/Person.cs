@@ -13,47 +13,47 @@ using lit=PathwaysEngine.Literature;
 //using static PathwaysEngine.Literature.Terminal;
 using mv=PathwaysEngine.Movement;
 using stat=PathwaysEngine.Statistics;
-using util=PathwaysEngine.Utilities;
+using u=PathwaysEngine.Utilities;
 
 
 namespace PathwaysEngine.Adventure {
 
 
-    /** `Person` : **`class`**
+    /** `Person` : **`Creature`**
      *
      * This is a pretty important class, as it defines some of
-     * the most important behaviours that apply to `Person`s.
+     * the most significant behaviours that apply to people.
      **/
-    partial class Person : Creature {
-        public float radius = 25f, dist = 4f;
+    public class Person : Creature {
         Body body;
         public mv::Hand right, left;
         public mv::Feet feet;
         internal mv::IMotor motor;
-        public lit::proper_name fullName;
-        public map::Area area;
-        public map::Room room;
 
         public LayerMask layerMask;
 
-        public override bool IsDead {
-            get { return motor.IsDead; }
-            set { IsDead = value; } }
+        public override bool IsDead => motor.IsDead;
 
-        public Vector3 Position {
-            get { return motor.Position; } }
+        public override float Radius => 4f;
+
+        public override Vector3 Position => motor.Position;
 
         public override stat::Set stats {get;set;}
 
-        public List<inv::Item> nearbyItems {
-            get {
-                _nearbyItems = GetNearbyItems();
-                return _nearbyItems;
+        public map::Room Room {
+            get { return room; }
+            set { if (room==value || value==null) return;
+                if (room==null || value.Depth>room.Depth)
+                    room = value;
             }
-        } List<inv::Item> _nearbyItems;
+        } map::Room room;
 
-        public List<Thing> NearbyThings {
-            get { return GetNearby<Thing>(dist); } }
+        public map::Area Area {
+            get { return area; }
+            set { if (area==value || value==null) return;
+                area = value;
+            }
+        } map::Area area;
 
         public inv::IItemSet Items {
             get { if (items==null)
@@ -66,142 +66,222 @@ namespace PathwaysEngine.Adventure {
             }
         } inv::IItemSet items;
 
-        public override void Awake() { base.Awake();
-            var temp = new util::Anchor[(int) Corpus.All];
-            layerMask = ~(LayerMask.NameToLayer("Thing")
-                & LayerMask.NameToLayer("Room")
-                & LayerMask.NameToLayer("Item"));
-            motor = GetComponent<mv::IMotor>();
-            if (motor==null)
-                motor = GetComponentInChildren<mv::IMotor>();
-            if (motor==null)
-                throw new System.Exception("!motor");
-            feet = GetComponentInChildren<mv::Feet>();
-            var hands = GetComponentsInChildren<mv::Hand>();
-            foreach (var hand in hands)
-                if (hand.hand==mv::Hands.Left) left = hand;
-                else right = hand;
-            foreach (var elem in GetComponentsInChildren<util::Anchor>())
-                temp[(int) elem.bodyPart] = elem;
-            body = new Person.Body(temp);
-            //_rigidbody = GetComponentInChildren<Rigidbody>();
+
+        public override void ApplyDamage(float damage) { }
+
+
+        public virtual bool Take(
+                        Person sender,
+                        EventArgs e,
+                        lit::Command c,
+                        string input) {
+            if ((new Regex(@"\b(all)\b")).IsMatch(input))
+                return sender.Take();
+            var list = new List<inv::Item>();
+            foreach (var item in sender.GetNearby<inv::Item>())
+                if (item.Fits(input)) list.Add(item);
+            if (list.Count<1)
+                throw new lit::TextException(
+                    "You don't see anything you can take.");
+            if (list.Count>1)
+                throw new lit::AmbiguityException<inv::Item>(
+                    "Which did you want to take: ",list);
+            return sender.Take(list[0]);
         }
 
-        public override void ApplyDamage(float damage) {
-            if (stats!=null) return; // set dead to true
+        public bool Take(List<inv::Item> list) {
+            foreach (var item in list)
+                if (!Take(item))
+                    throw new lit::TextException(
+                        $"You can't take the {item}.");
+            return true;
         }
 
-
-        public virtual bool Take(lit::Command c) {
-            if (nearbyItems.Count==0) return false;
-            var temp = new List<inv::Item>();
-            if ((new Regex(@"\b(all)\b")).IsMatch(c.input))
-                return Player.Take();
-            else foreach (var item in nearbyItems)
-                if (item.IsMatch(c.input))
-                    temp.Add(item);
-            if (temp.Count==1)
-                return Player.Take(temp[0]);
-            return false;
-            //else if (temp.Count!=0) Resolve(c,temp);
-        }
-
-        public virtual bool Take(List<inv::Item> list) {
-            foreach (var item in list) Take(item);
-            return false;
-        }
-
-        public virtual bool Take(inv::Item item) {
+        public bool Take(inv::Item item) {
             if (Items.Contains(item)) return false;
             item.transform.parent = transform;
             Items.Add(item);
             return item.Take();
         }
 
-        public virtual bool Take() => Take(nearbyItems);
+        public bool Take() => Take(GetNearby<inv::Item>());
 
-        public virtual bool Drop(lit::Command c) {
-            var temp = new List<inv::Item>();
-            if (Items.Count==0) return false;
-            if ((new Regex(@"\ball\b")).IsMatch(c.input))
-                return Drop();
-            else foreach (var item in Items)
-                if (item.description.IsMatch(c.input))
-                    temp.Add(item);
-            if (temp.Count==1)
-                return Drop(temp[0]);
-            return false;
+
+        public virtual bool Drop(
+                        Person sender,
+                        EventArgs e,
+                        lit::Command c,
+                        string s) {
+            if ((new Regex(@"\ball\b")).IsMatch(s))
+                return sender.Drop();
+            var list = new List<inv::Item>();
+            foreach (var item in sender.Items)
+                if (item.Fits(s)) list.Add(item);
+            if (list.Count<1) throw new lit::TextException(
+                "You don't have anything you can drop.");
+            if (list.Count>1)
+                throw new lit::AmbiguityException<inv::Item>(
+                    "Which did you want to drop:", list);
+            return sender.Drop(list[0]);
         }
 
-        public virtual bool Drop(inv::Item item) {
+        public bool Drop(inv::Item item) {
             if (!Items.Contains(item)) return false;
-            item.transform.parent = null;
             Items.Remove(item);
+            item.transform.parent = null;
+            item.transform.position = transform.position;
             return item.Drop();
         }
 
-        public virtual bool Drop() {
+        public bool Drop() {
             var temp = new List<inv::Item>();
             foreach (var item in Items) temp.Add(item);
             foreach (var item in temp) Drop(item);
             return false;
         }
 
-
-        public virtual bool Wear() {
-            foreach (var item in Items)
-                if (item is inv::IWearable)
-                    Wear((inv::IWearable) item);
-            return false;
+        public virtual bool Read(
+                        Person sender,
+                        EventArgs e,
+                        lit::Command c,
+                        string input) {
+            var list = new List<inv::Item>();
+            foreach (var elem in sender.GetNearby<inv::Item>())
+                if (elem is lit::IReadable && elem.Fits(input))
+                    list.Add(elem);
+            if (list.Count<1)
+                throw new lit::TextException(
+                    "There's nothing to read nearby.");
+            if (list.Count>1)
+                throw new lit::AmbiguityException<inv::Item>(
+                    "Which did you want to read: ", list);
+            return sender.Read((lit::IReadable) list[0]);
         }
 
-        public virtual bool Stow() {
-            foreach (var item in Items)
-                if (item is inv::IWearable)
-                    Stow((inv::IWearable) item);
-            return false;
+        public bool Read(lit::IReadable o) => o.Read();
+
+
+        public virtual bool Push(
+                        Person sender,
+                        EventArgs e,
+                        lit::Command c,
+                        string input) {
+            var list = new List<Thing>();
+            foreach (var elem in sender.GetNearby<Thing>())
+                if (elem is IPushable && elem.Fits(input))
+                    list.Add(elem);
+            if (list.Count<1)
+                throw new lit::TextException(
+                    "You can't push anything nearby.");
+            if (list.Count>1)
+                throw new lit::AmbiguityException<Thing>(
+                    "Which did you want to push: ", list);
+            return sender.Push((IPushable) list[0]);
         }
 
-        public virtual bool Wear(inv::IWearable item) {
-            if ((Corpus) Body.Type_Index(item.GetType())==Corpus.HandL)
-                left.SwitchItem((inv::IWieldable) item);
-            else body[item.GetType()] = item;
-            return item.Wear();
+        public bool Push(IPushable o) => o.Push();
+
+
+        public virtual bool Pull(
+                        Person sender,
+                        EventArgs e,
+                        lit::Command c,
+                        string input) {
+            var list = new List<Thing>();
+            foreach (var elem in sender.GetNearby<Thing>())
+                if (elem is IPushable && elem.Fits(input))
+                    list.Add(elem);
+            if (list.Count<1)
+                throw new lit::TextException(
+                    "You can't pull anything nearby.");
+            if (list.Count>1)
+                throw new lit::AmbiguityException<Thing>(
+                    "Which did you want to pull: ", list);
+            return sender.Pull((IPushable) list[0]);
         }
 
-        public virtual bool Stow(inv::IWearable o) => o.Stow();
+        public bool Pull(IPushable o) => o.Pull();
 
-        public virtual bool Push(IPushable o) => o.Push();
 
-        public virtual bool Pull(IPullable o) => o.Pull();
+        public virtual bool Open(
+                        Person sender,
+                        EventArgs e,
+                        lit::Command c,
+                        string input) {
+            var list = new List<Thing>();
+            foreach (var elem in sender.GetNearby<Thing>())
+                if (elem is IOpenable && elem.Fits(input))
+                    list.Add(elem);
+            if (list.Count<1)
+                throw new lit::TextException(
+                    "You can't open anything nearby.");
+            if (list.Count>1)
+                throw new lit::AmbiguityException<Thing>(
+                    "Which did you want to open: ", list);
+            return sender.Open((IOpenable) list[0]);
+        }
 
-        public virtual bool Open(IOpenable o) => o.Open();
+        public bool Open(IOpenable o) => o.Open();
 
-        public virtual bool Shut(IOpenable o) => o.Shut();
 
-        public bool Goto(map::Area tgt) => false;
+        public virtual bool Shut(
+                        Person sender,
+                        EventArgs e,
+                        lit::Command c,
+                        string input) {
+            var list = new List<Thing>();
+            foreach (var elem in sender.GetNearby<Thing>())
+                if (elem is IOpenable && elem.Fits(input))
+                    list.Add(elem);
+            if (list.Count<1)
+                throw new lit::TextException(
+                    "You can't shut anything nearby.");
+            if (list.Count>1)
+                throw new lit::AmbiguityException<Thing>(
+                    "Which did you want to shut: ", list);
+            return sender.Shut((IOpenable) list[0]);
+        }
+
+        public bool Shut(IOpenable o) => o.Shut();
+
 
         IEnumerator Goto(int n) {
-            util::CameraFade.StartAlphaFade(
+            u::CameraFade.StartAlphaFade(
                 Color.black,false,1f);
             yield return new WaitForSeconds(1.1f);
             SceneManager.LoadScene(n);
         }
 
+        public bool Goto(map::Area a) => false;
 
-        public bool Use(lit::Command c) {
-            foreach (var elem in GetNearby<Thing>(dist))
-                if (elem is inv::IUsable && c.Fits(elem))
-                    return ((inv::IUsable) elem).Use();
-            return false;
+
+        public virtual bool Kill(
+                        Person sender,
+                        EventArgs e,
+                        lit::Command c,
+                        string input) => sender.Kill();
+
+
+        public virtual bool Use(
+                        Person sender,
+                        EventArgs e,
+                        lit::Command c,
+                        string input) {
+            var list = new List<Thing>();
+            foreach (var item in sender.GetNearby<Thing>())
+                if (item is inv::IUsable && item.Fits(input))
+                    list.Add(item);
+            if (list.Count<1)
+                throw new lit::TextException(
+                    "You don't see anything you can use.");
+            if (list.Count>1)
+                throw new lit::AmbiguityException<Thing>(
+                    "Which did you want to use: ",list);
+            return sender.Use((inv::IUsable) list[0]);
         }
 
-        public bool Unlock(lit::Command c) {
-            foreach (var door in GetNearby<map::Door>(dist))
-                if (door.IsMatch(c.input))
-                    return Unlock(door);
-            return false;
-        }
+        public virtual bool Use(inv::IUsable o) => o.Use();
+
 
         public bool Lock(ILockable o) {
             if (o?.IsLocked==true) return true;
@@ -209,6 +289,17 @@ namespace PathwaysEngine.Adventure {
                 if (o.LockKey==key) return true;
             return false;
         }
+
+        public bool Unlock(
+                        Person sender,
+                        EventArgs e,
+                        lit::Command c,
+                        string input) {
+            foreach (var door in sender.GetNearby<map::Door>())
+                if (door.Fits(input)) return Unlock(door);
+            return false;
+        }
+
 
         public bool Unlock(ILockable o) {
             if (o?.IsLocked==false) return true;
@@ -219,50 +310,112 @@ namespace PathwaysEngine.Adventure {
 
 
         public override bool View(
-                        object source,
-                        Thing target,
+                        Person sender,
                         EventArgs e,
-                        lit::Command c) {
-            if (target==this) return View();
-            foreach (var thing in GetNearby<Thing>(dist))
-                if (c.Fits(thing))
-                    return thing.View(this,thing,e,c);
-            if (room) return room.View(this,room,e,c);
-            throw new lit::TextException(
+                        lit::Command c,
+                        string input) {
+            var list = new List<Thing>();
+            foreach (var thing in sender.GetNearby<Thing>())
+                if (c.Fits(thing)) list.Add(thing);
+            if (list.Count>1)
+                throw new lit::AmbiguityException<Thing>(
+                    "Which did you want to view: ", list);
+            if (list.Count<1 && room)
+                return room.View(this,e,c,input);
+            else if (!room) throw new lit::TextException(
                 "You can't see anything like that here.");
+            return list[0].View(this,e,c,input);
         }
 
         public override bool View() {
-            PathwaysEngine.Literature.Terminal.Log(description);
+            lit::Terminal.Log(description);
             return true;
         }
 
 
-        public virtual List<T> GetNearby<T>(float r)
+        public virtual bool Wear(
+                        Person sender,
+                        EventArgs e,
+                        lit::Command c,
+                        string input) {
+            if ((new Regex(@"\b(all)\b")).IsMatch(input))
+                return sender.Wear();
+            var list = new List<inv::Item>();
+            foreach (var item in sender.Items)
+                if (item is inv::IWearable && item.Fits(input))
+                    list.Add(item);
+            if (list.Count<1)
+                throw new lit::TextException(
+                    "You have nothing to wear. ");
+            if (list.Count>1)
+                throw new lit::AmbiguityException<inv::Item>(
+                    "Which did you want to wear: ", list);
+            return sender.Wear((inv::IWearable) list[0]);
+        }
+
+        public virtual bool Wear(inv::IWearable item) {
+            if ((Corpus) Body.Type_Index(item.GetType())==Corpus.HandL)
+                left.SwitchItem((inv::IWieldable) item);
+            else body[item.GetType()] = item;
+            return item.Wear();
+        }
+
+        public virtual bool Wear() {
+            foreach (var item in Items)
+                if (item is inv::IWearable)
+                    Wear((inv::IWearable) item);
+            return false;
+        }
+
+
+        public virtual bool Stow(
+                        Person sender,
+                        EventArgs e,
+                        lit::Command c,
+                        string input) {
+            if ((new Regex(@"\b(all)\b")).IsMatch(input))
+                return sender.Stow();
+            var list = new List<inv::Item>();
+            foreach (var item in sender.Items)
+                if (item is inv::IWearable && item.Fits(input))
+                    list.Add(item);
+            if (list.Count<1)
+                throw new lit::TextException(
+                    "You have nothing to stow. ");
+            if (list.Count>1)
+                throw new lit::AmbiguityException<inv::Item>(
+                    "Which did you want to stow: ", list);
+            return sender.Stow((inv::IWearable) list[0]);
+        }
+
+        public virtual bool Stow() {
+            foreach (var item in Items)
+                if (item is inv::IWearable)
+                    Stow((inv::IWearable) item);
+            return false;
+        }
+
+        public virtual bool Stow(inv::IWearable o) => o.Stow();
+
+
+        public virtual List<T> GetNearby<T>()
+            where T : Thing => GetNearby<T>(Radius);
+
+        public virtual List<T> GetNearby<T>(float radius)
                         where T : Thing {
             var temp = Physics.OverlapSphere(
-                Position,r,layerMask,
+                Position, radius, layerMask,
                 QueryTriggerInteraction.Collide);
             var list = new List<T>();
             foreach (var elem in temp) {
                 var thing = (elem.attachedRigidbody==null)
                     ? elem.gameObject.GetComponent<T>()
-                    : elem.attachedRigidbody.GetComponent<T>();
+                    : elem.attachedRigidbody?.GetComponent<T>();
                 if (thing && !list.Contains(thing))
                     list.Add(thing);
             } return list;
         }
 
-        public virtual List<inv::Item> GetNearbyItems() {
-            var temp = Physics.OverlapSphere(
-                motor.Position,
-                4f,LayerMask.NameToLayer("Items"));
-            var list = new List<inv::Item>();
-            foreach (var elem in temp) {
-                var item = elem.attachedRigidbody?.GetComponent<inv::Item>();
-                if (item && !list.Contains(item) && !item.Held) list.Add(item);
-            } return list;
-        }
 
         public void AddCondition(stat::Condition cond) { }
 
@@ -270,11 +423,42 @@ namespace PathwaysEngine.Adventure {
                     stat::Condition cond,
                     stat::Severity svrt) { }
 
+
+
+        public override void Awake() { base.Awake();
+            layerMask =
+                ~(LayerMask.NameToLayer("Thing")
+                & LayerMask.NameToLayer("Room")
+                & LayerMask.NameToLayer("Item"));
+            var temp = new u::Anchor[(int) Corpus.All];
+            motor = GetComponent<mv::IMotor>()
+                ?? GetComponentInChildren<mv::IMotor>();
+            if (motor==null)
+                throw new System.Exception("!motor");
+            feet = GetComponentInChildren<mv::Feet>();
+            var hands = GetComponentsInChildren<mv::Hand>();
+            foreach (var hand in hands)
+                if (hand.hand==mv::Hands.Left) left = hand;
+                else right = hand;
+            foreach (var elem in GetComponentsInChildren<u::Anchor>())
+                temp[(int) elem.bodyPart] = elem;
+            body = new Person.Body(temp);
+            //_rigidbody = GetComponentInChildren<Rigidbody>();
+            motor.KillEvent += Kill;
+        }
+
+        public virtual void OnDestroy() {
+            motor.KillEvent -= Kill;
+        }
+
+
+
+
         class Body {
             inv::IWearable[] list;
-            util::Anchor[] anchors;
+            u::Anchor[] anchors;
 
-            public Body(util::Anchor[] anchors) {
+            public Body(u::Anchor[] anchors) {
                 this.list = new inv::IWearable[(int) Corpus.All];
                 this.anchors = anchors;
             }
@@ -282,8 +466,8 @@ namespace PathwaysEngine.Adventure {
             public inv::IWearable this[Corpus n] {
                 get { return list[(int) n]; }
                 set { if (value==null) return;
-                    var temp = (inv::IWearable) list[(int) n];
-                    if (temp!=value) Player.Stow(temp);
+                    //var temp = (inv::IWearable) list[(int) n];
+                    //if (temp!=value) Person.Stow(temp);
                     var item = (inv::Item) value;
                     item.transform.parent = anchors[(int) n].transform;
                     item.transform.localPosition = Vector3.zero;
@@ -295,8 +479,8 @@ namespace PathwaysEngine.Adventure {
             public inv::IWearable this[Type T] {
                 get { return list[Type_Index(T)]; }
                 set { if (value==null) return;
-                    var temp = list[Type_Index(T)];
-                    if (temp!=value) Player.Stow(temp);
+                    //var temp = list[Type_Index(T)];
+                    //if (temp!=value) Person.Stow(temp);
                     var item = (inv::Item) value;
                     item.transform.parent =
                         anchors[(int) Type_Index(T)].transform;
@@ -338,6 +522,10 @@ namespace PathwaysEngine.Adventure {
                 return (int) Corpus.All;
             }
         }
+
+
+        public override void Deserialize() =>
+            Pathways.Deserialize<Person,Person_yml>(this);
     }
 }
 

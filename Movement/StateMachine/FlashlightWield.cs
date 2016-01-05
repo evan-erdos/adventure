@@ -11,12 +11,10 @@ namespace PathwaysEngine.Movement.StateMachine {
 
     public class FlashlightWield : StateMachineBehaviour {
 
-        inv::Flashlight flashlight;
-
-        override public void OnStateEnter(Animator a,AnimatorStateInfo asi,int i) {
-            if (!flashlight)
-                flashlight = ((adv::Person) Pathways.player).left.objHand.GetComponent<inv::Flashlight>();
-            flashlight.Worn = true;
+        override public void OnStateEnter(
+        				Animator a,
+        				AnimatorStateInfo asi,
+        				int i) {
         }
     }
 }

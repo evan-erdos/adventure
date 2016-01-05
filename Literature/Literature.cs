@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using YamlDotNet.Serialization;
 using Type=System.Type;
+using EventArgs=System.EventArgs;
 using Buffer=System.Text.StringBuilder;
 using inv=PathwaysEngine.Inventory;
 using adv=PathwaysEngine.Adventure;
@@ -92,16 +93,34 @@ namespace PathwaysEngine.Literature {
     	Description=1,
     	State=4}
 
-    /** `Parse()` : **`delegate`**
+
+    public enum Inputs : byte {
+        Trigger, Click, Elapsed, Sight };
+
+
+    /** `Parse` : **`delegate`**
      *
      * The standard `event`/`delegate` for commands from
      * the `Parser` class.
      *
+     * - `sender` : **`Person`**
+     *     the instance which is issuing the command.
+     *
+     * - `e` : **`EventArgs`**
+     *     ubiquitous event arguments
+     *
      * - `c` : **`Command`**
      *     Default `Command` struct, sometimes unused, but
      *     means that this function is a `Parse` delegate.
+     *
+     * - `input` : **`string`**
+     *     raw input from the user
      **/
-    public delegate bool Parse(Command c);
+    public delegate bool Parse(
+        adv::Person sender,
+        EventArgs e,
+        Command c,
+        string input);
 
 
 #if FAIL
@@ -109,38 +128,6 @@ namespace PathwaysEngine.Literature {
     where T : ILoggable {
         Description<Thing> description {get;set;} }
 #endif
-
-
-    /** `CommandEvent` : **`delegate`**
-     *
-     * This delegate is used for creating multicast callbacks
-     * for certain `Parser` commands. The user input is sent
-     * directly to subscribers in the `c` struct. Returns
-     * true if the operation was successful, such that callers
-     * can do additional operations if they need to.
-     *
-     * - `source` : **`object`**
-     *     a reference to whatever sent the `event`
-     *
-     * - `target` : **`Thing`**
-     *     the object to be acted upon / that will act
-     *
-     * - `e` : **`EventArgs`**
-     *     default event arguments
-     *
-     * - `c` : **`Command`**
-     *     the user-issued command to execute
-     *
-     * - `throw` : **`TextException`**
-     *     An exception to indicate if an action cannot be or
-     *     should not be taken. These are always caught by the
-     *     `Parser`, and only indicate errors in game logic.
-     **/
-    delegate bool CommandEvent(
-        			object source,
-        			adv::Thing target,
-        			System.EventArgs e,
-        			Command c);
 
 
     /** `ILoggable` : **`interface`**
@@ -175,12 +162,10 @@ namespace PathwaysEngine.Literature {
 
         /** `Log()` : **`string`**
          *
-         * base string to be `string.Format`-ed by the
-         * `Terminal` to render it as Markdown.
-         * Could make the name a header, the text italic,
-         * or any combination of other effects. There
-         * should be a specific order of arguments, i.e.,
-         * name first, then desc, etc.
+         * Base string to be formatted by the `Terminal` in the
+         * process of rendering it into Markdown. It could make
+         * the name a header, the text italic, or any other
+         * combination of effects.
          **/
         string Log();
     }

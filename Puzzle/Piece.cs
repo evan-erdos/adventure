@@ -14,7 +14,7 @@ namespace PathwaysEngine.Puzzle {
      * Represents an instance of a puzzle piece, which must be
      * `Solve`d to finish a puzzle.
      **/
-    abstract partial class Piece<T> : adv::Thing, IPiece<T> {
+    public abstract class Piece<T> : adv::Thing, IPiece<T> {
 
 
         /** `SolveEvent` : **`event`**
@@ -35,7 +35,7 @@ namespace PathwaysEngine.Puzzle {
 
         public T Solution {
             get { return solution; }
-            private set { solution = value; }
+            set { solution = value; }
         } T solution;
 
 
@@ -60,6 +60,9 @@ namespace PathwaysEngine.Puzzle {
 
         public virtual void OnDestroy() {
             solveEvent -= OnSolve; }
+
+        public override void Deserialize() =>
+            Pathways.Deserialize<Piece<T>,Piece_yml<T>>(this);
     }
 }
 

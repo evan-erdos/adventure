@@ -31,10 +31,10 @@ namespace PathwaysEngine.Puzzle {
      * - `solved` : **`bool`**
      *     was the `sender` solved?
      **/
-    delegate T OnSolve<T>(
-                    IPiece<T> sender,
-                    EventArgs e,
-                    bool solved);
+    public delegate T OnSolve<T>(
+        IPiece<T> sender,
+        EventArgs e,
+        bool solved);
 
 
     /** `IPiece<T>` : **`interface`**
@@ -47,7 +47,7 @@ namespace PathwaysEngine.Puzzle {
      * a given piece might not have its own solution, but could
      * represent a solved puzzle when considered in aggregate.
      **/
-    interface IPiece<T> {
+    public interface IPiece<T> {
 
 
         /** `SolveEvent` : **`event`**
@@ -70,7 +70,7 @@ namespace PathwaysEngine.Puzzle {
          *
          * - `ensure` : `IsSolved==(Condition==Solution)`
          **/
-        bool IsSolved { get; }
+        bool IsSolved {get;}
 
 
         /** `Condition` : **`T`**
@@ -85,7 +85,7 @@ namespace PathwaysEngine.Puzzle {
          * When the configuration of an instance is equal to
          * its `Solution`, it's considered solved.
          **/
-        T Solution { get; }
+        T Solution {get;set;}
 
 
         /** `Solve()` : **`T`**
@@ -110,7 +110,7 @@ namespace PathwaysEngine.Puzzle {
      * to activate some components, check if there's some other
      * precondition to then solve some higher state, etc.
      **/
-    interface IResponder<T> : IPiece<T> {
+    public interface IResponder<T> : IPiece<T> {
 
 
         /** `WhenSolved` : **`bool`**
@@ -139,7 +139,7 @@ namespace PathwaysEngine.Puzzle {
      * deriving type of `IPiece` should be the type constraint)
      * then this iterates through those `IPiece`s.
      **/
-    interface IIterator<T> : IPiece<T>, ICollection<IPiece<T>> {
+    public interface IIterator<T> : IPiece<T>, ICollection<IPiece<T>> {
 
 
         /** `Current` : **`IPiece<T>`**
@@ -176,7 +176,7 @@ namespace PathwaysEngine.Puzzle {
      * the behavior between some external forces and a group
      * of `IPiece`s that all need to be solved in unison.
      **/
-    interface ICombinator<T> : IPiece<T>, ICollection<IPiece<T>> {
+    public interface ICombinator<T> : IPiece<T>, ICollection<IPiece<T>> {
 
 
         /** `Pieces` : **`IPiece<T> -> T`**

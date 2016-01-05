@@ -20,11 +20,9 @@ namespace PathwaysEngine.Adventure.Setting {
      * `Thing`s it might contain, and defines, pretty broadly,
      * where the `Player` is, and what they're doing.
      **/
-    public partial class Room : Thing {
+    public class Room : Thing {
         bool wait;
-        public byte hack = 0x0;
-
-        public List<Room> nearbyRooms;
+        byte hack = 0x0;
 
 
         /** `Depth` : **`int`**
@@ -39,13 +37,13 @@ namespace PathwaysEngine.Adventure.Setting {
         } [SerializeField] int depth = 0;
 
 
-
         /** `Things` : **`Thing[]`**
          *
          * Collection of `Thing`s that start in the room.
          **/
         public List<Thing> Things {
             get { return new List<Thing>(things); }
+            set { things = value; }
         } List<Thing> things;
 
 
@@ -60,50 +58,33 @@ namespace PathwaysEngine.Adventure.Setting {
          * every frame, because it will take at least `4s` for
          * the next `Description` to be logged.
          **/
-        IEnumerator LoggingRoom() {
+        IEnumerator LoggingRoom(Player player) {
             if (!wait) {
                 wait = true;
                 collider.enabled = false;
                 yield return new WaitForSeconds(1f);
                 Seen = true; //if (hack>0x7F) {
-                PathwaysEngine.Literature.Terminal.LogCommand(
-                    "Now Entering: "+Name);
-                Player.Room = this;
-                // now rooms are one time use
-                //yield return new WaitForSeconds(10f);
-                //collider.enabled = true;
-                //wait = false;
+                lit::Terminal.LogCommand(
+                    $"Now Entering: {Name}");
+                player.Room = this;
             }
         }
 
         public string descThings() {
             if (things==null || things.Count<1) return "";
             if (things.Count==1)
-                return string.Format(
-                    "You see a {0} here.",things[0]);
+                return $"You see a {things[0]} here.";
             var buffer = new Buffer("You see a ");
             foreach (var thing in things)
                 buffer.Append(thing.name+", ");
             return buffer.ToString();
         }
 
-
-        /** `IsValidRoom()` : **`bool`**
-         *
-         * Checks if the `Player`'s current room can switch to
-         * this room, and if it already is the current room.
-         **/
-        static bool IsValidRoom(Room room) {
-            if (!room || room==Player.Room) return false;
-            if (!Player.Room) return true;
-            return (room.Depth>Player.Room.Depth);
-        }
-
         void LogRoom() {
-            if (Seen) PathwaysEngine.Literature.Terminal.LogCommand($"Now Entering: {Name}");
-            else PathwaysEngine.Literature.Terminal.Log(description);
+            if (Seen) lit::Terminal.LogCommand(
+                $"Now Entering: {Name}");
+            else lit::Terminal.Log(description);
             Seen = true;
-            Player.Room = this;
         }
 
 
@@ -112,19 +93,22 @@ namespace PathwaysEngine.Adventure.Setting {
 
 
         public void OnTriggerEnter(Collider o) {
-            if (Player.IsCollider(o) && IsValidRoom(this)) {
-                //if (hack>0x7E && !wait)
-                StartCoroutine(LoggingRoom());
+            if (Player.Is(o)) { //if (hack>0x7E && !wait)
+                StartCoroutine(LoggingRoom(
+                    Player.InstanceFor(o)));
                 if (hack<=0x80)
                     hack = unchecked ((byte)((hack<<0x1)|0x1));
             }
         }
 
         public void OnTriggerExit(Collider o) {
-            if (Player.IsCollider(o)) {
-                hack = 0x0; wait = false;
-                if (Player.Room==this) Player.Room = null;
-            }
+            var player = Player.InstanceFor(o);
+            if (player==null) return;
+            hack = 0x0; wait = false;
+            if (player.Room==this) player.Room = null;
         }
+
+        public override void Deserialize() =>
+            Pathways.Deserialize<Room,Room_yml>(this);
     }
 }

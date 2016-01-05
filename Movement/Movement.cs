@@ -2,7 +2,9 @@
 
 using UnityEngine;
 using System.Collections.Generic;
+using EventArgs=System.EventArgs;
 using adv=PathwaysEngine.Adventure;
+using lit=PathwaysEngine.Literature;
 
 
 /** `PathwaysEngine.Movement` : **`namespace`**
@@ -12,6 +14,11 @@ using adv=PathwaysEngine.Adventure;
  * make sounds, animate, and interact, physically.
  **/
 namespace PathwaysEngine.Movement {
+
+
+    public delegate void PersonEvent(
+        adv::Person sender,
+        EventArgs e);
 
 
     /** `Hands` : **`enum`**
@@ -46,41 +53,48 @@ namespace PathwaysEngine.Movement {
      **/
     interface IMotor {
 
+
         /** `IsGrounded` : **`bool`**
          *
          * Is the motor currently grounded?
          **/
-        bool IsGrounded { get; }
+        bool IsGrounded {get;}
+
 
         /** `WasGrounded` : **`bool`**
          *
          * Was the motor grounded last frame?
          **/
-        bool WasGrounded { get; }
+        bool WasGrounded {get;}
+
 
         /** `IsSliding` : **`bool`**
          *
          * Is the motor sliding?
          **/
-        bool IsSliding { get; }
+        bool IsSliding {get;}
+
 
         /** `IsSprinting` : **`bool`**
          *
          * Is the motor sprinting?
          **/
-        bool IsSprinting { get; }
+        bool IsSprinting {get;}
+
 
         /** `IsJumping` : **`bool`**
          *
          * Is the motor jumping?
          **/
-        bool IsJumping { get; }
+        bool IsJumping {get;}
+
 
         /** `WasJumping` : **`bool`**
          *
          * Was the motor jumping last frame?
          **/
-        bool WasJumping { get; }
+        bool WasJumping {get;}
+
 
         /** `IsDead` : **`bool`**
          *
@@ -88,11 +102,13 @@ namespace PathwaysEngine.Movement {
          **/
         bool IsDead {get;set;}
 
+
         /** `Position` : **`<real,real,real>`**
          *
          * The global position of this motor.
          **/
         Vector3 Position {get;set;}
+
 
         /** `LocalPosition` : **`<real,real,real>`**
          *
@@ -100,17 +116,22 @@ namespace PathwaysEngine.Movement {
          **/
         Vector3 LocalPosition {get;set;}
 
+
         /** `Velocity` : **`<real,real,real>`**
          *
          * Current velocity of this motor.
          **/
         Vector3 Velocity {get;set;}
 
+
+        event lit::Parse KillEvent;
+
         /** `Kill()` : **`bool`**
          *
          * Kills the motor.
          **/
         bool Kill();
+
 
         /** `OnCollisionEvent()` : **`function`**
          *

@@ -41,7 +41,7 @@ namespace PathwaysEngine.Utilities {
         public void FindAndTargetPlayer() {
             if (!target) {
 //              var targetObj = GameObject.FindGameObjectWithTag("Player");
-                var targetObj = Pathways.player.gameObject;
+                var targetObj = Player.Current.gameObject;
                 if (targetObj) SetTarget(targetObj.transform);
             }
         }

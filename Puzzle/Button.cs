@@ -14,7 +14,7 @@ namespace PathwaysEngine.Puzzle {
      * Represents any button which can be pressed, toggled, or
      * or otherwise manipulated with a single click.
      **/
-    partial class Button : Piece<bool> {
+    public class Button : Piece<bool> {
 
 
         public override bool OnSolve(
@@ -29,6 +29,9 @@ namespace PathwaysEngine.Puzzle {
 
         public override void Awake() {
             SolveEvent += this.OnSolve; }
+
+        public override void Deserialize() =>
+            Pathways.Deserialize<Button,Button_yml>(this);
     }
 }
 

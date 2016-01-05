@@ -226,8 +226,7 @@ namespace PathwaysEngine.Inventory {
         public T GetItem<T>() where T : Item {
             var temp = GetItems<T>();
             foreach (var item in temp)
-                if (item is T)
-                    return (T) item;
+                if (item is T) return (T) item;
             return default (T);
         }
 
@@ -240,7 +239,7 @@ namespace PathwaysEngine.Inventory {
         public string Log() {
             var s = description.Template;
             foreach (var item in this)
-                s += string.Format("\n- {0}",item);
+                s += $"\n- {item}";
             return s;
         }
 

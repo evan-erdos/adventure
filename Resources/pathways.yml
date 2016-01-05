@@ -3,39 +3,8 @@
 
 init: !!message
   desc: |
-    ## A Change in the Weather ##
-    © 2015, Ben Scott <bescott@andrew.cmu.edu>
-    bescott.org/observatory/
-    
-    If this is your first time playing, press **TAB** and then type **help** for more information. If you just want to explore, press **TAB** and type **hide terminal**.
-
-init_Observatory: !!message
-  desc: |
-    ## Observatory ##
-    © 2015, Ben Scott <bescott@andrew.cmu.edu>
-    bescott.org/observatory/
-    
-    If this is your first time playing, press **TAB** and then type **help** for more information. If you just want to explore, press **TAB** and type **hide terminal**.
-
-
-crystal_init: !!message
-  desc: |
-    ## Among Fields of Crystal ##
-    © 2015, Ben Scott <bescott@andrew.cmu.edu>
-    bescott.org/among-fields-of-crystal/
-    
     **Welcome!**
-    If this is your first time playing, press **TAB** and then type **help** for more information. Then, try walking near the crystals to activate them. 
-
-
-gedenkstatte_init: !!message
-  desc: |
-    ## Gedenkstätte v1.0.3 ##
-    © 2015, Ben Scott <bescott@andrew.cmu.edu>
-    bescott.org/gedenkstatte/
-    
-    **Welcome!**
-    If this is your first time playing, press **TAB** and then type **help** for more information.
+    If this is your first time playing, press **TAB** and then type **help** for more information. If you just want to explore, press **TAB** and type **hide terminal**.
 
 
 dead: !!message

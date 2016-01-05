@@ -16,7 +16,7 @@ namespace PathwaysEngine.Puzzle {
      * Represents an instance of a lever, which can either be
      * `Solve`d or not, depending upon if it's pulled.
      **/
-    partial class Lever : adv::Thing, IPiece<int> {
+    public class Lever : adv::Thing, IPiece<int> {
         bool wait = false;
         public float time = 2f, dist = 2f, delay = 4f;
         float tgt, speed, handle_tgt, handle_speed;
@@ -61,7 +61,7 @@ namespace PathwaysEngine.Puzzle {
 
         public int Solution {
             get { return solution; }
-            private set { solution = value; }
+            set { solution = value; }
         } int solution;
 
 
@@ -97,8 +97,12 @@ namespace PathwaysEngine.Puzzle {
         }
 
 
-        void Pull(lit::Command c) {
-            if (description.Nouns.IsMatch(c.input))
+        void Pull(
+                        Player player,
+                        EventArgs e,
+                        lit::Command c,
+                        string input) {
+            if (description.Fits(input))
                 StartCoroutine(Pulling(!IsSolved)); }
 
         IEnumerator Solving(bool t) {
@@ -149,14 +153,16 @@ namespace PathwaysEngine.Puzzle {
         }
 
         public override IEnumerator OnMouseOver() {
-            if (Vector3.Distance(transform.position,Player.Position)>dist) {
-                Pathways.CursorGraphic = Cursors.None; yield break; }
-            if (Pathways.CursorGraphic==Cursors.Grab) yield break;
+            if (Player.IsNear(this)) {
+                Pathways.CursorGraphic = Cursors.None;
+                yield break; }
+            if (Pathways.CursorGraphic==Cursors.Grab)
+                yield break;
             Pathways.CursorGraphic = Cursors.Hand;
             if (Input.GetButton("Fire1"))
                 yield return StartCoroutine(Pulling(!IsSolved));
             while (Input.GetButton("Fire1")
-            && Vector3.Distance(transform.position,Player.Position)<dist) {
+            && Player.IsNear(this)) {
                 var v0 = Input.mousePosition;
                 Pathways.CursorGraphic = Cursors.Grab;
                 handle_tgt = handleRange.y;
@@ -178,6 +184,9 @@ namespace PathwaysEngine.Puzzle {
             base.OnMouseExit();
             handle_tgt = handleRange.x;
         }
+
+        public override void Deserialize() =>
+            Pathways.Deserialize<Lever,Lever_yml>(this);
     }
 }
 

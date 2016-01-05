@@ -3,7 +3,10 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-using util=PathwaysEngine.Utilities;
+using EventArgs=System.EventArgs;
+using adv=PathwaysEngine.Adventure;
+using lit=PathwaysEngine.Literature;
+using u=PathwaysEngine.Utilities;
 
 
 namespace PathwaysEngine.Movement {
@@ -11,28 +14,44 @@ namespace PathwaysEngine.Movement {
 
     [RequireComponent(typeof(CharacterController))]
     public class CharacterMotor : MonoBehaviour, IMotor {
-        public enum transfer { None, initial, PermaTransfer, PermaLocked }
-        bool newPlatform, wait = false, recentlyLanded = false;
-        uint massPlayer; //deltaPitch, deltaStep,
-        float maxSpeed, dampingGround, dampingAirborne,
-            lastStartTime, lastEndTime, tgtCrouch, tgtCrouchLand;
-        public float modSprint, modCrouch, speedAnterior, speedLateral,
-            speedPosterior, speedVertical, deltaHeight, weightPerp,
-            weightSteep, extraHeight, slidingSpeed, lateralControl,
-            speedControl, deltaCrouch, landingDuration, terminalVelocity;
-        public transfer dirTransfer;
+        public enum transfer {
+            None, initial, PermaTransfer, PermaLocked }
+        bool newPlatform, wait, recentlyLanded;
+        uint massPlayer = 80; //deltaPitch, deltaStep,
+        float maxSpeed = 57.2f, dampingGround = 30f,
+            dampingAirborne = 20f, lastStartTime = 0,
+            lastEndTime = -100f, tgtCrouch = 0,
+            tgtCrouchLand = 1.5f;
+        public float modSprint = 1.6f, modCrouch = 0.8f,
+            speedAnterior = 16f, speedLateral = 12f,
+            speedPosterior = 10f, speedVertical = 1f,
+            deltaHeight = 2f, weightPerp = 0,
+            weightSteep = 0.5f, extraHeight = 4.1f,
+            slidingSpeed = 15f, lateralControl = 1f,
+            speedControl = 0.4f, deltaCrouch = 1f,
+            landingDuration = 0.15f, terminalVelocity = 30f;
+        public transfer dirTransfer = transfer.PermaTransfer;
         public AnimationCurve responseSlope;
         CollisionFlags hitFlags;
-        Vector3 inputMove, jumpDir, platformVelocity,
-            groundNormal, lastGroundNormal, hitPoint,
-            lastHitPoint, activeLocalPoint, activeGlobalPoint;
-        Transform hitPlatform, activePlatform, mCamr, playerGraphics;
+        Vector3 inputMove = Vector3.zero,
+            jumpDir = Vector3.zero,
+            platformVelocity = Vector3.zero,
+            groundNormal = Vector3.zero,
+            lastGroundNormal = Vector3.zero,
+            hitPoint = Vector3.zero,
+            lastHitPoint = new Vector3(Mathf.Infinity,0,0),
+            activeLocalPoint = Vector3.zero,
+            activeGlobalPoint = Vector3.zero;
+        Transform hitPlatform, activePlatform,
+            mCamr, playerGraphics;
         Quaternion activeLocalRotation, activeGlobalRotation;
         Matrix4x4 lastMatrix;
         CharacterController cr;
         ControllerColliderHit lastColl;
-        public util::key jump, dash, duck;
-        public util::axis axisX, axisY;
+        public u::key jump, dash, duck;
+        public u::axis axisX, axisY;
+
+        public event lit::Parse KillEvent;
 
         public bool IsDead {
             get { return isDead; }
@@ -97,29 +116,11 @@ namespace PathwaysEngine.Movement {
         public Vector3 lastVelocity {get;set;}
 
         internal CharacterMotor() {
-            maxSpeed        = 57.2f;        massPlayer          = 80;
-            dampingGround   = 30.0f;        dampingAirborne     = 20.0f;
-            modSprint       = 1.6f;         modCrouch           = 0.8f;
-            speedAnterior   = 16.0f;        speedPosterior      = 10.0f;
-            speedLateral    = 12.0f;        speedVertical       = 1.0f;
-            extraHeight     = 4.1f;         slidingSpeed        = 15.0f;
-            weightPerp      = 0.0f;         weightSteep         = 0.5f;
-            lastStartTime   = 0.0f;         lastEndTime         = -100f;
-            lateralControl  = 1.0f;         speedControl        = 0.4f;
-            deltaCrouch     = 1.0f;         deltaHeight         = 2.0f;
-            tgtCrouchLand   = 1.5f;         landingDuration     = 0.15f;
-            terminalVelocity= 30f;
-            lastVelocity    = Vector3.zero; hitPoint            = Vector3.zero;
-            groundNormal    = Vector3.zero; lastGroundNormal    = Vector3.zero;
-            jumpDir         = Vector3.up;   inputMove           = Vector3.zero;
-            dirTransfer     = transfer.PermaTransfer;
-
-            lastHitPoint    = new Vector3(Mathf.Infinity,0,0);
-            jump            = new util::key((n)=>jump.input=n);
-            dash            = new util::key((n)=>dash.input=n);
-            duck            = new util::key((n)=>duck.input=n);
-            axisX           = new util::axis((n)=>axisX.input=n);
-            axisY           = new util::axis((n)=>axisY.input=n);
+            jump  = new u::key((n)=>jump.input=n);
+            dash  = new u::key((n)=>dash.input=n);
+            duck  = new u::key((n)=>duck.input=n);
+            axisX = new u::axis((n)=>axisX.input=n);
+            axisY = new u::axis((n)=>axisY.input=n);
         }
 
         /* internal ~CharacterMotor() {
@@ -127,27 +128,32 @@ namespace PathwaysEngine.Movement {
 
         public void Awake() {
             cr = GetComponent<CharacterController>();
-            mCamr = GameObject.FindGameObjectsWithTag("MainCamera")[0].transform;
+            mCamr = GameObject.FindGameObjectsWithTag(
+                "MainCamera")[0].transform;
             responseSlope = new AnimationCurve(
                 new Keyframe(-90,1),
                 new Keyframe(90,0));
+            KillEvent += Kill;
+        }
+
+        void OnDestroy() {
+            KillEvent -= Kill;
         }
 
         public IEnumerator Killing() {
-            if (!wait) {
-                wait = true;
-                util::CameraFade.StartAlphaFade(
-                    new Color(255,255,255),false,8f,2f,
-                    ()=> {
-                        if (!Pathways.mainCamera) return;
-                        Pathways.mainCamera.cullingMask = 0;
-                        Pathways.mainCamera.clearFlags =
-                            CameraClearFlags.SolidColor;
-                        Pathways.mainCamera.backgroundColor =
-                            new Color(255,255,255); });
-                yield return new WaitForSeconds(12f);
-                wait = false;
-            }
+            if (wait) yield break;
+            wait = true;
+            u::CameraFade.StartAlphaFade(
+                new Color(255,255,255),false,8f,2f,
+                ()=> {
+                    if (!Pathways.mainCamera) return;
+                    Pathways.mainCamera.cullingMask = 0;
+                    Pathways.mainCamera.clearFlags =
+                        CameraClearFlags.SolidColor;
+                    Pathways.mainCamera.backgroundColor =
+                        new Color(255,255,255); });
+            yield return new WaitForSeconds(12f);
+            wait = false;
         }
 
         public bool Kill() {
@@ -163,6 +169,14 @@ namespace PathwaysEngine.Movement {
             this.enabled = false;
             return true;
         }
+
+
+        public bool Kill(
+                        adv::Person sender,
+                        EventArgs e,
+                        lit::Command c,
+                        string input) => Kill();
+
 
         public void OnJump() { }
 
@@ -180,7 +194,6 @@ namespace PathwaysEngine.Movement {
             StartCoroutine(Landed()); }
 
         public void Update() {
-            if (velocity.y<-terminalVelocity) Player.Kill();
             if (Mathf.Abs(Time.timeScale)<0.01f) return;
             if (modSprint==0 || modCrouch==0 || speedAnterior==0
             || speedLateral==0 || speedPosterior==0) return;
@@ -257,7 +270,8 @@ namespace PathwaysEngine.Movement {
                 IsJumping = false;
                 SubtractNewPlatformVelocity();
                 if (velocity.y<-terminalVelocity)
-                    Player.Kill();
+                    Kill(null,EventArgs.Empty,
+                        new lit::Command(),"");
             } if (MoveWithPlatform()) {
                 activeGlobalPoint = transform.position
                     +Vector3.up*(cr.center.y-cr.height*0.5f+cr.radius);
@@ -346,11 +360,11 @@ namespace PathwaysEngine.Movement {
         }
 
         void OnCollisionEnter(Collision collision) {
-            Player.OnCollisionEnter(collision);
+            //Player.OnCollisionEnter(collision);
         }
 
         void OnControllerColliderHit(ControllerColliderHit hit) {
-            Player.OnCollisionEnter(hit.collider);
+            //Player.OnCollisionEnter(hit.collider);
             var other = hit.collider.attachedRigidbody;
             lastColl = hit;
             if (other && hit.moveDirection.y>-0.05)

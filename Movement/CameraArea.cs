@@ -94,8 +94,9 @@ namespace PathwaysEngine.Movement {
 		}
 
 		IEnumerator OnMouseEnter() {
-            if (Vector3.Distance(transform.position,Player.Position)>dist) {
-                Pathways.CursorGraphic = Cursors.None; yield break; }
+            if (Player.IsNear(transform.position,dist)) {
+                Pathways.CursorGraphic = Cursors.None;
+                yield break; }
             Pathways.CursorGraphic = Cursors.Look;
             if (Input.GetButton("Fire1"))
                 yield return StartCoroutine(Entering(true));

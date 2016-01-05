@@ -184,7 +184,7 @@ namespace PathwaysEngine.Movement {
 #endif
                     if (!hit.collider.isTrigger) { // this== being on ground
                         if (velocity.y<-terminalVelocity || falling) {
-                            Player.IsDead = true;
+                            //Player.IsDead = true;
                             dead = true;
                         } else if (velocity.y<=0)
                             rb.position = Vector3.MoveTowards(
@@ -246,6 +246,7 @@ namespace PathwaysEngine.Movement {
             animator.SetLookAtWeight(1, 0.2f, 2.5f);
             if (lookTarget!=null) currentLookPos = lookTarget.position;
             animator.SetLookAtPosition(currentLookPos); // used for the head look feature
+#if ANIMATOR_EXTENDED
             animator.FootPlacement(onGround,offsetHeel,offsetFoot);
             var left = ((adv::Person) Pathways.player).left;
             if (!left) return;
@@ -263,6 +264,7 @@ namespace PathwaysEngine.Movement {
                 animator.SetIKRotationWeight(left.handGoal,0);
                 //animator.SetLookAtWeight(0);
             }
+#endif
         }
 
         void SetUpAnimator() {

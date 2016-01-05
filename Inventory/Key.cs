@@ -14,7 +14,7 @@ namespace PathwaysEngine.Inventory {
      * Represents any object which can be used to `Unlock()` a
      * `Door`, a `Container`, or any other `ILockable` object.
      **/
-    partial class Key : Item {
+    public class Key : Item {
 
 
         /** `Kind` : **`Keys`**
@@ -34,5 +34,8 @@ namespace PathwaysEngine.Inventory {
          **/
         public int Value {get;set;}
 
+
+        public override void Deserialize() =>
+            Pathways.Deserialize<Key,Key_yml>(this);
     }
 }

@@ -8,8 +8,8 @@ using System.Collections.Generic;
 namespace PathwaysEngine.Inventory {
 
 
-    class ItemGroup<T> : Item, IItemGroup <T> {
-        int radius = 4, layerItem = 16;
+    class ItemGroup<T> : Item, IItemGroup<T>
+               where T : Item {
 
         public uint Count {
             get { return count; }
@@ -27,28 +27,16 @@ namespace PathwaysEngine.Inventory {
             // instantiate new Stack _c n
         }
 
-        internal Item[] GetNearbyItems() {
-            Collider[] temp = Physics.OverlapSphere(
-                transform.position, radius, 1<<layerItem);
-            ArrayList items = new ArrayList();
-            foreach (Collider entity in temp)
-                if (entity.gameObject.GetComponent<Item>())
-                    items.Add(entity.gameObject.GetComponent<Item>());
-            return items.ToArray(typeof(Item)) as Item[];
-        }
-
-        public void Add(Item elem) {
-            if (elem.GetType()==typeof(T)) {
-                Count++;
-                Destroy(elem.gameObject);
-            } else throw new System.Exception("fool");
+        public void Add(T elem) {
+            Count++;
+            Destroy(elem.gameObject);
         }
 
         public void Add(ItemGroup<T> elem) {
             if (elem.GetType()==typeof (T)) {
-                Count+=elem.Count;
+                Count += elem.Count;
                 Destroy(elem.gameObject);
-            } else throw new System.Exception("silly");
+            }
         }
     }
 }

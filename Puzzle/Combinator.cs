@@ -3,6 +3,7 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using adv=PathwaysEngine.Adventure;
 
 
 namespace PathwaysEngine.Puzzle {
@@ -13,26 +14,22 @@ namespace PathwaysEngine.Puzzle {
      * A Set of `IPiece`s which must be solved in a particular
      * configuration for the system to be considered solved.
      **/
-    class Combinator<T> : Piece<T>, ICombinator<T> {
+    public class Combinator<T> : Piece<T>, ICombinator<T> {
 
-        [SerializeField] IPiece<T>[] externalPieces;
-        [SerializeField] T[] solveState;
-
-
-        public bool IsReadOnly {
-            get { return false; } }
+        [SerializeField] protected IPiece<T>[] externalPieces;
+        [SerializeField] protected T[] solveState;
 
 
-        public int Count {
-            get { return Pieces.Count; } }
+        public bool IsReadOnly => false;
+
+        public int Count => Pieces.Count;
 
 
         /** `Pieces` : **`IPiece<T> -> T`**
          *
          * Denotes the "solved" state of the current system.
          **/
-        public IDictionary<IPiece<T>,T> Pieces {
-            get { return pieces; } }
+        public IDictionary<IPiece<T>,T> Pieces => pieces;
         protected Dictionary<IPiece<T>,T> pieces
             = new Dictionary<IPiece<T>,T>();
 
@@ -57,27 +54,25 @@ namespace PathwaysEngine.Puzzle {
 //            set { pieces[o] = value; } }
 
 
-        public void Add(IPiece<T> o) {
-            pieces[o] = default (T); }
+        public void Add(IPiece<T> o) =>
+            pieces[o] = default (T);
 
-        public void Clear() {
-            Pieces.Clear(); }
+        public void Clear() => Pieces.Clear();
 
-        public bool Contains(IPiece<T> o) {
-            return Pieces.ContainsKey(o); }
+        public bool Contains(IPiece<T> o) =>
+            Pieces.ContainsKey(o);
 
-        public void CopyTo(IPiece<T>[] a, int n) {
-            Pieces.Keys.CopyTo(a,n); }
+        public void CopyTo(IPiece<T>[] a, int n) =>
+            Pieces.Keys.CopyTo(a,n);
 
-        public bool Remove(IPiece<T> o) {
-            return Pieces.Remove(o); }
+        public bool Remove(IPiece<T> o) =>
+            Pieces.Remove(o);
 
-        public IEnumerator<IPiece<T>> GetEnumerator() {
-            return (IEnumerator<IPiece<T>>) Pieces.GetEnumerator(); }
+        public IEnumerator<IPiece<T>> GetEnumerator() =>
+            (IEnumerator<IPiece<T>>) Pieces.GetEnumerator();
 
-        IEnumerator IEnumerable.GetEnumerator() {
-            return Pieces.GetEnumerator(); }
-
+        IEnumerator IEnumerable.GetEnumerator() =>
+            Pieces.GetEnumerator();
 
         public override bool Solve(T condition) {
             foreach (var piece in pieces)
@@ -90,16 +85,20 @@ namespace PathwaysEngine.Puzzle {
 
 
         public override void Awake() {
-            var list = new List<IPiece<T>>(externalPieces);
+            var list = new List<IPiece<T>>();
+            if (externalPieces!=null)
+                foreach (var elem in externalPieces)
+                    list.Add(elem);
             var bits = new List<T>(solveState);
             foreach (Transform child in transform) {
-                var children = child.gameObject.GetComponents<T>();
+                var children = child.gameObject.GetComponents<adv::Thing>();
                 if (children==null || children.Length<=0) continue;
                 foreach (var elem in children)
-                    if (elem.GetType()==typeof(IPiece<T>))
+                    if (elem is IPiece<T>)
                         list.Add((IPiece<T>) elem);
             } if (list.Count<=0 || bits.Count!=list.Count)
-                throw new System.Exception("Bad Pieces!");
+                throw new System.Exception(
+                    $"Bad Pieces!\n{list.Count},{bits.Count}");
             foreach (var elem in list)
                 pieces.Add(elem,bits[list.IndexOf(elem)]);
         }

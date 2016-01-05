@@ -17,8 +17,5 @@ namespace PathwaysEngine.Adventure.Setting {
 
 		[SerializeField] Area area_src;
 		[SerializeField] Area area_tgt;
-
-		void OnTriggerEnter(Collider o) {
-			if (Player.IsCollider(o)) Player.Goto(area_tgt); }
 	}
 }

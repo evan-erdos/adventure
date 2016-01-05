@@ -11,7 +11,7 @@ namespace PathwaysEngine.Adventure {
     [RequireComponent(typeof(AudioSource))]
     [RequireComponent(typeof(Collider))]
     [RequireComponent(typeof(Light))]
-    public partial class Crystal : Thing {
+    public class Crystal : Thing {
         bool wait = false, ring_wait = false;
         public bool repeat, first = true;
         float velocity, velocity2;
@@ -99,7 +99,7 @@ namespace PathwaysEngine.Adventure {
         }
 
         public void OnTriggerEnter(Collider o) {
-            if (Player.IsCollider(o) && !repeat) {
+            if (Player.Is(o) && !repeat) {
                 StartCoroutine(Resonate());
                 if (!ring_wait) StartCoroutine(Ring());
             }

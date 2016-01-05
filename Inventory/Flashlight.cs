@@ -8,7 +8,7 @@ using System.Collections;
 namespace PathwaysEngine.Inventory {
 
 
-    class Flashlight : Lamp {
+    public class Flashlight : Lamp {
         public override bool Wear() {
             Literature.Terminal.LogCommand(
                 "You turn on your flashlight.");

@@ -11,39 +11,24 @@ namespace PathwaysEngine.Literature {
      * Represents any `Player`-issued command.
      **/
     public struct Command {
-        public string uuid, input;
+        public string uuid;
         public Regex regex {get;set;}
         public Parse parse {get;set;}
 
         public Command(
                         string uuid,
                         Regex regex,
-                        Parse parse,
-                        string input) {
+                        Parse parse) {
             this.uuid = uuid;
             this.regex = regex;
             this.parse = parse;
-            this.input = input;
         }
 
         public Command(
                         string uuid,
-                        Regex regex,
-                        Parse parse)
-            : this(uuid,regex,parse,"") { }
-
-        public Command(
-                        string uuid,
                         string regex,
                         Parse parse)
-            : this(uuid,new Regex(regex),parse,"") { }
-
-        public Command(
-                        string uuid,
-                        string regex,
-                        Parse parse,
-                        string input)
-            : this(uuid,new Regex(regex),parse,input) { }
+            : this(uuid,new Regex(regex),parse) { }
 
         public Command(
                         string uuid,
@@ -51,16 +36,9 @@ namespace PathwaysEngine.Literature {
                         string regex)
             : this(uuid,new Regex(regex),parse) { }
 
-        public Command(
-                        string uuid,
-                        Parse parse,
-                        string regex,
-                        string input)
-            : this(uuid,new Regex(regex),parse,input) { }
-
 
         public bool Fits(Description d) =>
-            d.Fits(this);
+            regex.IsMatch(d.Name);
 
         public bool Fits(IDescribable d) =>
             Fits(d.description);

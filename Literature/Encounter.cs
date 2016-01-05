@@ -16,13 +16,11 @@ namespace PathwaysEngine.Literature {
      * was initialized.
      **/
     [RequireComponent(typeof(Collider))]
-    public partial class Encounter : adv::Thing, IStorable {
+    public class Encounter : adv::Thing, IStorable {
 
-        public enum Inputs : byte {
-            Trigger, Click, Elapsed, Sight };
-        Inputs input;
-        bool reuse;
-        float time;
+        internal Inputs input;
+        internal bool reuse;
+        internal float time;
         Collider _collider;
 
         public override void Awake() { base.Awake();
@@ -40,7 +38,7 @@ namespace PathwaysEngine.Literature {
         }
 
         public void OnTriggerEnter(Collider o) {
-            if (input==Inputs.Trigger && Player.IsCollider(o))
+            if (input==Inputs.Trigger && Player.Is(o))
                 StartCoroutine(BeginEncounter());
         }
 
@@ -57,6 +55,9 @@ namespace PathwaysEngine.Literature {
             yield return new WaitForSeconds(t);
             StartCoroutine(BeginEncounter());
         }
+
+        public override void Deserialize() =>
+            Pathways.Deserialize<Encounter,Encounter_yml>(this);
     }
 }
 

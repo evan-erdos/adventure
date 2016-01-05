@@ -32,7 +32,7 @@ namespace PathwaysEngine.Statistics {
             this.affinity = affinity;
         }
 
-        public override string ToString() {
-            return string.Format(@"~{0}:|{1}|~",value,affinity); }
+        public override string ToString() =>
+            $@"~{value}:|{affinity}|~";
     }
 }

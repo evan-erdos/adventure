@@ -1,6 +1,6 @@
-
 /* Ben Scott * bescott@andrew.cmu.edu * 2015-11-13 * Adventure */
 
+using UnityEngine;
 using EventArgs=System.EventArgs;
 using lit=PathwaysEngine.Literature;
 using inv=PathwaysEngine.Inventory;
@@ -99,7 +99,6 @@ namespace PathwaysEngine.Adventure {
     }
 
 
-
     /** `IPushable` : **`interface`**
      *
      * Interface to anything that can be pushed.
@@ -112,14 +111,6 @@ namespace PathwaysEngine.Adventure {
          * This is called when the instance should be pushed.
          **/
         bool Push();
-    }
-
-
-    /** `IPullable` : **`interface`**
-     *
-     * Interface to anything that can be pulled.
-     **/
-    public interface IPullable {
 
 
         /** `Pull` : **`bool`**
@@ -138,19 +129,6 @@ namespace PathwaysEngine.Adventure {
     interface IThing : lit::IDescribable {
 
 
-        /** `Near` : **`bool`**
-         *
-         * **DEPRECATED**
-         *
-         * Specifies whether or not something is closeby, and
-         * subscribes to `event`s if it is the case. Deriving
-         * classes should ensure that setting it is effective,
-         * especially if it's being set by physics events, as
-         * is the case in the main implementation of `Thing`.
-         **/
-        //bool Near {get;set;}
-
-
         /** `Seen` : **`bool`**
          *
          * Used to determine if the `Player` has knowledge of
@@ -160,15 +138,30 @@ namespace PathwaysEngine.Adventure {
         bool Seen {get;set;}
 
 
+        /** `Radius` : **`real`**
+         *
+         * A distance, used to determine if a **`Player`** is
+         * near `this`. S&P is to use `sqrMagnitude`, as the
+         * precise distance between `this` and the nearest
+         * **`Player`** is not typically important. Any values
+         * assigned to `Radius` should be inflated accordingly.
+         **/
+        float Radius {get;}
+
+
+        /** `Position` : **`<real,real,real>`**
+         *
+         * A vector which denotes where `this` is.
+         **/
+        Vector3 Position {get;}
+
+
         /** `ViewEvent` : **`event`**
          *
          * This event handles the `View()`ing of anything that
          * can be seen, which is every `Thing` by default.
          **/
-        //event lit::CommandEvent ViewEvent;
-        //void AddEvents(IThing thing);
-        //void RemoveEvents(IThing thing);
-
+        //event lit::Parse ViewEvent;
 
 
         /** `Find()` : **`bool`**
@@ -176,7 +169,7 @@ namespace PathwaysEngine.Adventure {
          * Allows the `Player` to find things via commands.
          *
          * - `throw` : **`TextException`**
-         *     the thing cannot be found
+         *     `this` cannot be found, or isn't nearby.
          **/
         bool Find();
 
@@ -200,10 +193,10 @@ namespace PathwaysEngine.Adventure {
          *     the thing cannot be examined
          **/
         bool View(
-                        object source,
-                        Thing target,
-                        EventArgs e,
-                        lit::Command c);
+            Person sender,
+            EventArgs e,
+            lit::Command c,
+            string input);
     }
 
 

@@ -18,7 +18,7 @@ namespace PathwaysEngine.Adventure.Setting {
 	 * traveled to from it, either via the `Map`view, or by the
 	 * **goto** command. Also defines all contained `Rooms`.
 	 **/
-	partial class Area : Thing {
+	public class Area : Thing {
 
 
 		/** `rooms` : **`Room[]`**
@@ -56,8 +56,12 @@ namespace PathwaysEngine.Adventure.Setting {
 
 		public override lit::Description description {get;set;}
 
-		public void OnTriggerEnter(Collider o) {
-			if (Player.IsCollider(o)) Player.area = this; }
+		public void OnTriggerEnter(Collider o) =>
+			Player.InstanceFor(o).Area = this;
+
+
+		public override void Deserialize() =>
+            Pathways.Deserialize<Area,Area_yml>(this);
 	}
 }
 
