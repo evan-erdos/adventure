@@ -22,7 +22,7 @@ namespace PathwaysEngine.Movement {
 		public float dist = 1f;
 		public float nearClip = 0.1f;
 		float time = 1f;
-		bool wait = false;
+		bool wait;
 
 		/** `IsActive` : **`bool`**
 		 *
@@ -80,7 +80,8 @@ namespace PathwaysEngine.Movement {
 		}
 
 		void Update() {
-			if (Input.GetButtonDown("Submit") || Input.GetButtonUp("Menu")) {
+			if (Input.GetButtonDown("Submit")
+			|| Input.GetButtonUp("Menu")) {
 				IsActive = false; OnMouseExit();
 			}
 		}
@@ -94,12 +95,14 @@ namespace PathwaysEngine.Movement {
 		}
 
 		IEnumerator OnMouseEnter() {
-            if (Player.IsNear(transform.position,dist)) {
+            if (!Player.IsNear(transform.position,dist)) {
                 Pathways.CursorGraphic = Cursors.None;
                 yield break; }
             Pathways.CursorGraphic = Cursors.Look;
-            if (Input.GetButton("Fire1"))
-                yield return StartCoroutine(Entering(true));
+            while (Player.IsNear(transform.position,dist))
+	            if (Input.GetButton("Fire1"))
+	                yield return StartCoroutine(Entering(true));
+	            else yield return new WaitForSeconds(0.01f);
         }
 
         void OnMouseExit() {

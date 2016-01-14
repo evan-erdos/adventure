@@ -31,11 +31,9 @@ namespace PathwaysEngine {
      * namespace, due to its importance and its involvement in
      * many of the other namespaces' systems.
      **/
-    public class Player : Person {
+    class Player : Person {
         bool wait;
-        public List<inv::Item> wornItems;
         public string FullName = "Amelia Earhart";
-        public new stat::Set stats;
         public u::key menu, term, lamp;
 
         static Regex regex = new Regex(
@@ -55,7 +53,6 @@ namespace PathwaysEngine {
 
         public uint massLimit {get;set;}
 
-        public new Vector3 Position => motor.Position;
 
         public RandList<string> deathMessages {get;set;}
 
@@ -64,41 +61,29 @@ namespace PathwaysEngine {
             menu = new u::key((n)=>menu.input=n);
             term = new u::key((n)=>term.input=n);
             lamp = new u::key((n)=>{lamp.input=n;
-                if (n && left.heldItem!=null
-                && left.heldItem.Held)
+                if (n && (left?.heldItem.Held)!=null)
                     left.heldItem.Use(); });
         }
 
+
         public override void Awake() { base.Awake();
+            gameObject.layer = LayerMask.NameToLayer("Player");
             Players.Add(this);
             Pathways.mainCamera = Camera.main;
-            gameObject.layer = LayerMask.NameToLayer("Player");
         }
 
-        public override void Start() {
+
+        public override void Start() =>
             Pathways.GameState = GameStates.Game;
-        }
 
-        public void Update() {
-//            IsGrounded = motor.IsGrounded;
-//            IsJumping = motor.IsJumping;
-        }
 
-        public void LateUpdate() {
-//            WasGrounded = motor.WasGrounded;
-//            WasJumping = motor.WasJumping;
+        public void LateUpdate() =>
             Cursor.visible = (Pathways.CursorGraphic!=Cursors.None);
-        }
+
 
         public override void OnDestroy() { base.OnDestroy();
             Players.Remove(this);
         }
-
-        public void OnColliderEnter(Collider c) =>
-            feet.OnFootstep(c.material);
-
-        public void OnCollisionEnter(Collision c) =>
-            feet.OnFootstep(c.collider.material);
 
 
         public static bool Is(Collider c) =>
@@ -115,13 +100,15 @@ namespace PathwaysEngine {
             } return (0<nearest && nearest<radius);
         }
 
+
         public static bool IsNear(Thing o) =>
             IsNear(o.Position,o.Radius);
 
 
         public static Player InstanceFor(Collider c) =>
             c.gameObject.GetComponentInParent<Player>()
-                ?? c.gameObject.GetComponent<Player>();
+                ?? c.gameObject.GetComponent<Player>()
+                    ?? Player.Current;
 
 
         public static Player NearestTo(Thing o) {
@@ -133,31 +120,15 @@ namespace PathwaysEngine {
                     nearest = player;
                     d = dist;
                 }
-            } return nearest;
+            } return nearest ?? Player.Current;
         }
 
-
-        public void ResetPlayerLocalPosition() =>
-            motor.LocalPosition = Vector3.zero;
-
-
-        public bool Kill(string s) {
-            if (IsDead) return false;
-            lit::Terminal.Show(new lit::Command());
-            lit::Terminal.Clear();
-            lit::Terminal.LogImmediate(
-                new lit::Message(s,lit::Styles.Alert));
-            IsDead = true;
-            return motor.Kill();
-        }
 
         public override bool Kill() =>
             Kill(deathMessages.Next());
 
 
-        public class Holdall : inv::ItemSet {
-            public new List<inv::Item> Items;
-
+        class Holdall : inv::ItemSet {
             public uint lim => 4;
 
             public T GetItem<T>(string s)
@@ -167,9 +138,5 @@ namespace PathwaysEngine {
                 return default (T);
             }
         }
-
-
-        public override void Deserialize() =>
-            Pathways.Deserialize<Player,Player_yml>(this);
     }
 }

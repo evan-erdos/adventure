@@ -4,13 +4,14 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 //using static PathwaysEngine.Literature.Terminal;
+using lit=PathwaysEngine.Literature;
 using stat=PathwaysEngine.Statistics;
 
 
 namespace PathwaysEngine.Adventure {
 
 
-    /** `Creature` : **`class`**
+    /** `Creature` : **`Thing`**
      *
      * A base class for anything that needs to live breathe, or
      * be killed. Some pretty important classes derive from it,
@@ -25,7 +26,7 @@ namespace PathwaysEngine.Adventure {
          * Defines if the `Creature` is alive or dead, and in
          * deriving classes, sometimes has side effects if it's
          * assigned to. This allows for a quite clean assigning
-         * syntax, i.e., `creature.IsDead = true;`.
+         * syntax, i.e., `creature.IsDead = true`.
          **/
         public virtual bool IsDead {get;set;}
 
@@ -41,14 +42,14 @@ namespace PathwaysEngine.Adventure {
         public virtual void ApplyDamage(float n) { }
 
 
-        /** `Kill` : **`function`**
+        /** `Kill` : **`bool`**
          *
-         * Kills the `Creature` and logs a message.
+         * Kills `this` and logs a death message.
          **/
         public virtual bool Kill() {
             IsDead = true;
-            Literature.Terminal.LogCommand(
-                $"{Name} has died.");
+            lit::Terminal.Log(
+                $"{Name} <cmd>has died.</cmd>");
             return IsDead;
         }
 
@@ -57,3 +58,5 @@ namespace PathwaysEngine.Adventure {
             Pathways.Deserialize<Creature,Creature_yml>(this);
     }
 }
+
+

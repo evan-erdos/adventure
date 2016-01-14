@@ -33,10 +33,6 @@ namespace PathwaysEngine.Literature {
         /** `Sudo()` : **`Parse`**
          *
          * For special user commands. Unused, so far.
-         *
-         * - `c` : **`Command`**
-         *     Default `Command` struct, sometimes unused, but
-         *     means that this function is a `Parse` delegate.
          **/
         public static bool Sudo(
                         adv::Person sender,
@@ -48,10 +44,6 @@ namespace PathwaysEngine.Literature {
         /** `Redo()` : **`Parse`**
          *
          * Runs the prior command issued to the `Parser` again.
-         *
-         * - `c` : **`Command`**
-         *     Default `Command` struct, sometimes unused, but
-         *     means that this function is a `Parse` delegate.
          **/
         public static bool Redo(
                         adv::Person sender,
@@ -63,10 +55,6 @@ namespace PathwaysEngine.Literature {
         /** `Quit()` : **`Parse`**
          *
          * Prompts user through `Terminal` to quit the game.
-         *
-         * - `c` : **`command`**
-         *     Default `command` struct, sometimes unused, but
-         *     means that this function is a `Parse` delegate.
          **/
         public static bool Quit(
                         adv::Person sender,
@@ -81,10 +69,6 @@ namespace PathwaysEngine.Literature {
         /** `Load()` : **`Parse`**
          *
          * Loads a game from a `*.yml` file. Currently broken.
-         *
-         * - `c` : **`Command`**
-         *     Default `Command` struct, sometimes unused, but
-         *     means that this function is a `Parse` delegate.
          **/
         public static bool Load(
                         adv::Person sender,
@@ -102,10 +86,6 @@ namespace PathwaysEngine.Literature {
         /** `Save()` : **`Parse`**
          *
          * Saves a game from a `*.yml` file. Currently broken.
-         *
-         * - `c` : **`Command`**
-         *     Default `Command` struct, sometimes unused, but
-         *     means that this function is a `Parse` delegate.
          **/
         public static bool Save(
                         adv::Person sender,
@@ -136,10 +116,6 @@ namespace PathwaysEngine.Literature {
         /** `Help()` : **`Parse`**
          *
          * Shows the help menu via `Window`.
-         *
-         * - `c` : **`Command`**
-         *     Default `Command` struct, sometimes unused, but
-         *     means that this function is a `Parse` delegate.
          **/
         public static bool Help(
                         adv::Person sender,
@@ -156,7 +132,7 @@ namespace PathwaysEngine.Literature {
                         EventArgs e,
                         Command c,
                         string input) =>
-            sender.View(sender,e,c,input);
+            Player.Current.View(Player.Current,e,c,input);
 
 
         public static bool Look(
@@ -164,6 +140,7 @@ namespace PathwaysEngine.Literature {
                         EventArgs e,
                         Command c,
                         string input) => false;
+            //Player.Current.Look(Player.Current,e,c,input);
 
 
         public static bool Goto(
@@ -192,7 +169,7 @@ namespace PathwaysEngine.Literature {
                         EventArgs e,
                         Command c,
                         string input) =>
-            sender.Take(sender,e,c,input);
+            Player.Current.Take(Player.Current,e,c,input);
 
 
         public static bool Drop(
@@ -200,7 +177,7 @@ namespace PathwaysEngine.Literature {
                         EventArgs e,
                         Command c,
                         string input) =>
-            sender.Drop(sender,e,c,input);
+            Player.Current.Drop(Player.Current,e,c,input);
 
 
         public static bool Use(
@@ -208,7 +185,7 @@ namespace PathwaysEngine.Literature {
                         EventArgs e,
                         Command c,
                         string input) =>
-            sender.Use(sender,e,c,input);
+            Player.Current.Use(Player.Current,e,c,input);
 
 
         public static bool Wear(
@@ -216,7 +193,7 @@ namespace PathwaysEngine.Literature {
                         EventArgs e,
                         Command c,
                         string input) =>
-            sender.Wear(sender,e,c,input);
+            Player.Current.Wear(Player.Current,e,c,input);
 
 
         public static bool Stow(
@@ -224,7 +201,7 @@ namespace PathwaysEngine.Literature {
                         EventArgs e,
                         Command c,
                         string input) =>
-            sender.Stow(sender,e,c,input);
+            Player.Current.Stow(Player.Current,e,c,input);
 
 
         public static bool Read(
@@ -232,7 +209,7 @@ namespace PathwaysEngine.Literature {
                         EventArgs e,
                         Command c,
                         string input) =>
-            sender.Read(sender,e,c,input);
+            Player.Current.Read(Player.Current,e,c,input);
 
 
         public static bool Open(
@@ -240,7 +217,7 @@ namespace PathwaysEngine.Literature {
                         EventArgs e,
                         Command c,
                         string input) =>
-            sender.Open(sender,e,c,input);
+            Player.Current.Open(Player.Current,e,c,input);
 
 
         public static bool Shut(
@@ -248,7 +225,7 @@ namespace PathwaysEngine.Literature {
                         EventArgs e,
                         Command c,
                         string input) =>
-            sender.Shut(sender,e,c,input);
+            Player.Current.Shut(Player.Current,e,c,input);
 
 
         public static bool Push(
@@ -256,7 +233,7 @@ namespace PathwaysEngine.Literature {
                         EventArgs e,
                         Command c,
                         string input) =>
-            sender.Push(sender,e,c,input);
+            Player.Current.Push(Player.Current,e,c,input);
 
 
         public static bool Pull(
@@ -264,7 +241,7 @@ namespace PathwaysEngine.Literature {
                         EventArgs e,
                         Command c,
                         string input) =>
-            sender.Pull(sender,e,c,input);
+            Player.Current.Pull(Player.Current,e,c,input);
 
 
         public static bool Show(

@@ -7,6 +7,8 @@ using System.Collections.Generic; // just like I pictured it!
 using System.Linq;
 using System.IO;
 using System.Text.RegularExpressions;
+using Buffer=System.Text.StringBuilder;
+using Type=System.Type;
 using DateTime=System.DateTime;
 using EventArgs=System.EventArgs;
 using inv=PathwaysEngine.Inventory;
@@ -222,6 +224,98 @@ namespace PathwaysEngine {
                 ? (CursorLockMode.Locked)
                 : (CursorLockMode.Confined);
         }
+
+
+        /** `md()` : **`string`**
+         *
+         * Adds support for `Markdown`, and can be called on
+         * any `string`. Formats the `Markdown` syntax into
+         * `HTML`. Currently removes all `<p>` tags.
+         *
+         * - `s` : **`string`**
+         *    `string` to be formatted.
+         **/
+        public static string md(this string s) =>
+            new Buffer(Markdown.Transform(s))
+                .Replace("<em>","<i>")
+                .Replace("</em>","</i>")
+                .Replace("<blockquote>","<i>")
+                .Replace("</blockquote>","</i>")
+                .Replace("<strong>","<b>")
+                .Replace("</strong>","</b>")
+                .Replace("<h1>",
+                    $"<size={(int) Literature.Styles.h1}><color=#{(int) Literature.Styles.Title:X}>")
+                .Replace("</h1>","</color></size>")
+                .Replace("<h2>",
+                    $"<size={(int) Literature.Styles.h2}><color=#{(int) Literature.Styles.Title:X}>")
+                .Replace("</h2>","</color></size>")
+                .Replace("<h3>",
+                    $"<size={(int) Literature.Styles.h3}><color=#{(int) Literature.Styles.Title:X}>")
+                .Replace("</h3>","</color></size>")
+                .Replace("<pre>").Replace("</pre>")
+                .Replace("<code>").Replace("</code>")
+                .Replace("<ul>").Replace("</ul>")
+                .Replace("<li>").Replace("</li>")
+                .Replace("<p>").Replace("</p>")
+                /* custom tags */
+                .Replace("<help>",
+                    $"<color=#{(int) Literature.Styles.Help:X}>")
+                .Replace("</help>","</color>")
+                .Replace("<cmd>",
+                    $"<color=#{(int) Literature.Styles.Command:X}>")
+                .Replace("</cmd>","</color>")
+                .Replace("<warn>",
+                    $"<color=#{(int) Literature.Styles.Warning:X}>")
+                .Replace("</warn>","</color>")
+                .ToString();
+
+
+        /** `Replace()` : **`string`**
+         *
+         * Adds an overload to the existing `Replace()` that
+         * takes a single argument, for removing things instead
+         * of replacing them.
+         *
+         * - `s` : **`string`**
+         *    `string` to be formatted.
+         *
+         * - `newValue` : **`string`**
+         *    replacement `string` to insert.
+         **/
+        public static string Replace(
+                        this string s,
+                        string newValue) =>
+            s.Replace(newValue,"");
+
+        public static Buffer Replace(
+                        this Buffer sb,
+                        string s) =>
+            sb.Replace(s,"");
+
+
+        /** `Strip()` : **`string`**
+         *
+         * @TODO: Dumb name, should be changed.
+         *
+         * - `s` : **`string`**
+         *    `string` to be processed for usage with `Parser`.
+         **/
+        public static string Strip(this string s) =>
+            s.Trim().ToLower()
+            .Replace("\bthe\b")
+            .Replace("\ba\b");
+
+
+        /** `DerivesFrom<T>()` : **`bool`**
+         *
+         * Simple extension method to determine if a `Type` is,
+         * or derives from, the type specified.
+         *
+         * - `<T>` : **`Type`**
+         *    type to check against
+         **/
+        public static bool DerivesFrom<T>(this Type type) =>
+            type==typeof(T) || type.IsSubclassOf(typeof(T));
 
 
         public static void Reset() {

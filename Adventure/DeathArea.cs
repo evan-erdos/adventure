@@ -28,7 +28,7 @@ namespace PathwaysEngine.Adventure {
          *
          * Kills the `Player` that entered the `Collider`.
         **/
-        public IEnumerator Kill(Player player) {
+        public IEnumerator Kill(Person person) {
             if (!wait) {
                 wait = true;
                 yield return new WaitForSeconds(2f);
@@ -41,7 +41,7 @@ namespace PathwaysEngine.Adventure {
                             CameraClearFlags.SolidColor;
                         Pathways.mainCamera.backgroundColor =
                             new Color(255,255,255); });
-                player.Kill(message);
+                person.Kill(message);
                 yield return new WaitForSeconds(12f);
                 wait = false;
             }

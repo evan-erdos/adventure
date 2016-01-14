@@ -89,11 +89,10 @@ namespace PathwaysEngine.Literature {
          * window, i.e., if it's `focus`sed, or not.
          **/
         public void EventListener(
-                object sender,
-                System.EventArgs e,
-                GameStates gameState) {
+                        object sender,
+                        System.EventArgs e,
+                        GameStates gameState) =>
             focus = (gameState==GameStates.Term);
-        }
 
 
         /** `LockLog` : **`coroutine`**
@@ -118,7 +117,7 @@ namespace PathwaysEngine.Literature {
             wait = true;
             yield return new WaitForSeconds(0.125f);
             if (!activator.IsActivated)
-                Terminal.Show(new Command());
+                Terminal.Show();
             Pathways.GameState = GameStates.Term;
             wait = false;
         }
@@ -166,7 +165,7 @@ namespace PathwaysEngine.Literature {
 
         public static void Log(ILoggable o) {
             if (o==null || o==last) return;
-            //if (last!=null && o.Entry==last.Entry) return;
+            if (last!=null && o.Entry==last.Entry) return;
             queue.Enqueue(o);
             o = last;
         }
@@ -197,12 +196,11 @@ namespace PathwaysEngine.Literature {
                         ICollection<IDescribable> list) =>
             Log(list,Styles.Default);
 
-
         public static void Log(IDescribable o) =>
             Log((ILoggable) o.description);
 
-        public static void LogCommand(string s) =>
-            Log(new Message(s,Styles.Command));
+        public static void Log(adv::Thing o) =>
+            Log(o.Template,o.description.styles);
 
         public static void LogImmediate(string s) {
             buffer.Append((TrailingNewline(buffer))
@@ -222,8 +220,10 @@ namespace PathwaysEngine.Literature {
 
         public static void LogImmediate(
                         ICollection<IDescribable> list) {
-            foreach(var elem in list)
+            foreach(var elem in list) {
+                elem.description.Seen = true;
                 LogImmediate(elem.description.Entry);
+            }
         }
 
         static bool TrailingNewline(Buffer b) =>
@@ -246,7 +246,7 @@ namespace PathwaysEngine.Literature {
                     case Styles.h2:
                     case Styles.h3:
                     case Styles.h4:
-                        s = $"\n\n<size={elem}>{s.Trim()}</size>\n";
+                        s = $"\n\n<color=#{(int) Styles.Title:X}><size={elem}>{s.Trim()}</size></color>\n";
                         break;
                     case Styles.Inline:
                         s = s.Trim(); break;
@@ -275,12 +275,12 @@ namespace PathwaysEngine.Literature {
             Window.Display(m);
         }
 
-        public static bool Show(Command c) {
+        public static bool Show() {
             Pathways.terminal.activator.Activate();
             return true;
         }
 
-        public static bool Hide(Command c) {
+        public static bool Hide() {
             Pathways.terminal.activator.Deactivate();
             return true;
         }
@@ -312,27 +312,37 @@ namespace PathwaysEngine.Literature {
             Clear();
             StopAllCoroutines();
             LogImmediate($@"
-## {Pathways.Config.Title} v{Pathways.Config.Version} ##
+## {Pathways.Config.Title} <cmd>v{Pathways.Config.Version}</cmd> ##
 © {Pathways.Config.Date}, {Pathways.Config.Author} <{Pathways.Config.Email}>
-{Pathways.Config.Link}");
+{Pathways.Config.Link}".md());
             LogImmediate(Pathways.messages["init"]);
             StartCoroutine(Logging());
             StartCoroutine(LockLog(initTime));
-            Hide(new Command());
+            Hide();
+        }
+
+        void Update() {
+            if (Pathways.GameState!=GameStates.Term) return;
+            if (Input.GetButtonDown("Submit")
+            || Input.GetButtonUp("Menu")
+            || Input.GetButtonDown("Console"))
+                Pathways.GameState = GameStates.Game;
         }
 
         void LateUpdate() {
             if (Pathways.GameState!=GameStates.Term)
                 scrollRect.verticalNormalizedPosition = 0f; }
 
-        public void CommandInput() =>
+        public void CommandInput() {
+            if (string.IsNullOrEmpty(inputField.text.Trim()))
+                Pathways.GameState = GameStates.Game;
             Parser.Evaluate(inputField.text);
+        }
 
         public void CommandChange() {
-            if (inputField.text.Contains("\t")) {
+            if (inputField.text.Contains("\t")
+            || inputField.text.Contains("\n"))
                 Pathways.GameState = GameStates.Game;
-                focus = false;
-            }
         }
     }
 }

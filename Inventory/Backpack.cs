@@ -3,14 +3,14 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-using lit=PathwaysEngine.Literature;
 //using static PathwaysEngine.Literature.Terminal;
+using lit=PathwaysEngine.Literature;
 
 
 namespace PathwaysEngine.Inventory {
 
 
-    /** `Backpack` : **`class`**
+    /** `Backpack` : **`Bag`**
      *
      * Acts as the main holdall for the `Player`, and cannot be
      * stored, as `Take()`/`Drop()`-ing the backpack will also
@@ -19,40 +19,36 @@ namespace PathwaysEngine.Inventory {
      **/
     class Backpack : Bag, IWearable {
 
-
         public bool Worn {get;set;}
 
 
-        //public override bool Take() { base.Take();
-        //    return Player.Wear(this); }
+        public override bool Take() { base.Take();
+            return Player.Current.Wear(this); }
 
 
-        //public override bool Drop() { base.Drop();
-        //    return Player.Stow(this); }
+        public override bool Drop() { base.Drop();
+            return Player.Current.Stow(this); }
 
-
-        /** `Backpack` : **`destructor`**
-         *
-         * Drops all the contained `Item`s if `this` is garbage
-         * collected for whatever reason (or is `Destroy()`ed).
-         **/
-        ~Backpack() { DropAll(); }
 
         public bool Wear() {
             Worn = true;
             gameObject.SetActive(true);
-            Literature.Terminal.LogCommand("You put on the backpack.");
+            Literature.Terminal.Log(
+                $"<cmd>You put on the</cmd> {Name.ToLower()}<cmd>.</cmd>");
             return false;
         }
 
+
         public bool Stow() {
             Worn = false;
-            Literature.Terminal.LogCommand("You take off the backpack.");
+            Literature.Terminal.Log(
+                $"<cmd>You take off the</cmd> {Name.ToLower()}<cmd>.</cmd>");
             gameObject.SetActive(false);
             return false;
         }
 
-        //public override void Deserialize() =>
-        //    Pathways.Deserialize<Key,Key_yml>(this);
+
+        public override void Deserialize() =>
+            Pathways.Deserialize<Backpack,Backpack_yml>(this);
     }
 }

@@ -10,7 +10,7 @@ using lit=PathwaysEngine.Literature;
 namespace PathwaysEngine.Adventure.Setting {
 
 
-	/** `Area` : **`class`**
+	/** `Area` : **`Thing`**
 	 *
 	 * Represents a large space, which could be an entire level
 	 * or a significant sub-area. Each `Area` is represented on

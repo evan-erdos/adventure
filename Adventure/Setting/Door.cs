@@ -11,7 +11,7 @@ using inv=PathwaysEngine.Inventory;
 namespace PathwaysEngine.Adventure.Setting {
 
 
-    /** `Door` : **`class`**
+    /** `Door` : **`Thing`**
      *
      * Represents any portal that can be opened or that usually
      * behaves like a door.
@@ -33,7 +33,7 @@ namespace PathwaysEngine.Adventure.Setting {
         public GameObject door;
         public Transform tgt;
 
-        static event lit::Parse OpenEvent, ShutEvent;
+        event lit::Parse OpenEvent, ShutEvent;
 
 
         /** `IsOpen` : **`bool`**
@@ -89,18 +89,17 @@ namespace PathwaysEngine.Adventure.Setting {
          **/
         public Vector3 LocalPosition {
             get { return door.transform.localPosition; }
-            set {
-                if (IsLocked || wait) return;
+            set { if (IsLocked || wait) return;
                 door.transform.position = value;
                 var x = Mathf.Min(Mathf.Max(
                     door.transform.localPosition.x,
                     tgt.localPosition.x),0f);
                 door.transform.localPosition = new Vector3(
                     x,0f,0f);
-                if (x>=(3f*tgt.localPosition.x)/4f && IsOpen)
-                    Shut();
-                else if (x<=tgt.localPosition.x/4f && !IsOpen)
-                    Open(); //only?
+                if (x>=(3f*tgt.localPosition.x)/4f)
+                    if (IsOpen) Shut();
+                else if (x<=tgt.localPosition.x/4f)
+                    if (!IsOpen) Open();
             }
         }
 
@@ -117,34 +116,26 @@ namespace PathwaysEngine.Adventure.Setting {
         } [SerializeField] inv::Key lockKey;
 
 
-        /** `Open()` : **`function`**
+        /** `Open()` : **`Parse`**
          *
-         * This is a `static` callback for the text-commands
-         * that registers any instances of `Door` to the
-         * command multicast delegate, which calls their local
-         * function, `Open()`, when the `Player` or anyone else
-         * enters a command to open doors.
+         * This is the callback for the `Open` command, which
+         * calls all subscribers when `this` is `Open()`-ed.
          **/
-        public static void Open(
+        public bool Open(
                         Person sender,
                         EventArgs e,
                         lit::Command c,
-                        string input) =>
+                        string input) {
             OpenEvent?.Invoke(sender,e,c,input);
+            if (IsOpen) {
+                lit::Terminal.Log(
+                    "<cmd>It's already opened.</cmd>");
+                return false;
+            } else if (IsLocked)
+                return sender.Unlock(this);
+            else return this.Open();
+        }
 
-
-        /** `Shut()` : **`function`**
-         *
-         * Inverse of the `Open()` command, simply calls the
-         * other event, & does the same thing that `Open()`
-         * does, but instead closes the `Door`.
-         **/
-        public static void Shut(
-                        Person sender,
-                        EventArgs e,
-                        lit::Command c,
-                        string input) =>
-            ShutEvent?.Invoke(sender,e,c,input);
 
         public override void Awake() { base.Awake();
             audio = GetComponent<AudioSource>();
@@ -177,16 +168,7 @@ namespace PathwaysEngine.Adventure.Setting {
                     dirTarget,ref dirDelta,0.8f,
                     delay,Time.deltaTime);
         }
-#if SLOW
-        public void OnTriggerStay(Collider o) {
-            //Debug.Log(System.Convert.ToString(frameOpen,2));
-            if (!Near) return;
-            if (isAutomatic && frameOpen<128)
-                frameOpen = unchecked ((byte)((frameOpen<<0x1)|0x1));
-            if (IsOpen && isInitOnly)
-                collider.enabled = false;
-        }
-#endif
+
 
         public void OnTriggerExit(Collider o) {
             if (isAutomatic && frameOpen>0 && Player.Is(o))
@@ -208,52 +190,22 @@ namespace PathwaysEngine.Adventure.Setting {
                 wait = true;
                 collider.enabled = false;
                 dirTarget = (t)?(dirOpen):(dirInit);
-                PathwaysEngine.Literature.Terminal.LogCommand(
-                    (t) ? $"You open the {Name}."
-                        : $"The {Name} clicks closed.");
+                Literature.Terminal.Log((t)
+                    ? $"<cmd>You open the {Name}.</cmd>"
+                    : $"<cmd>The {Name} clicks closed.</cmd>");
                 audio.PlayOneShot(soundOpen,0.8f);
                 yield return new WaitForSeconds(time);
                 if (autoClose && t) {
                     yield return new WaitForSeconds(time);
                     Shut();
-                }
-                wait = false;
+                } wait = false;
             }
         }
 
         public bool Open() {
-            StartCoroutine(Opening(true)); return true; }
-
-
-        /** `Open()` : **`bool`**
-         *
-         * This is the local event handler for the `Parser`'s
-         * command, `Open`.
-         **/
-        public bool Open(
-                        Player player,
-                        EventArgs e,
-                        lit::Command c,
-                        string input) {
-            if (IsOpen) {
-                lit::Terminal.LogCommand(
-                    "It's already opened.");
-                return true;
-            } else if (IsLocked)
-                return player.Unlock(this);
-            else return this.Open();
+            StartCoroutine(Opening(true));
+            return true;
         }
-
-
-        /** `OpenOnly()` : **`bool`**
-         *
-         * This does exactly what open does, but locks the door
-         * afterwords.
-         **/
-        //public bool OpenOnly() {
-        //    StartCoroutine(OpeningOnly());
-        //    return true;
-        //}
 
 
         /** `Shut()` : **`bool`**
@@ -261,15 +213,16 @@ namespace PathwaysEngine.Adventure.Setting {
          * Closes the door, the higher-level command.
          **/
         public bool Shut(
-                        object source,
-                        Thing target,
+                        Person sender,
                         EventArgs e,
-                        lit::Command c) {
-            if (dirTarget!=dirInit)
-                return this.Shut();
-            lit::Terminal.LogCommand(
-                "It's already closed.");
-            return true;
+                        lit::Command c,
+                        string input) {
+            ShutEvent?.Invoke(sender,e,c,input);
+            if (dirTarget==dirInit) {
+                lit::Terminal.Log(
+                    "<cmd>It's already closed.</cmd>");
+                return false;
+            } return this.Shut();
         }
 
         public bool Shut() {
@@ -308,12 +261,12 @@ namespace PathwaysEngine.Adventure.Setting {
                 yield break; }
             Pathways.CursorGraphic = Cursors.Hand;
             if (!IsLocked && !IsOpen
-                            && Input.GetButton("Fire1"))
+            && Input.GetButton("Fire1"))
                 yield return StartCoroutine(Unlocking());
             while (!IsLocked && Player.IsNear(this)
-                            && Input.GetButton("Fire1")) {
-                var v0 = Input.mousePosition;
+            && Input.GetButton("Fire1")) {
                 Pathways.CursorGraphic = Cursors.Grab;
+                var v0 = Input.mousePosition;
                 var v1 = Camera.main.ScreenToWorldPoint(v0);
                 v0 = new Vector3(
                     Input.mousePosition.x,

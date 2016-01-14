@@ -35,12 +35,5 @@ namespace PathwaysEngine.Literature {
                         Parse parse,
                         string regex)
             : this(uuid,new Regex(regex),parse) { }
-
-
-        public bool Fits(Description d) =>
-            regex.IsMatch(d.Name);
-
-        public bool Fits(IDescribable d) =>
-            Fits(d.description);
     }
 }

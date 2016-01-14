@@ -161,7 +161,7 @@ namespace PathwaysEngine.Adventure {
          * This event handles the `View()`ing of anything that
          * can be seen, which is every `Thing` by default.
          **/
-        //event lit::Parse ViewEvent;
+        event lit::Parse ViewEvent;
 
 
         /** `Find()` : **`bool`**

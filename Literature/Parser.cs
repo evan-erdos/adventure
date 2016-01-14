@@ -64,10 +64,13 @@ namespace PathwaysEngine.Literature {
         }
 
         public static bool Failure(string input, string s) {
-            Terminal.LogCommand($@" \> **{input}**: {s}");
-            interceptNext = false;
-            Pathways.GameState = Pathways.LastState;
-            return false;
+            if (input.Length>0) {
+                Terminal.Log(
+                    $@"<cmd> \> **{input}**:</cmd> <help>{s}</help>");
+                interceptNext = false;
+                Pathways.GameState = Pathways.LastState;
+                return true;
+            } return false;
         }
 
         public static bool Failure(string s) =>
@@ -142,8 +145,7 @@ namespace PathwaysEngine.Literature {
                 var sb = new Buffer();
                 sb.AppendLine(e.Message);
                 foreach (var elem in e.options)
-                    sb.AppendLine(
-                        $"- ({e.options.IndexOf(elem):d}) : {elem.Name} ");
+                    sb.AppendLine($"- {elem.Name} ");
                 Terminal.LogImmediate(Terminal.Format(
                     sb.ToString(),Styles.Command));
                 if (interceptNext)
@@ -179,9 +181,9 @@ namespace PathwaysEngine.Literature {
          * sense, this prompts the user for some explanation.
          **/
         public static void Resolve<T>(Command c,List<T> list) {
-            Terminal.LogCommand("Which do you mean: ");
+            Terminal.Log("<cmd>Which do you mean:</cmd>");
             foreach (var elem in list)
-                Terminal.LogCommand("- "+elem);
+                Terminal.Log($"<cmd>-</cmd> {elem}");
             Pathways.GameState = GameStates.Term;
         }
     }

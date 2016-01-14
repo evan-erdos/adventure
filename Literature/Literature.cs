@@ -83,9 +83,10 @@ namespace PathwaysEngine.Literature {
      **/
     public enum Styles : int {
         Inline=0, Newline=1, Paragraph=2, Refresh=3,
-        h1=36, h2=28, h3=24, h4=18,
+        h1=36, h2=24, h3=18, h4=16,
         Default=0xFFFFFF, State=0x2A98AA, Change=0xFFAE10,
-        Alert=0xFC0000, Command=0xBBBBBB}
+        Alert=0xFC0000, Command=0xBBBBBB, Warning=0xFA2363,
+        Help=0x9CDF91, Title=0x98C8FC}
 
 
     public enum Templates : int {
@@ -141,7 +142,7 @@ namespace PathwaysEngine.Literature {
     	 * A formatting `string` to specialize the way that the
     	 * `ILoggable` object is displayed.
     	 **/
-    	string Template {get;set;}
+    	string Template {get;}
 
 
         /** `Entry` : **`string`**

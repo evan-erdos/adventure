@@ -347,7 +347,7 @@ namespace PathwaysEngine {
     }
 
 
-    public class Player_yml : adv::Person_yml, ISerializable<Player> {
+    class Player_yml : adv::Person_yml, ISerializable<Player> {
         public List<string> deathMessages {get;set;}
 
         public void Deserialize(Player o) {
@@ -465,7 +465,7 @@ namespace PathwaysEngine {
     }
 
     namespace Inventory {
-        public class Item_yml : adv::Thing_yml, ISerializable<Item> {
+        class Item_yml : adv::Thing_yml, ISerializable<Item> {
             public int cost {get;set;}
             public float mass {get;set;}
 
@@ -476,7 +476,19 @@ namespace PathwaysEngine {
             }
         }
 
-        public class Lamp_yml : Item_yml, ISerializable<Lamp> {
+        class Bag_yml : Item_yml, ISerializable<Bag> {
+            public void Deserialize(Bag o) {
+                Deserialize((Item) o);
+            }
+        }
+
+        class Backpack_yml : Item_yml, ISerializable<Backpack> {
+            public void Deserialize(Backpack o) {
+                Deserialize((Bag) o);
+            }
+        }
+
+        class Lamp_yml : Item_yml, ISerializable<Lamp> {
             public float time {get;set;}
 
             public void Deserialize(Lamp o) {
@@ -485,8 +497,7 @@ namespace PathwaysEngine {
             }
         }
 
-
-        public class Key_yml : Item_yml, ISerializable<Key> {
+        class Key_yml : Item_yml, ISerializable<Key> {
             [YamlMember(Alias="key type")]
             public Keys Kind {get;set;}
 
@@ -500,8 +511,7 @@ namespace PathwaysEngine {
             }
         }
 
-
-        class Book_yml : adv::Thing_yml, ISerializable<Book> {
+        class Book_yml : Item_yml, ISerializable<Book> {
             public string passage {get;set;}
 
             public void ApplyDefaults(Book o) {
@@ -518,7 +528,6 @@ namespace PathwaysEngine {
             }
         }
 
-
         class Crystal_yml : Item_yml, ISerializable<Crystal> {
             public uint shards {get;set;}
 
@@ -528,8 +537,7 @@ namespace PathwaysEngine {
             }
         }
 
-
-        public class Weapon_yml : Item_yml, ISerializable<Weapon> {
+        class Weapon_yml : Item_yml, ISerializable<Weapon> {
             public float rate {get;set;}
 
             public void Deserialize(Weapon o) {

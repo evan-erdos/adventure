@@ -7,23 +7,23 @@ using System.Collections;
 namespace PathwaysEngine.Adventure {
 
 
-	/** `Teleporter` : **`class`**
+	/** `Teleporter` : **`MonoBehaviour`**
 	 *
 	 * Extremely simple class which will teleport anything that
 	 * touches its trigger `Collider`.
 	 **/
 	[RequireComponent(typeof(AudioSource))]
 	class Teleporter : MonoBehaviour {
-	    AudioSource _audio;
+	    new AudioSource audio;
 	    [SerializeField] AudioClip sound;
-	    [SerializeField] Transform tgt;
+	    [SerializeField] Transform target;
 
-	    void Awake() { _audio = GetComponent<AudioSource>(); }
+	    void Awake() { audio = GetComponent<AudioSource>(); }
 
 	    void OnTriggerEnter(Collider other) {
-	        other.transform.position = tgt.position;
-	        _audio.clip = sound;
-	        _audio.Play();
+	        other.transform.position = target.position;
+	        audio.clip = sound;
+	        audio.Play();
 	    }
 	}
 }

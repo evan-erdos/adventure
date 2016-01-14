@@ -9,7 +9,7 @@ using adv=PathwaysEngine.Adventure;
 namespace PathwaysEngine.Puzzle {
 
 
-    /** `Combinator` : **`class`**
+    /** `Combinator` : **`Piece`**
      *
      * A Set of `IPiece`s which must be solved in a particular
      * configuration for the system to be considered solved.

@@ -50,10 +50,11 @@ namespace PathwaysEngine.Literature {
          * the rendered output of `Entry`.
          **/
         [YamlMember(Alias="template")]
-        public virtual string Template {
-            get { return template; }
-            set { RefreshTemplate(value); }
-        } string template = $"### {0} ###\n{1}\n\n{2}";
+        public virtual string Template => $@"
+### {Name} ###
+{init}{raw}
+
+{Help}";
 
 
         /** `Entry` : **`string`**
@@ -65,7 +66,9 @@ namespace PathwaysEngine.Literature {
         public string Entry {
             get { return desc; }
             set { Refresh(value); }
-        } protected string desc, raw;
+        } protected string desc;
+
+        public string raw;
 
         /** `init` : **`string`**
          *
@@ -81,8 +84,11 @@ namespace PathwaysEngine.Literature {
          * A specially formatted help text which can be added
          * to the description if the user appears to be dumb.
          **/
-        //[YamlMember(Alias="help")]
-        public string help {get;set;}
+        [YamlMember(Alias="help")]
+        public string Help {
+            get { return (!Seen)?$"<help>{help}</help>":""; }
+            set { help = value; }
+        } string help;
 
         /** `styles` : **`Styles[]`**
          *
@@ -101,9 +107,8 @@ namespace PathwaysEngine.Literature {
         [YamlMember(Alias="nouns")]
         public Regex Nouns {
             get { return nouns; }
-            set { nouns = new Regex(string.Format(
-                (Name!=null)?"({0})|{1}":"{1}",
-                    Name,value)); }
+            set { nouns = new Regex((Name!=null)
+                ?$"({Name})|{value}":$"{value}"); }
         } Regex nouns;
 
 
@@ -167,21 +172,7 @@ namespace PathwaysEngine.Literature {
 
         void Refresh(string s) {
             raw = s;
-            desc = Terminal.Format(string.Format(
-                Template,Name,s,
-                    (init!=null && !Seen)
-                        ? (init)
-                        : ("")).md(),styles);
-            if (help!=null)
-                desc += Terminal.Format(help.md(),
-                    Styles.Command);
-        }
-
-        void RefreshTemplate(string s) {
-            template = s
-                .Replace("name","0").Replace("desc","1")
-                .Replace("init","2").Replace("help","3")
-                .Replace("{").Replace("}");
+            desc = Terminal.Format(Template.md(),styles);
         }
 
 
@@ -206,7 +197,6 @@ namespace PathwaysEngine.Literature {
             if (d0==null && d1!=null) return d1;
             if (d0!=null && d1==null) return d1;
             if (d0==null && d1==null) return null;
-            if (d0.template==null) d0.template = d1.template;
             if (d0.Name==null) d0.Name = d1.Name;
             if (d0.init==null) d0.init = d1.init;
             if (d0.help==null) d0.help = d1.help;
@@ -223,7 +213,6 @@ namespace PathwaysEngine.Literature {
             if (d0==null && d1!=null) return d1;
             if (d0!=null && d1==null) return d1;
             if (d0==null && d1==null) return null;
-            if (d1.template!=null) d0.template = d1.template;
             if (d1.Name!=null) d0.Name = d1.Name;
             if (d1.init!=null) d0.init = d1.init;
             if (d1.help!=null) d0.help = d1.help;

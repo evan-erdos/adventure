@@ -13,6 +13,8 @@ knob: !!key
       
 
 Brass Lantern: !!lamp
+  cost: 400
+  mass: 2
   time: 3600
 
   description: 
@@ -126,5 +128,64 @@ Colt 45: !!weapon
 
     desc: |
       This is a Colt .45 pistol.
+
+
+unusual note: !!book
+  passage: |
+    The note is very short, and very unusual. It reads:
+
+    > wagner plays,
+    > hitler waves,
+    > storm clouds gather in nuremberg
+    
+    You have a hard time determining what this means.
+
+  description:
+    nouns: /note|weird|hitler/
+    desc: |
+      This little letter is quite strange, it's just three lines.
+
+
+note for George: !!book
+  passage: |
+    The note is ripped along the bottom, but you can make out the rest. 
+    It reads:
+
+    >George,
+    > When you leave tonight, remember to leave 4 & 5 as such (unreadable) off (unreadable)
+
+  description:
+    nouns: /note|letter|message|aldous|trevelyan/
+    help: |
+      (click on this, or type **read note** to read it.)
+
+    desc: |
+      This old note seems to have gotten wet, and has some mud on it.
+
+
+note for Aldous: !!book
+  passage: |
+    The letter reads:
+
+    >Aldous,
+    >An urgent matter has come up, and I fear I will be away for quite some time. I have chosen you to manage my work in the interim.
+
+    > The circuits on 2 & (you guess, 5) have been misbehaving, so I've rewired the main fuse box to automatically shut off if they're activated, to prevent any damage to the other systems.
+
+    > Remember to only pull the final power switch AFTER you've turned off all the power. You didn't last time.
+
+    > Regards,
+    >    Trevelyan
+
+  description:
+    nouns: /note|letter|message|aldous|trevelyan/
+    help: |
+      (click on this, or type **read note** to read it.)
+
+    desc: |
+      This old note seems to have gotten wet, and has some mud on it.
+
+
+
 
 ...

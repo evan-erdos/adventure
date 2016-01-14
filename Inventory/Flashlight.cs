@@ -3,6 +3,7 @@
 using UnityEngine;
 using System.Collections;
 //using static PathwaysEngine.Literature.Terminal;
+using lit=PathwaysEngine.Literature;
 
 
 namespace PathwaysEngine.Inventory {
@@ -10,14 +11,14 @@ namespace PathwaysEngine.Inventory {
 
     public class Flashlight : Lamp {
         public override bool Wear() {
-            Literature.Terminal.LogCommand(
-                "You turn on your flashlight.");
+            lit::Terminal.Log(
+                $"<cmd>You turn on the</cmd> {Name}<cmd>.</cmd>");
             return base.Wear();
         }
 
         public override bool Stow() {
-            Literature.Terminal.LogCommand(
-                "You put away your flashlight.");
+            lit::Terminal.Log(
+                $"<cmd>You put away the</cmd> {Name}<cmd>.</cmd>");
             return base.Stow();
         }
     }

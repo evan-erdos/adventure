@@ -27,7 +27,7 @@ namespace PathwaysEngine.Puzzle {
         [SerializeField] public AudioClip soundLever;
         [SerializeField] public AudioClip soundHandle;
 
-        AudioSource _audio;
+        new AudioSource audio;
         GameObject arm, handle;
 
         public event OnSolve<int> SolveEvent {
@@ -77,7 +77,7 @@ namespace PathwaysEngine.Puzzle {
         public override void Awake() { base.Awake();
             arm = transform.FindChild("arm").gameObject;
             handle = arm.transform.FindChild("handle").gameObject;
-            _audio = GetComponent<AudioSource>();
+            audio = GetComponent<AudioSource>();
             if (armRange.x>armRange.y)
                 armRange = new Vector2(armRange.y,armRange.x);
             SolveEvent += this.OnSolve;
@@ -125,10 +125,9 @@ namespace PathwaysEngine.Puzzle {
         IEnumerator Pulling(bool t) {
             if (!wait) {
                 wait = true;
-                _audio.PlayOneShot(soundLever,0.2f);
-                lit::Terminal.LogCommand(
-                    "You pull the lever "+
-                        ((t)?"back.":"forwards."));
+                audio.PlayOneShot(soundLever,0.2f);
+                lit::Terminal.Log(
+                    $"<cmd>You pull the</cmd> {Name} <cmd>{(t)?"back.":"forwards."}</cmd>");
                 //IsSolved = t;
                 Solve(t?1:0);
                 yield return new WaitForSeconds(delay);

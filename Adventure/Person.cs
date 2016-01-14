@@ -127,10 +127,11 @@ namespace PathwaysEngine.Adventure {
 
         public bool Drop(inv::Item item) {
             if (!Items.Contains(item)) return false;
+            if (!item.Drop()) return false;
             Items.Remove(item);
             item.transform.parent = null;
             item.transform.position = transform.position;
-            return item.Drop();
+            return true; //item.Drop();
         }
 
         public bool Drop() {
@@ -262,6 +263,17 @@ namespace PathwaysEngine.Adventure {
                         string input) => sender.Kill();
 
 
+        public bool Kill(string s) {
+            if (IsDead) return false;
+            lit::Terminal.Show();
+            lit::Terminal.Clear();
+            lit::Terminal.LogImmediate(
+                new lit::Message(s,lit::Styles.Alert));
+            IsDead = true;
+            return motor.Kill();
+        }
+
+
         public virtual bool Use(
                         Person sender,
                         EventArgs e,
@@ -314,13 +326,17 @@ namespace PathwaysEngine.Adventure {
                         EventArgs e,
                         lit::Command c,
                         string input) {
+            if (sender==null) return false;
             var list = new List<Thing>();
             foreach (var thing in sender.GetNearby<Thing>())
-                if (c.Fits(thing)) list.Add(thing);
+                if (thing.Fits(input)) list.Add(thing);
             if (list.Count>1)
                 throw new lit::AmbiguityException<Thing>(
                     "Which did you want to view: ", list);
-            if (list.Count<1 && room)
+            if (list.Count<1)
+                foreach (var item in sender.Items)
+                    if (item.Fits(input)) list.Add(item);
+            if (list.Count<1 && room!=null)
                 return room.View(this,e,c,input);
             else if (!room) throw new lit::TextException(
                 "You can't see anything like that here.");
@@ -331,6 +347,12 @@ namespace PathwaysEngine.Adventure {
             lit::Terminal.Log(description);
             return true;
         }
+
+        public bool Look(
+                        Person sender,
+                        EventArgs e,
+                        lit::Command c,
+                        string input) => false;
 
 
         public virtual bool Wear(
@@ -357,6 +379,12 @@ namespace PathwaysEngine.Adventure {
             if ((Corpus) Body.Type_Index(item.GetType())==Corpus.HandL)
                 left.SwitchItem((inv::IWieldable) item);
             else body[item.GetType()] = item;
+            if (item is inv::Lamp) {
+                var lamp = ((inv::Lamp) item);
+                lamp.transform.parent = left.transform;
+                lamp.transform.localPosition = Vector3.zero;
+            }
+
             return item.Wear();
         }
 

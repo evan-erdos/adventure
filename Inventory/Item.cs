@@ -12,7 +12,7 @@ using lit=PathwaysEngine.Literature;
 namespace PathwaysEngine.Inventory {
 
 
-    /** `Item` : **`class`**
+    /** `Item` : **`Thing`**
      *
      * Represents anything that the `Player` can take, drop, or
      * use in any other way. Does not apply to any interactive
@@ -20,7 +20,7 @@ namespace PathwaysEngine.Inventory {
      **/
     [RequireComponent(typeof(Rigidbody))]
     public class Item : adv::Thing, IGainful {
-        float volume = 0.9f;
+        static float volume = 0.9f;
         [SerializeField] AudioClip sound;
         [SerializeField] public Sprite Icon;
 
@@ -37,13 +37,19 @@ namespace PathwaysEngine.Inventory {
 
         public int Cost {get;set;}
 
-        public override float Radius => 4f;
+        public override float Radius => 8f;
 
         public float Mass {
             get { return rigidbody.mass; }
             set { rigidbody.mass = value; }
         }
 
+
+        public override string Template => $@"
+**{Name}** : <cmd>|{Mass:N}kg|</cmd>
+
+{description.init}{description.raw} {(Cost!=0)?"It is worth "+Cost+" coins.":""}
+{description.Help}";
 
         public virtual bool Use() => Drop();
 
@@ -55,8 +61,8 @@ namespace PathwaysEngine.Inventory {
          * to `Unity3D`, such as reparenting to the `Player`.
          **/
         public virtual bool Take() {
-            lit::Terminal.LogCommand(
-                $"You take the {Name}.");
+            lit::Terminal.Log(
+                $"<cmd>You take the {Name}.</cmd>");
             transform.localPosition = Vector3.zero;
             transform.localRotation = Quaternion.identity;
             Held = true;
@@ -74,8 +80,8 @@ namespace PathwaysEngine.Inventory {
             gameObject.SetActive(true);
             AudioSource.PlayClipAtPoint(
                 sound,transform.position,volume);
-            lit::Terminal.LogCommand(
-                $"You drop the {Name}.");
+            lit::Terminal.Log(
+                $"<cmd>You drop the {Name}.</cmd>");
             Held = false;
             rigidbody.AddForce(
                 Quaternion.identity.eulerAngles*4,
@@ -104,7 +110,7 @@ namespace PathwaysEngine.Inventory {
                     Pathways.CursorGraphic = Cursors.Grab;
                     yield return new WaitForSeconds(0.1f);
                     OnMouseExit();
-                    Player.NearestTo(this).Take(this);
+                    Player.NearestTo(this)?.Take(this);
                 } else yield return new WaitForSeconds(0.05f);
             } OnMouseExit();
         }

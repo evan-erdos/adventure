@@ -13,10 +13,11 @@ namespace PathwaysEngine.Inventory {
     public class Book : Item, lit::IReadable {
         bool waitRead;
 
-        public string Passage {
-            get { return passage; }
-            set { passage = value.md(); }
-        } string passage = "It reads: ";
+        public string Passage {get;set;}
+
+        public override string Template => $@"
+{base.Template}
+{Passage}";
 
 
         public IEnumerator Reading() {
@@ -28,8 +29,15 @@ namespace PathwaysEngine.Inventory {
         }
 
 
+        public override bool Drop() {
+            lit::Terminal.Log(
+                $"You decide to keep the {Name.ToLower()}.");
+            return false;
+        }
+
+
         public bool Read() {
-            PathwaysEngine.Literature.Terminal.Log(Passage, lit::Styles.Paragraph);
+            lit::Terminal.Log(Passage);
             return true;
         }
 

@@ -9,10 +9,6 @@ Adventure:
       name: thing
       styles: [ Paragraph ]
       nouns: /thing|object/
-      template: |
-        ### {name} ###
-        {init}{desc}
-        {help}
 
       help: |
         (You can click on this, or type **examine thing** or **search object**.)
@@ -24,7 +20,6 @@ Adventure:
   Creature: !!creature
     description:
       name: creature
-      template: "*{name}* [{health},{level}]"
       styles: [ Paragraph, Alert ]
       desc: |
         This is a living, breathing creature. 
@@ -33,7 +28,6 @@ Adventure:
   Person: !!person
     description:
       name: person
-      template: "*{first},{last}* [{health},{level}]"
       styles: [ Paragraph ]
       nouns: /person|(hu|wo)?man|guy|girl|dude/
 
@@ -48,7 +42,6 @@ Adventure.Setting:
   Room: !!room
     description:
       name: room
-      template: "## {name} ##\n{{desc}}\n\n{other}"
       styles: [ Paragraph ]
       nouns: /room|place/
       help: |
@@ -63,9 +56,6 @@ Adventure.Setting:
       name: area
       styles: [ Refresh ]
       nouns: /area|level|setting|zone/
-      template: |
-        # {name} #
-        {{desc}}
 
       help: |
         (To get a description of the surrounding area, type **examine area**. To travel to a new area, type **goto area** or **travel to someplace**.)
@@ -77,7 +67,6 @@ Adventure.Setting:
   Door: !!door
     description:
       name: door
-      template: "**{name}** (*{state}*)"
       styles: [ Paragraph ]
       nouns: /door|portal/
 
@@ -90,14 +79,12 @@ Adventure.Setting:
 
 Inventory:
   Item: !!item
+    cost: 0
+    mass: 1
     description:
       name: item
       styles: [ Inline ]
       nouns: /item|thing/
-      template: |
-        **{name}** : |{mass}kg|
-        
-        {{desc}}
 
       help: |
         (Items can be bought, sold, taken, dropped, and support all sorts of other actions as well. Type **take item** or **sell weird widget to the funny-looking barkeep**.)
@@ -107,6 +94,8 @@ Inventory:
 
 
   Lamp: !!lamp
+    cost: 51
+    mass: 2
     description: 
       name: lamp
       styles: [ Inline ]
@@ -119,6 +108,8 @@ Inventory:
 
 
   Book: !!book
+    cost: 10
+    mass: 1
     passage : |
       This is one of the most boring pieces of literature you have ever come across. It is so dry that you cannot bear to look at the pages for another moment before putting it down. You ignore it, and go about your travels with a fresh taste of disgust for people who wear suits.
 
@@ -126,8 +117,6 @@ Inventory:
       name: book
       styles: [ Paragraph ]
       nouns: /book|paper|page|reading|writing/
-      template: |
-        **{name}** : {seen}
 
       help: |
         (books and other sorts of writing can be read. Type **read book** to read this book.)
@@ -137,12 +126,13 @@ Inventory:
 
 
   Key: !!key
+    cost: 20
+    mass: 0.2
     key type: Default
     lock number: 0
 
     description: 
       name: key
-      template: "*{name}* ({type})"
       styles: [ Newline ]
       nouns: /key|lock/
 

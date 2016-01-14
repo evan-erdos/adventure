@@ -21,8 +21,7 @@ namespace PathwaysEngine.Adventure.Setting {
      * where the `Player` is, and what they're doing.
      **/
     public class Room : Thing {
-        bool wait;
-        byte hack = 0x0;
+        bool waitViewRoom;
 
 
         /** `Depth` : **`int`**
@@ -35,6 +34,12 @@ namespace PathwaysEngine.Adventure.Setting {
             get { return depth; }
             set { depth = value; }
         } [SerializeField] int depth = 0;
+
+
+        public override string Template => $@"
+## {Name} ##
+{description.init}{description.raw}
+{description.Help}";
 
 
         /** `Things` : **`Thing[]`**
@@ -50,7 +55,7 @@ namespace PathwaysEngine.Adventure.Setting {
         public override lit::Description description {get;set;}
 
 
-        /** `LoggingRoom` : **`coroutine`**
+        /** `Viewing` : **`coroutine`**
          *
          * Locks the `Terminal` for a bit while the description
          * of this `Room` is `Log`ged. Can be called from all
@@ -58,33 +63,17 @@ namespace PathwaysEngine.Adventure.Setting {
          * every frame, because it will take at least `4s` for
          * the next `Description` to be logged.
          **/
-        IEnumerator LoggingRoom(Player player) {
-            if (!wait) {
-                wait = true;
+        IEnumerator Viewing(Player player) {
+            if (!waitViewRoom) {
+                waitViewRoom = true;
                 collider.enabled = false;
                 yield return new WaitForSeconds(1f);
-                Seen = true; //if (hack>0x7F) {
-                lit::Terminal.LogCommand(
-                    $"Now Entering: {Name}");
+                if (Seen) lit::Terminal.Log(
+                    $"<cmd>Now Entering:</cmd> {Name}");
+                else base.View();
+                Seen = true;
                 player.Room = this;
             }
-        }
-
-        public string descThings() {
-            if (things==null || things.Count<1) return "";
-            if (things.Count==1)
-                return $"You see a {things[0]} here.";
-            var buffer = new Buffer("You see a ");
-            foreach (var thing in things)
-                buffer.Append(thing.name+", ");
-            return buffer.ToString();
-        }
-
-        void LogRoom() {
-            if (Seen) lit::Terminal.LogCommand(
-                $"Now Entering: {Name}");
-            else lit::Terminal.Log(description);
-            Seen = true;
         }
 
 
@@ -93,20 +82,20 @@ namespace PathwaysEngine.Adventure.Setting {
 
 
         public void OnTriggerEnter(Collider o) {
-            if (Player.Is(o)) { //if (hack>0x7E && !wait)
-                StartCoroutine(LoggingRoom(
+            if (Player.Is(o))
+                StartCoroutine(Viewing(
                     Player.InstanceFor(o)));
-                if (hack<=0x80)
-                    hack = unchecked ((byte)((hack<<0x1)|0x1));
-            }
         }
+
 
         public void OnTriggerExit(Collider o) {
             var player = Player.InstanceFor(o);
             if (player==null) return;
-            hack = 0x0; wait = false;
-            if (player.Room==this) player.Room = null;
+            waitViewRoom = false;
+            if (player.Room==this)
+                player.Room = null;
         }
+
 
         public override void Deserialize() =>
             Pathways.Deserialize<Room,Room_yml>(this);

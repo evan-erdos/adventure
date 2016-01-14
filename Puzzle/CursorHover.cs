@@ -33,8 +33,8 @@ namespace PathwaysEngine.Puzzle {
                 Pathways.CursorGraphic = Cursors.None; yield break; }
             Pathways.CursorGraphic = cursor;
             if (Input.GetButton("Fire1") && !first) {
-                lit::Terminal.LogCommand(
-                    "Nothing special happens.");
+                lit::Terminal.Log(
+                    "<cmd>Nothing special happens.</cmd>");
                 first = true;
             }
         }

@@ -17,7 +17,7 @@ namespace PathwaysEngine.Utilities {
      * Then, from any of those, it will instantiate the `src`
      * object at the position & rotation of a random child.
      **/
-    public class SpawnManager : MonoBehaviour {
+    class SpawnManager : MonoBehaviour {
         public bool isPlayer = true;
         public Transform source;
         Transform[] targets;
@@ -28,8 +28,6 @@ namespace PathwaysEngine.Utilities {
          * Puts the `source` at a randomly-chosen `SpawnPoint`.
          **/
         void Spawn() {
-            if (Player.Current)
-                Player.Current.ResetPlayerLocalPosition();
             var i = new Rand().Next(0,targets.Length);
             source.position = targets[i].position;
             source.rotation = targets[i].rotation;
@@ -39,7 +37,8 @@ namespace PathwaysEngine.Utilities {
             targets = GetComponentsInChildren<Transform>();
             var temp = new List<Transform>();
             foreach (var elem in targets)
-                if (elem.CompareTag("SpawnPoint")) temp.Add(elem);
+                if (elem.CompareTag("SpawnPoint"))
+                    temp.Add(elem);
             targets = temp.ToArray();
         }
 

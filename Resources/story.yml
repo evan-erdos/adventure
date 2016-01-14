@@ -1,0 +1,63 @@
+%YAML 1.1
+--- # story
+
+
+Ada's Letter to Anton: !!encounter
+  description: 
+    desc: |
+      Dearest Anton,
+      That I have no other recourse than to write you pains me. Were my circumstances any less dire I would not disturb you, for fear of opening old wounds.
+      I pen these lines to you betwixt hastily packing my trunk and holding a feverish vigil over my bedroom window, as I am certainly being followed.
+      
+      I implore you, Anton, to find it in your heart to forgive my past transgressions, if only for a day. I know all too well the hurt I've caused you, but in this moment I fear for my life like I have never before, and I don't have many people I can trust. By writing to you, I may have endangered your life as well, which pains me more deeply than you know. 
+      
+      The Digsite lies north of Harston, at the bottom of a ravine which, perplexingly, did not exist a month ago. We had just excavated a number of artefacts, (most of them worthless trinkets left by Roman soldiers as they were building Hadrian's Wall), but on the last day, I happened upon something altogether stranger.
+      
+      That day, just before we packed up the tools, I found... it. I hesitate to divulge anything further: if this letter falls into the wrong hands, it would be a catastrophe. 
+
+
+Digsite Directions: !!encounter
+  reuse: false
+  description:
+    desc: |
+      The Digsite lies north of Harston, at the bottom of a ravine which, perplexingly, did not exist a month ago. We had just excavated a number of artefacts, (most of them worthless trinkets left by Roman soldiers as they were building Hadrian's Wall), but on the last day, I happened upon something altogether stranger.
+
+
+Note to Ada: !!encounter
+  reuse: false
+  description:
+    styles: [ Refresh ]
+    desc: |
+      Adaline,
+      
+      You are becoming quite the writer! You would do well to speak to your cousin Aldous, as I can tell he will become a great writer someday. I see the old Huxley spark in him, and I daresay you as well! Pray his eyesight recovers.
+      
+      I confess to having written you with another proposal in mind. The behaviour of Aldous' brother, Noel, has become... distressing. I have reason to believe that he has succumbed to melancholia in its worst form. Having shared this with many members of the family, it has become clear that we are in unanimous agreement that something must be done.
+      
+      While I have little doubt in the prudence of my prognosis, I require some form of evidence. If Noel does not cede to treatment, or if he cannot be cured of this depressive fit... I fear the worst, and his reaction may necessitate a legal basis for the discipline that will ensue.
+      
+      I take no pleasure in supporting this unfortunate circumstance, however I cannot allow the Huxley family reputation to be tarnished. While Noel may be weak-minded, I have not lost hope. I have a talent for discovering greatness in people.
+      
+      Yours,
+        Anton
+
+
+Note to Ada (As Trevelyan): !!encounter
+  reuse: false
+  description:
+    styles: [ Refresh ]
+    desc: |
+      Adaline,
+      
+      You are becoming quite the writer [daughter]! You would do well to speak to your [brilliant] cousin Aldous, as I can tell [infer] he will become a great [astounding] writer someday. I see the old Huxley spark in him [pride++], and I daresay you as well! Pray [deities?] his eyesight [poor guy] recovers.
+      
+      I confess [you wrote it down?] to having written you with another proposal in mind. The behaviour of Aldous' brother, Noel, has become... distressing [offensive to my views]. I have reason to believe that he has succumbed to melancholia [depression] in its worst form [mild seasonal affect]. Having shared this with many members of the family [indiscrete], it has become clear that we are in unanimous [one] agreement that something [discipline] must be done.
+      
+      While I have little doubt in the prudence of my prognosis [nor of any decision], I require some form of evidence [dirt]. If Noel does not cede [do] to treatment [what I say], or if said treatments fail to cure him of this depressive fit... I fear [expect] the worst, and his reaction may necessitate a legal basis for the discipline that will ensue [holy shit what's all this now?].
+      
+      I [piece of shit!] take no pleasure in [the hell you dont!] supporting this unfortunate circumstance [citation needed], however I cannot allow the Huxley family reputation to be tarnished [by whom?]. While Noel may be weak-minded [ill-informed], I have not lost hope [well]. I have a talent [genius?] for discovering [divining] greatness in people.
+      
+      Yours,
+        Anton
+
+...

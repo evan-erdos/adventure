@@ -11,7 +11,7 @@ using lit=PathwaysEngine.Literature;
 namespace PathwaysEngine.Adventure {
 
 
-    /** `Thing` : **`class`**
+    /** `Thing` : **`MonoBehaviour`**
      *
      * An extremely important class, `Thing` is the base class
      * for anything that has any interface with the `Adventure`
@@ -19,9 +19,9 @@ namespace PathwaysEngine.Adventure {
      * or the `Terminal` or any deriving/text-based interfaces.
      **/
     public class Thing : MonoBehaviour, IThing {
-        bool waitViewing;
-        protected internal new Rigidbody rigidbody;
-        protected internal new Collider collider;
+        bool waitView;
+        protected new Rigidbody rigidbody;
+        protected new Collider collider;
 
         public virtual bool Seen {get;set;}
 
@@ -29,11 +29,20 @@ namespace PathwaysEngine.Adventure {
 
         public string Name => gameObject.name;
 
+        public virtual string Template => $@"
+### {Name} ###
+{description.init}{description.raw}
+{description.Help}";
+
+        public virtual Vector3 Position =>
+            transform.position;
+
         public virtual lit::Description description {get;set;}
 
-        public virtual Vector3 Position => transform.position;
-
-        static event lit::Parse ViewEvent;
+        public event lit::Parse ViewEvent {
+            add { viewEvent += value; }
+            remove { viewEvent -= value; }
+        } event lit::Parse viewEvent;
 
 
         /** `AddListener()` : **`function`**
@@ -46,7 +55,7 @@ namespace PathwaysEngine.Adventure {
          * functions called iff the `Player` is nearby and the
          * `Player` issues an appropriate command.
          **/
-        public static void AddListener(Thing thing) =>
+        public virtual void AddListener(Thing thing) =>
             ViewEvent += thing.View;
 
 
@@ -54,7 +63,7 @@ namespace PathwaysEngine.Adventure {
          *
          * Corollary to the `AddListener()` function.
          **/
-        public static void RemoveListener(Thing thing) =>
+        public virtual void RemoveListener(Thing thing) =>
             ViewEvent -= thing.View;
 
 
@@ -65,7 +74,8 @@ namespace PathwaysEngine.Adventure {
                         string input) => View();
 
         public virtual bool View() {
-            lit::Terminal.Log(description);
+            lit::Terminal.Log(this);
+            Seen = true;
             return true;
         }
 
@@ -77,10 +87,10 @@ namespace PathwaysEngine.Adventure {
 
 
         IEnumerator Viewing() {
-            waitViewing = true;
+            waitView = true;
             View();
             yield return new WaitForSeconds(1f);
-            waitViewing = false;
+            waitView = false;
         }
 
 
@@ -102,7 +112,7 @@ namespace PathwaysEngine.Adventure {
         public virtual IEnumerator OnMouseOver() {
             while (Player.IsNear(this)) {
                 Pathways.CursorGraphic = Cursors.Pick;
-                if (Input.GetButtonUp("Fire1") && !waitViewing)
+                if (Input.GetButtonUp("Fire1") && !waitView)
                     yield return StartCoroutine(Viewing());
                 else yield return new WaitForSeconds(0.1f);
             } OnMouseExit();
