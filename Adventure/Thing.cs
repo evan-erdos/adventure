@@ -76,6 +76,7 @@ namespace PathwaysEngine.Adventure {
         public virtual bool View() {
             lit::Terminal.Log(this);
             Seen = true;
+            description.Seen = true;
             return true;
         }
 

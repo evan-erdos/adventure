@@ -79,14 +79,15 @@ namespace PathwaysEngine.Literature {
         public string init {get;set;}
 
 
-        /** `help` : **`string`**
+        /** `Help` : **`string`**
          *
          * A specially formatted help text which can be added
          * to the description if the user appears to be dumb.
          **/
         [YamlMember(Alias="help")]
         public string Help {
-            get { return (!Seen)?$"<help>{help}</help>":""; }
+            get { return (Seen)?"":
+                $"<help>{help}</help>"; }
             set { help = value; }
         } string help;
 

@@ -30,7 +30,7 @@ namespace PathwaysEngine.Literature {
         }
 
 
-        /** `Sudo()` : **`Parse`**
+        /** `Sudo` : **`Parse`**
          *
          * For special user commands. Unused, so far.
          **/
@@ -41,7 +41,7 @@ namespace PathwaysEngine.Literature {
                         string input) => true;
 
 
-        /** `Redo()` : **`Parse`**
+        /** `Redo` : **`Parse`**
          *
          * Runs the prior command issued to the `Parser` again.
          **/
@@ -52,7 +52,7 @@ namespace PathwaysEngine.Literature {
                         string input) => true;
 
 
-        /** `Quit()` : **`Parse`**
+        /** `Quit` : **`Parse`**
          *
          * Prompts user through `Terminal` to quit the game.
          **/
@@ -66,7 +66,7 @@ namespace PathwaysEngine.Literature {
         }
 
 
-        /** `Load()` : **`Parse`**
+        /** `Load` : **`Parse`**
          *
          * Loads a game from a `*.yml` file. Currently broken.
          **/
@@ -83,7 +83,7 @@ namespace PathwaysEngine.Literature {
         }
 
 
-        /** `Save()` : **`Parse`**
+        /** `Save` : **`Parse`**
          *
          * Saves a game from a `*.yml` file. Currently broken.
          **/
@@ -113,7 +113,7 @@ namespace PathwaysEngine.Literature {
         } /*(s) => (s.Length>100)?(s.Substring(0,100)+"&hellip;"):(s); */
 
 
-        /** `Help()` : **`Parse`**
+        /** `Help` : **`Parse`**
          *
          * Shows the help menu via `Window`.
          **/

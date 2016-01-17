@@ -55,6 +55,7 @@ namespace PathwaysEngine.Adventure {
         bool Shut();
     }
 
+
     /** `ILockable` : **`interface`**
      *
      * Interface to anything which can be locked or unlocked.
@@ -62,11 +63,13 @@ namespace PathwaysEngine.Adventure {
      **/
     public interface ILockable {
 
+
         /** `IsLocked` : **`bool`**
          *
          * Indicates whether or not the object is locked.
          **/
         bool IsLocked {get;}
+
 
         /** `KeyMatch` : **`Key`**
          *

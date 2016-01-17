@@ -66,7 +66,7 @@ namespace PathwaysEngine.Literature {
         public static bool Failure(string input, string s) {
             if (input.Length>0) {
                 Terminal.Log(
-                    $@"<cmd> \> **{input}**:</cmd> <help>{s}</help>");
+                    $@"<cmd> \> **{input}**:</cmd> <warn>{s}</warn>");
                 interceptNext = false;
                 Pathways.GameState = Pathways.LastState;
                 return true;

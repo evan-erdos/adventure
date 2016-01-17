@@ -267,6 +267,9 @@ namespace PathwaysEngine {
                 .Replace("<warn>",
                     $"<color=#{(int) Literature.Styles.Warning:X}>")
                 .Replace("</warn>","</color>")
+                .Replace("<cost>",
+                    $"<color=#{(int) Literature.Styles.Static:X}>")
+                .Replace("</cost>","</color>")
                 .ToString();
 
 

@@ -86,7 +86,7 @@ namespace PathwaysEngine.Literature {
         h1=36, h2=24, h3=18, h4=16,
         Default=0xFFFFFF, State=0x2A98AA, Change=0xFFAE10,
         Alert=0xFC0000, Command=0xBBBBBB, Warning=0xFA2363,
-        Help=0x9CDF91, Title=0x98C8FC}
+        Help=0x9CDF91, Title=0x98C8FC, Static=0xFFDBBB}
 
 
     public enum Templates : int {
@@ -137,6 +137,7 @@ namespace PathwaysEngine.Literature {
      **/
     public interface ILoggable {
 
+
     	/** `Template` : **`string`**
     	 *
     	 * A formatting `string` to specialize the way that the
@@ -160,6 +161,7 @@ namespace PathwaysEngine.Literature {
          * object, (hopefully ahead of time).
          **/
         Styles[] styles {get;set;}
+
 
         /** `Log()` : **`string`**
          *
@@ -194,6 +196,7 @@ namespace PathwaysEngine.Literature {
      * Interface to anything that can be read.
      **/
     public interface IReadable {
+
 
     	/** `Passage` : **`string`**
     	 *

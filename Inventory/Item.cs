@@ -48,7 +48,9 @@ namespace PathwaysEngine.Inventory {
         public override string Template => $@"
 **{Name}** : <cmd>|{Mass:N}kg|</cmd>
 
-{description.init}{description.raw} {(Cost!=0)?"It is worth "+Cost+" coins.":""}
+{description.init}{description.raw}
+{(Cost!=0)?"It is worth <cost>"+Cost+"</cost> coins.":""}
+
 {description.Help}";
 
         public virtual bool Use() => Drop();
@@ -62,7 +64,7 @@ namespace PathwaysEngine.Inventory {
          **/
         public virtual bool Take() {
             lit::Terminal.Log(
-                $"<cmd>You take the {Name}.</cmd>");
+                $"<cmd>You take the </cmd>{Name}<cmd>.</cmd>");
             transform.localPosition = Vector3.zero;
             transform.localRotation = Quaternion.identity;
             Held = true;
@@ -81,7 +83,7 @@ namespace PathwaysEngine.Inventory {
             AudioSource.PlayClipAtPoint(
                 sound,transform.position,volume);
             lit::Terminal.Log(
-                $"<cmd>You drop the {Name}.</cmd>");
+                $"<cmd>You drop the </cmd>{Name}<cmd>.</cmd>");
             Held = false;
             rigidbody.AddForce(
                 Quaternion.identity.eulerAngles*4,

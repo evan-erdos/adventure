@@ -16,6 +16,7 @@ namespace PathwaysEngine.Literature {
         bool wait;
         static float delay = 0.5f;
         static ui::Text message_title, message_body;
+        static ui::Image message_image;
         public util::key accept;
 
 
@@ -36,6 +37,9 @@ namespace PathwaysEngine.Literature {
                     message_title = child;
                 else if (child.name=="Body")
                     message_body = child;
+            foreach (var child in GetComponentsInChildren<ui::Image>())
+                if (child.name=="Image")
+                    message_image = child;
             if (!message_title || !message_body)
                 Debug.LogError("missing title / body");
         }
@@ -69,6 +73,18 @@ namespace PathwaysEngine.Literature {
             Pathways.window.StartCoroutine(
                 Pathways.window.BeginDisplay(delay));
         }
+
+        public static void ShowImage(ui::Image image) {
+            message_body.text = "";
+            message_title.text = "";
+            message_image = image;
+            message_image.enabled = true;
+            Pathways.GameState = GameStates.Msgs;
+            Pathways.window.gameObject.SetActive(true);
+            Pathways.window.StartCoroutine(
+                Pathways.window.BeginDisplay(delay));
+        }
+
 
         public void Disable() {
             if (wait) return;

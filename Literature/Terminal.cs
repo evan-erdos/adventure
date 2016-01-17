@@ -26,6 +26,7 @@ namespace PathwaysEngine.Literature {
     [RequireComponent(typeof(RectTransform))]
     public class Terminal : MonoBehaviour {
         static bool wait = false, isLocked = false;
+        static uint recentErrors, mistakeLimit = 4;
         static float time = 0.5f, initTime = 5f;
         static ui::InputField inputField;
         static ui::Text log;
@@ -97,9 +98,9 @@ namespace PathwaysEngine.Literature {
 
         /** `LockLog` : **`coroutine`**
          *
-         * Stops the `Terminal.Log` from printing any new
-         * messages, usually useful in the first few frames of
-         * the game, when the startup information is visible.
+         * Stops the `Terminal` from printing any new messages,
+         * usually useful in the first few frames of the game,
+         * when the startup information is visible.
          **/
         IEnumerator LockLog(float t) {
             isLocked = true;
@@ -134,6 +135,17 @@ namespace PathwaysEngine.Literature {
                 if (queue.Count>0 && !isLocked)
                     LogImmediate(queue.Dequeue());
                 yield return new WaitForSeconds(time);
+            }
+        }
+
+
+        IEnumerator Suggest() {
+            for (;;) {
+                if (recentErrors>mistakeLimit) {
+                    LogImmediate(Pathways.messages["dumb"]);
+                    recentErrors = 0;
+                } else if (recentErrors>0) recentErrors--;
+                yield return new WaitForSeconds(initTime);
             }
         }
 
@@ -317,6 +329,7 @@ namespace PathwaysEngine.Literature {
 {Pathways.Config.Link}".md());
             LogImmediate(Pathways.messages["init"]);
             StartCoroutine(Logging());
+            StartCoroutine(Suggest());
             StartCoroutine(LockLog(initTime));
             Hide();
         }

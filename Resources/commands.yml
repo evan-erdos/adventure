@@ -87,6 +87,14 @@ shut: !!command
   parse: Shut
   regex: /close|stop|lock|shut/
 
+push: !!command
+  parse: Push
+  regex: /push/
+
+pull: !!command
+  parse: Pull
+  regex: /pull|yank/
+
 read: !!command
   parse: Read
   regex: /read|watch|glance/

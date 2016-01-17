@@ -129,7 +129,7 @@ namespace PathwaysEngine.Adventure.Setting {
             OpenEvent?.Invoke(sender,e,c,input);
             if (IsOpen) {
                 lit::Terminal.Log(
-                    "<cmd>It's already opened.</cmd>");
+                    $"<cmd>The</cmd> {Name} <cmd>is already opened.</cmd>");
                 return false;
             } else if (IsLocked)
                 return sender.Unlock(this);
@@ -191,8 +191,8 @@ namespace PathwaysEngine.Adventure.Setting {
                 collider.enabled = false;
                 dirTarget = (t)?(dirOpen):(dirInit);
                 Literature.Terminal.Log((t)
-                    ? $"<cmd>You open the {Name}.</cmd>"
-                    : $"<cmd>The {Name} clicks closed.</cmd>");
+                    ? $"<cmd>You open the</cmd> {Name}<cmd>.</cmd>"
+                    : $"<cmd>The</cmd> {Name} <cmd>clicks closed.</cmd>");
                 audio.PlayOneShot(soundOpen,0.8f);
                 yield return new WaitForSeconds(time);
                 if (autoClose && t) {
@@ -220,7 +220,7 @@ namespace PathwaysEngine.Adventure.Setting {
             ShutEvent?.Invoke(sender,e,c,input);
             if (dirTarget==dirInit) {
                 lit::Terminal.Log(
-                    "<cmd>It's already closed.</cmd>");
+                    "<cmd>The</cmd> {Name} <cmd>is already closed.</cmd>");
                 return false;
             } return this.Shut();
         }

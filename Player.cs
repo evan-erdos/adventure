@@ -61,7 +61,7 @@ namespace PathwaysEngine {
             menu = new u::key((n)=>menu.input=n);
             term = new u::key((n)=>term.input=n);
             lamp = new u::key((n)=>{lamp.input=n;
-                if (n && (left?.heldItem.Held)!=null)
+                if (n && (left?.heldItem?.Held)!=null)
                     left.heldItem.Use(); });
         }
 

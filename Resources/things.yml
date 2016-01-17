@@ -1,62 +1,6 @@
 %YAML 1.1
 --- # things
 
-unusual note: !!book
-  passage: |
-    The note is very short, and very unusual. It reads:
-
-    > wagner plays,
-    > hitler waves,
-    > storm clouds gather in nuremberg
-    
-    You have a hard time determining what this means.
-
-  description:
-    nouns: /note|weird|hitler/
-    desc: |
-      This little letter is quite strange, it's just three lines.
-
-
-note for George: !!book
-  passage: |
-    The note is ripped along the bottom, but you can make out the rest. 
-    It reads:
-
-    >George,
-    > When you leave tonight, remember to leave 4 & 5 as such (unreadable) off (unreadable)
-
-  description:
-    nouns: /note|letter|message|aldous|trevelyan/
-    help: |
-      (click on this, or type **read note** to read it.)
-
-    desc: |
-      This old note seems to have gotten wet, and has some mud on it.
-
-
-note for Aldous: !!book
-  passage: |
-    The letter reads:
-
-    >Aldous,
-    >An urgent matter has come up, and I fear I will be away for quite some time. I have chosen you to manage my work in the interim.
-
-    > The circuits on 2 & (you guess, 5) have been misbehaving, so I've rewired the main fuse box to automatically shut off if they're activated, to prevent any damage to the other systems.
-
-    > Remember to only pull the final power switch AFTER you've turned off all the power. You didn't last time.
-
-    > Regards,
-    >    Trevelyan
-
-  description:
-    nouns: /note|letter|message|aldous|trevelyan/
-    help: |
-      (click on this, or type **read note** to read it.)
-
-    desc: |
-      This old note seems to have gotten wet, and has some mud on it.
-
-
 Observatory Annex Building: !!thing
   description:
     nouns: /building|annex/
@@ -64,7 +8,7 @@ Observatory Annex Building: !!thing
       This is the Annex to the main Observatory.
 
 
-Observatory Door: !!door
+Observatory door: !!door
   lock message: |
     It's a bit rusty, but it's unlocked.
 
@@ -74,7 +18,7 @@ Observatory Door: !!door
       This door looks pretty rough: its strong, wrought-iron construction is withering in the elements, and you can see rust beginning to form in the corners.
 
 
-Broken Observatory Door: !!door
+broken Observatory door: !!door
   locked: true
   lock message: |
     The handle for this door is missing, you can't open it.
@@ -88,14 +32,12 @@ Broken Observatory Door: !!door
 lever: !!lever
   description:
     nouns: /lever|crank/
-    help: |  
-      (either click on the lever to pull it, or type **pull lever**.)
 
     desc: |
       This is a rather unremarkable lever. It might cause something interesting to happen if you were to pull it.
 
 
-Metal Pathway: !!thing
+metal pathway: !!thing
   description:
     nouns: /path(way)?|floor|metal/
     desc: |
@@ -109,7 +51,7 @@ Obelisk: !!thing
       This pillar was cut from solid granite, and has a small inscription across its base.
 
 
-Desk: !!thing
+desk: !!thing
   description: 
     nouns: /desk|table|surface|wood/
     desc: |
@@ -123,7 +65,7 @@ Stack of Papers: !!thing
       It's a stack of blank papers, which appear to have gotten slightly wet somehow.
 
 
-Strange Note Half: !!book
+strange note half: !!book
   passage: |
     It reads:
       >Dearest Anton,
@@ -133,21 +75,21 @@ Strange Note Half: !!book
       >I have no other recourse than to write you, and it pains me so. Were my circumstances any less dire I would find another way. I implore you, Anton, to find it in your heart to forgive me, if only for a day. I know all too well the hurt I've caused you, and by writing to you, I may be endangering your life in turn, which pains me even more deeply than you know.
       
       >That day at the Digsite, just before we packed up the tools, I found... an artefact. I hesitate to divulge any...
-      
-    The message seems quite dire. Unfortunately, you have no idea who Anton is, nor do you have any idea where he might be. 
+
 
   description:
     nouns: /note|half|top|letter|paper|message|scrap/
     help: |
-      (type **read note half** to read the note.)
+      Type **read note half** to read the note.
 
     desc: |
       This note is slightly damp, and pretty crumpled. It's ripped along the bottom edge, which suggests that there's liable to be another section of this note somewhere.
 
 
-Strange Note: !!book
+strange note: !!book
   passage: |
-    Though it's torn across the top, the rest is still legible. It reads:
+    It's torn across the top, but the rest is still legible. It reads:
+      
       >...anything further: if this letter were to fall into the wrong hands... I fear the worst. 
       
       >I sent a package to help you find me and the artefact, but I had to be cryptic. I must be certain that you are the only one who can find the artefact. Some of the clues are rather personal. I truly hate to bring such ugly memories to the fore, but these are dangerous times.
@@ -156,13 +98,12 @@ Strange Note: !!book
       
       >Forever yours,
       >    Adaline
-    
-    This seems like it's extremely far-fetched, but then again, you woke up in a strangers house this morning, so, really anything is possible. 
+
 
   description:
     nouns: /note|bottom|letter|paper|message|scrap/
     help: |
-      (type **read note** to read the note.)
+      Type **read note** to read the note.
 
     desc: |
       This note is slightly damp, and pretty crumpled. It seems to be ripped along the top edge, which suggests that there's probably another section of this note somewhere.

@@ -364,14 +364,14 @@ namespace PathwaysEngine {
             public string Name {get;set;}
             public lit::Description description {get;set;}
 
-            public void ApplyDefaults<T>(Thing o) {
+            public void ApplyDefaults(Thing o) {
                 var d = Pathways.yml.DeserializeDefault<Thing_yml>();
                 o.Seen = d.seen;
                 o.description = d.description;
             }
 
             public void Deserialize(Thing o) {
-                ApplyDefaults<Thing>(o);
+                ApplyDefaults(o);
                 o.Seen = this.seen;
                 o.description.Name = o.Name;
                 o.description = lit::Description.Merge(
@@ -405,12 +405,20 @@ namespace PathwaysEngine {
         namespace Setting {
             public class Room_yml : Thing_yml, ISerializable<Room> {
                 public int depth {get;set;}
-                public List<Thing> things {get;set;}
                 public List<Room> nearbyRooms {get;set;}
 
+                public void ApplyDefaults(Room o) {
+                    ApplyDefaults((Thing) o);
+                    var d = Pathways.yml.DeserializeDefault<Room_yml>();
+                    o.description = lit::Description.Onto(
+                        o.description, d.description);
+                }
+
                 public void Deserialize(Room o) {
+                    ApplyDefaults(o);
                     Deserialize((Thing) o);
-                    //o.Things = this.things;
+                    o.description = lit::Description.Merge(
+                        this.description, o.description);
                     //o.nearbyRooms = this.nearbyRooms;
                 }
             }
@@ -422,6 +430,7 @@ namespace PathwaysEngine {
                 public List<Area_yml> areas {get;set;}
 
                 public void Deserialize(Area o) {
+                    ApplyDefaults(o);
                     Deserialize((Thing) o);
                     o.safe = this.safe;
                     o.level = this.level;
@@ -445,7 +454,7 @@ namespace PathwaysEngine {
                 public string LockMessage {get;set;}
 
                 public void ApplyDefaults(Door o) {
-                    ApplyDefaults<Door>((Thing) o);
+                    ApplyDefaults((Thing) o);
                     var d = Pathways.yml.DeserializeDefault<Door_yml>();
                     o.IsOpen = d.IsOpen;
                     o.IsInitOpen = d.IsInitOpen;
@@ -455,6 +464,7 @@ namespace PathwaysEngine {
 
                 public void Deserialize(Door o) {
                     Deserialize((Thing) o);
+                    ApplyDefaults(o);
                     o.IsOpen = this.IsOpen;
                     o.IsLocked = this.IsLocked;
                     o.IsInitOpen = this.IsInitOpen;
@@ -515,7 +525,7 @@ namespace PathwaysEngine {
             public string passage {get;set;}
 
             public void ApplyDefaults(Book o) {
-                ApplyDefaults<Book>(o);
+                ApplyDefaults((Item) o);
                 var d = Pathways.yml.DeserializeDefault<Book_yml>();
                 o.description = lit::Description.Merge(
                     o.description, d.description);

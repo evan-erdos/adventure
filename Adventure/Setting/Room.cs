@@ -13,7 +13,7 @@ using Buffer=System.Text.StringBuilder;
 namespace PathwaysEngine.Adventure.Setting {
 
 
-    /** `Room` : **`class`**
+    /** `Room` : **`Thing`**
      *
      * This class represents a room or an outdoor room, which
      * defines its connections to other rooms, any of the other
@@ -22,6 +22,7 @@ namespace PathwaysEngine.Adventure.Setting {
      **/
     public class Room : Thing {
         bool waitViewRoom;
+        byte frames;
 
 
         /** `Depth` : **`int`**
@@ -36,9 +37,13 @@ namespace PathwaysEngine.Adventure.Setting {
         } [SerializeField] int depth = 0;
 
 
+        public override float Radius => 0f;
+
+
         public override string Template => $@"
 ## {Name} ##
 {description.init}{description.raw}
+
 {description.Help}";
 
 
@@ -66,15 +71,20 @@ namespace PathwaysEngine.Adventure.Setting {
         IEnumerator Viewing(Player player) {
             if (!waitViewRoom) {
                 waitViewRoom = true;
-                collider.enabled = false;
-                yield return new WaitForSeconds(1f);
+                if (collider)
+                    collider.enabled = false;
+                yield return new WaitForSeconds(2f);
                 if (Seen) lit::Terminal.Log(
                     $"<cmd>Now Entering:</cmd> {Name}");
-                else base.View();
+                else if (frames>0xC) View();
                 Seen = true;
                 player.Room = this;
             }
         }
+
+
+        public void FixedUpdate() {
+            if (frames>0x02) frames--; }
 
 
         public override void Awake() { base.Awake();
@@ -87,13 +97,16 @@ namespace PathwaysEngine.Adventure.Setting {
                     Player.InstanceFor(o)));
         }
 
+        public void OnTriggerStay(Collider o) {
+            if (Player.Is(o) && frames<0xFA) frames+=2; }
+
 
         public void OnTriggerExit(Collider o) {
             var player = Player.InstanceFor(o);
             if (player==null) return;
             waitViewRoom = false;
-            if (player.Room==this)
-                player.Room = null;
+            StopAllCoroutines();
+            if (player.Room==this) player.Room = null;
         }
 
 

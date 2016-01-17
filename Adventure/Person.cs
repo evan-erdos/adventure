@@ -30,7 +30,7 @@ namespace PathwaysEngine.Adventure {
         public mv::Feet feet;
         internal mv::IMotor motor;
 
-        public LayerMask layerMask;
+        public static LayerMask layerMask;
 
         public override bool IsDead => motor.IsDead;
 
@@ -78,8 +78,7 @@ namespace PathwaysEngine.Adventure {
             if ((new Regex(@"\b(all)\b")).IsMatch(input))
                 return sender.Take();
             var list = new List<inv::Item>();
-            foreach (var item in sender.GetNearby<inv::Item>())
-                if (item.Fits(input)) list.Add(item);
+            GetNearby<inv::Item>(sender,input,ref list);
             if (list.Count<1)
                 throw new lit::TextException(
                     "You don't see anything you can take.");
@@ -131,7 +130,7 @@ namespace PathwaysEngine.Adventure {
             Items.Remove(item);
             item.transform.parent = null;
             item.transform.position = transform.position;
-            return true; //item.Drop();
+            return true;
         }
 
         public bool Drop() {
@@ -147,6 +146,8 @@ namespace PathwaysEngine.Adventure {
                         lit::Command c,
                         string input) {
             var list = new List<inv::Item>();
+            foreach (var item in sender.Items)
+                if (item.Fits(input)) list.Add(item);
             foreach (var elem in sender.GetNearby<inv::Item>())
                 if (elem is lit::IReadable && elem.Fits(input))
                     list.Add(elem);
@@ -262,7 +263,6 @@ namespace PathwaysEngine.Adventure {
                         lit::Command c,
                         string input) => sender.Kill();
 
-
         public bool Kill(string s) {
             if (IsDead) return false;
             lit::Terminal.Show();
@@ -336,10 +336,12 @@ namespace PathwaysEngine.Adventure {
             if (list.Count<1)
                 foreach (var item in sender.Items)
                     if (item.Fits(input)) list.Add(item);
-            if (list.Count<1 && room!=null)
-                return room.View(this,e,c,input);
-            else if (!room) throw new lit::TextException(
-                "You can't see anything like that here.");
+            if (list.Count<1 && room==null)
+                throw new lit::TextException(
+                    "You can't see anything like that here.");
+            else if (list.Count<1)
+                return room?.View(this,e,c,input) ?? false;
+            else if (list[0]==this) return View();
             return list[0].View(this,e,c,input);
         }
 
@@ -383,9 +385,7 @@ namespace PathwaysEngine.Adventure {
                 var lamp = ((inv::Lamp) item);
                 lamp.transform.parent = left.transform;
                 lamp.transform.localPosition = Vector3.zero;
-            }
-
-            return item.Wear();
+            } return item.Wear();
         }
 
         public virtual bool Wear() {
@@ -426,31 +426,97 @@ namespace PathwaysEngine.Adventure {
         public virtual bool Stow(inv::IWearable o) => o.Stow();
 
 
-        public virtual List<T> GetNearby<T>()
-            where T : Thing => GetNearby<T>(Radius);
-
-        public virtual List<T> GetNearby<T>(float radius)
+        /** `GetNearby<T>()` : **`Thing[]`**
+         *
+         * This function will find all the **`Thing`**s to be
+         * found anywhere near `this`.
+         **/
+        public List<T> GetNearby<T>()
                         where T : Thing {
-            var temp = Physics.OverlapSphere(
-                Position, radius, layerMask,
+            var list = new List<T>();
+            GetNearby<T>(this,"",ref list);
+            return list;
+        }
+
+        /** `GetNearby<T>()` : **`Thing[]`**
+         *
+         * This overload finds all **`Thing`**s whose regexes
+         * match the filter.
+         **/
+        public static List<T> GetNearby<T>(
+                        Person person,
+                        string filter,
+                        ref List<T> list)
+                            where T : Thing =>
+            GetNearby<T>(filter, ref list,
+                GetNearby<T>(
+                    person.Radius,
+                    person.Position));
+
+        /** `GetNearby<T>` : **`Thing[]`**
+         *
+         * The physics engine overload for this function. This
+         * uses a `Physics.OverlapSphere` to get references to
+         * all nearby `Thing`s.
+         *
+         * - `radius` : **`real`**
+         *     a distance from the `position` to search
+         *
+         * - `position` : **`<real,real,real>`**
+         *     the center of the search area
+         **/
+        public static List<T> GetNearby<T>(
+                        float radius,
+                        Vector3 position) where T : Thing {
+            var nearby = Physics.OverlapSphere(
+                position, radius, layerMask,
                 QueryTriggerInteraction.Collide);
             var list = new List<T>();
-            foreach (var elem in temp) {
-                var thing = (elem.attachedRigidbody==null)
-                    ? elem.gameObject.GetComponent<T>()
-                    : elem.attachedRigidbody?.GetComponent<T>();
-                if (thing && !list.Contains(thing))
-                    list.Add(thing);
+            foreach (var elem in nearby) {
+                var o =
+                    elem.attachedRigidbody?.GetComponent<T>()
+                    ?? elem.gameObject.GetComponent<T>();
+                if (o!=null && !list.Contains(o)) list.Add(o);
             } return list;
         }
 
+        /** `GetNearby<T>` : **`Thing[]`**
+         *
+         * This overload filters all the **`Thing`**s in the
+         * supplied argument collections on the basis of the
+         * `filter` string, and returns a list of matching
+         * **`Thing`**s. Should always return a list with no
+         * null elements.
+         *
+         * - `filter` : **`string`**
+         *     the user input to be matched against
+         *
+         * - `lists` : **`Thing[][]`**
+         *     all supplied lists to filter
+         **/
+        public static List<T> GetNearby<T>(
+                        string filter,
+                        ref List<T> list,
+                        params ICollection<T>[] lists)
+                            where T : Thing {
+            if (list==null) list = new List<T>();
+            foreach (var elem in lists)
+                foreach (var thing in elem)
+                    if (thing!=null
+                    && !list.Contains(thing)
+                    && string.IsNullOrEmpty(filter)
+                    || thing.Fits(filter))
+                        list.Add(thing);
+            return list;
+        }
 
-        public void AddCondition(stat::Condition cond) { }
 
         public void AddCondition(
-                    stat::Condition cond,
-                    stat::Severity svrt) { }
+                        stat::Condition cond) { }
 
+        public void AddCondition(
+                        stat::Condition cond,
+                        stat::Severity svrt) { }
 
 
         public override void Awake() { base.Awake();
@@ -471,14 +537,11 @@ namespace PathwaysEngine.Adventure {
             foreach (var elem in GetComponentsInChildren<u::Anchor>())
                 temp[(int) elem.bodyPart] = elem;
             body = new Person.Body(temp);
-            //_rigidbody = GetComponentInChildren<Rigidbody>();
             motor.KillEvent += Kill;
         }
 
-        public virtual void OnDestroy() {
+        public virtual void OnDestroy() =>
             motor.KillEvent -= Kill;
-        }
-
 
 
 

@@ -15,9 +15,7 @@ namespace PathwaysEngine.Inventory {
 
         public string Passage {get;set;}
 
-        public override string Template => $@"
-{base.Template}
-{Passage}";
+        //public override string Template => $@"{base.Template}";
 
 
         public IEnumerator Reading() {
@@ -31,7 +29,7 @@ namespace PathwaysEngine.Inventory {
 
         public override bool Drop() {
             lit::Terminal.Log(
-                $"You decide to keep the {Name.ToLower()}.");
+                $"<cmd>You decide to keep the</cmd> {Name}<cmd>.</cmd>");
             return false;
         }
 

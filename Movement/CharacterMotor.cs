@@ -126,7 +126,7 @@ namespace PathwaysEngine.Movement {
         /* internal ~CharacterMotor() {
             GameObject.Destroy(mapFollower); } */
 
-        public void Awake() {
+        public virtual void Awake() {
             cr = GetComponent<CharacterController>();
             mCamr = GameObject.FindGameObjectsWithTag(
                 "MainCamera")[0].transform;

@@ -1,34 +1,26 @@
-﻿/* Ben Scott * bescott@andrew.cmu.edu * 2015-10-27 * Feet */
+/* Ben Scott * bescott@andrew.cmu.edu * 2016-01-17 * Motor */
 
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using EventArgs=System.EventArgs;
 using adv=PathwaysEngine.Adventure;
+using lit=PathwaysEngine.Literature;
 using u=PathwaysEngine.Utilities;
 
 
 namespace PathwaysEngine.Movement {
 
 
-    /** `Feet` : **`MonoBehaviour`**
-     *
-     * A `Component` of `Person` and therefore `Player`, this
-     * plays a pretty large variety of foot sounds, which are
-     * triggered by the `PhysicMaterial`s that the `Person` or
-     * `Player` step on.
-     **/
-    [RequireComponent(typeof(AudioSource))]
-    public class Feet : MonoBehaviour {
+    public class Motor : CharacterMotor {
 
-        bool wait = false, isLanding = false;
+        bool waitStep, isLanding;
         public const float step = 0.4f;
         public float landVolume = 0.6f;
         Vector3 last;
         new AudioSource audio;
         public AudioClip[] stepSounds;
         public Dictionary<StepTypes,RandList<AudioClip>> sounds;
-        public u::key jump, dash, duck;
 
 
         /** `Volume` : **`real`**
@@ -47,20 +39,11 @@ namespace PathwaysEngine.Movement {
             (dash.input)?0.15f:((duck.input)?0.3f:0.2f);
 
 
-        /** `Feet` : **`constructor`**
-         *
-         * Usually frowned upon in `Unity` development, but in
-         * this case, it harmlessly creates input listeners for
-         * the few inputs that this class needs to know about.
-         **/
-        public Feet() {
-            jump = new u::key((n)=>jump.input=n);
-            dash = new u::key((n)=>dash.input=n);
-            duck = new u::key((n)=>duck.input=n);
-        }
-
-
-        public void OnMove(adv::Person sender, EventArgs e) {  }
+        public bool OnMove(
+                        adv::Person sender,
+                        EventArgs e,
+                        lit::Command c,
+                        string input) => false;
 
 
         bool HasMoved(float d = step) =>
@@ -82,17 +65,15 @@ namespace PathwaysEngine.Movement {
 
 
         public IEnumerator Step(StepTypes stepType) {
-            //if (Player.IsGrounded && !wait) {
-            if (!wait) {
-                wait = true;
-                isLanding = true;
-                yield return new WaitForSeconds(
-                    Rate+Random.Range(-0.005f,0.005f));
-                isLanding = false;
-                if (HasMoved()) //&& !Player.IsSliding)
-                    StartCoroutine(Land(stepType, Volume));
-                wait = false;
-            }
+            if (waitStep) yield break;
+            waitStep = true;
+            isLanding = true;
+            yield return new WaitForSeconds(
+                Rate+Random.Range(-0.005f,0.005f));
+            isLanding = false;
+            if (HasMoved()) //&& !Player.IsSliding)
+                StartCoroutine(Land(stepType, Volume));
+            waitStep = false;
         }
 
 
@@ -120,7 +101,7 @@ namespace PathwaysEngine.Movement {
             } StartCoroutine(Step(StepTypes.Default));
         }
 
-        void Awake() {
+        public override void Awake() { base.Awake();
             audio = GetComponent<AudioSource>();
             sounds = new Dictionary<StepTypes,RandList<AudioClip>>();
             foreach (var elem in u::Enum.GetValues<StepTypes>()) {
@@ -137,3 +118,4 @@ namespace PathwaysEngine.Movement {
             OnFootstep(collision.collider.material);
     }
 }
+

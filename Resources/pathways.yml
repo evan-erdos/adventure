@@ -1,6 +1,7 @@
 %YAML 1.1
 ---
 
+
 init: !!message
   desc: |
     **Welcome!**
@@ -12,8 +13,12 @@ dead: !!message
   desc: |
     ### \*\*\* YOU HAVE DIED. \*\*\* ###
     **Would you like to Restore, Restart, or Quit?**
-    
-    (Just type **restore** for now.)
+
+
+dumb: !!message
+  styles: [ Help ]
+  desc: |
+   (Continuing to do whatever it is you're doing is unlikely to advance your cause in any way.)
 
 
 help_old: !!message
@@ -87,7 +92,7 @@ quit: !!message
 view: !!message
   styles: [ Command ]
   desc: |
-    (You have entered a view area. Type **return** or **esc** to exit.)
+    <help>(You have entered a view area. Press <cmd>**return**</cmd> or <cmd>**esc**</cmd> to exit.)</help>
 
 
 ...

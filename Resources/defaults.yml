@@ -11,10 +11,16 @@ Adventure:
       nouns: /thing|object/
 
       help: |
-        (You can click on this, or type **examine thing** or **search object**.)
+        You can usually refer to things via common nouns and phrases. However, if too many similar things are nearby, you may need to use exact names. The exact names of nearby objects are listed when your commands are too ambiguous.
+        
+        Example Commands:
+        - <cmd>**look**</cmd>
+        - <cmd>**examine thing**</cmd>
+        - <cmd>**search object**</cmd>
+
 
       desc: |
-        This is a completely unremarkable thing. It has no special features or inherent value of its own.
+        This is a completely unremarkable thing. It has no special features or inherent value of its own. 
 
 
   Creature: !!creature
@@ -32,10 +38,15 @@ Adventure:
       nouns: /person|(hu|wo)?man|guy|girl|dude/
 
       help: |
-        (To talk to this person, type **talk to him** or **warn her about the rabid ostrich**.)
+        People can be quite helpful. You can start a conversation with someone nearby with any of the commands below. 
+        
+        Example Commands:
+        - <cmd>**talk**</cmd>
+        - <cmd>**speak to him**</cmd>
+        - <cmd>**warn her about the rabid ostrich**</cmd>
 
       desc: |
-        This person doesn't seem to have anything to say to you. Dressed in nondescript clothing, you suspect this person does not live a very interesting life.
+        This person doesn't seem to have much to say to you. Dressed in nondescript clothing, you suspect that this person does not live a very interesting life. While you *could* make small talk, it would be mostly out of courtesy.
 
 
 Adventure.Setting:
@@ -44,8 +55,14 @@ Adventure.Setting:
       name: room
       styles: [ Paragraph ]
       nouns: /room|place/
+
       help: |
-        (To get a description of the room, type **examine room** or simply **look**. To get to a particular room, type **goto that room over there**.)
+        As you move around and travel, the descriptions of the rooms you visit will provide you with more information about your surroundings. 
+        
+        Example Commands:
+        - <cmd>**look**</cmd>
+        - <cmd>**examine room**</cmd>
+        - <cmd>**goto that room over there**</cmd>
 
       desc: |
         You find yourself in a room. In many ways, it's very similar to other rooms that you have been in, except for it's the one you're currently in.
@@ -58,7 +75,7 @@ Adventure.Setting:
       nouns: /area|level|setting|zone/
 
       help: |
-        (To get a description of the surrounding area, type **examine area**. To travel to a new area, type **goto area** or **travel to someplace**.)
+        To get a description of the surrounding area, type **examine area**. To travel to a new area, type **goto area** or **travel to someplace**.
 
       desc: |
         You're in the area!
@@ -71,10 +88,15 @@ Adventure.Setting:
       nouns: /door|portal/
 
       help: |
-        (To use this door, drag the handle with the mouse, or type **open door** or **lock door**.)
+        Most doors can be opened by clicking and dragging their handles, or via the commands below.
+        
+        Example Commands:
+        - <cmd>**close door**</cmd>
+        - <cmd>**unlock door**</cmd>
+        - <cmd>**lock the door when you go, otherwise demons come through it**</cmd>
 
       desc: |
-        This is a door. Like other doors, it's probably pretty likely that this one opens and closes. Additionally, just like other doors, it certainly could be locked. 
+        This is a door. Like other doors, it's pretty likely that this one opens and closes. Additionally, just like other doors, it certainly could be locked. 
 
 
 Inventory:
@@ -87,7 +109,11 @@ Inventory:
       nouns: /item|thing/
 
       help: |
-        (Items can be bought, sold, taken, dropped, and support all sorts of other actions as well. Type **take item** or **sell weird widget to the funny-looking barkeep**.)
+        Items can be bought, sold, taken, dropped, and support all sorts of other actions as well.
+        
+        Example Commands:
+        - <cmd>**take item**</cmd>
+        - <cmd>**sell weird widget to the funny-looking barkeep**</cmd>
 
       desc: |
         This is an item. You can take it with you wherever you go, or you can drop it.
@@ -101,7 +127,11 @@ Inventory:
       styles: [ Inline ]
       nouns: /lamp|lantern|brass|light|bulb/
       help: |
-        (Hit the "F" key, or type **wield lamp** or **light the lantern** to use this lamp.)
+        It's always helpful to have a source of light.
+        
+        Example Commands:
+        - <cmd>**wield lamp**</cmd>
+        - <cmd>**light the lantern**</cmd>
 
       desc: |
         This is an ordinary brass lantern. It's dented, scratched, and ready for adventure.
@@ -119,7 +149,10 @@ Inventory:
       nouns: /book|paper|page|reading|writing/
 
       help: |
-        (books and other sorts of writing can be read. Type **read book** to read this book.)
+        Many things have writing on them which can be read. 
+        
+        Example Commands:
+        - <cmd>**read book**</cmd>
 
       desc: |
         This is a completely nondescript book. It reeks of boredom.
@@ -137,7 +170,7 @@ Inventory:
       nouns: /key|lock/
 
       help: |
-        (To use this key, simply walk up to a door and try to open it. If you have the key, it will automatically find it.)
+        If you have the proper key, it will automatically be used to unlock any door you approach.
 
       desc: |
         This is a pretty bland key, and you're not sure where you found it. It could unlock almost anything, and probably doesn't unlock anything nearby.
@@ -148,11 +181,11 @@ Puzzle:
     description:
       nouns: /lever|crank/
       help: |  
-        (either click on the lever to pull it, or type **pull lever**.)
+        You can pull levers via clicking and dragging
+        
+        Example Commands:
+        - <cmd>**pull lever**</cmd>
 
       desc: |
         This is a rather unremarkable lever. It might cause something interesting to happen if you were to pull it.
-
-
-#template: "The **{name}** contains: {list}\n"
 
