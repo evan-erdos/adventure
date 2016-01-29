@@ -14,16 +14,16 @@ namespace PathwaysEngine.Adventure {
 	 **/
 	[RequireComponent(typeof(AudioSource))]
 	class Teleporter : MonoBehaviour {
-	    new AudioSource audio;
+	    AudioSource _audio;
 	    [SerializeField] AudioClip sound;
 	    [SerializeField] Transform target;
 
-	    void Awake() { audio = GetComponent<AudioSource>(); }
+	    void Awake() { _audio = GetComponent<AudioSource>(); }
 
 	    void OnTriggerEnter(Collider other) {
 	        other.transform.position = target.position;
-	        audio.clip = sound;
-	        audio.Play();
+	        _audio.clip = sound;
+	        _audio.Play();
 	    }
 	}
 }

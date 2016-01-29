@@ -30,8 +30,8 @@ namespace PathwaysEngine.Inventory {
             set { held = value;
                 foreach (Transform child in transform)
                     child.gameObject.SetActive(!held);
-                rigidbody.isKinematic = held;
-                rigidbody.useGravity = !held;
+                _rigidbody.isKinematic = held;
+                _rigidbody.useGravity = !held;
             }
         } protected bool held = false;
 
@@ -40,8 +40,8 @@ namespace PathwaysEngine.Inventory {
         public override float Radius => 8f;
 
         public float Mass {
-            get { return rigidbody.mass; }
-            set { rigidbody.mass = value; }
+            get { return _rigidbody.mass; }
+            set { _rigidbody.mass = value; }
         }
 
 
@@ -85,7 +85,7 @@ namespace PathwaysEngine.Inventory {
             lit::Terminal.Log(
                 $"<cmd>You drop the </cmd>{Name}<cmd>.</cmd>");
             Held = false;
-            rigidbody.AddForce(
+            _rigidbody.AddForce(
                 Quaternion.identity.eulerAngles*4,
                 ForceMode.VelocityChange);
             return true;
@@ -98,10 +98,10 @@ namespace PathwaysEngine.Inventory {
 
         public override void Awake() { base.Awake();
             gameObject.layer = LayerMask.NameToLayer("Item");
-            var wasKinematic = rigidbody.isKinematic;
+            var wasKinematic = _rigidbody.isKinematic;
             Held = false;
             if (wasKinematic)
-                rigidbody.isKinematic = true;
+                _rigidbody.isKinematic = true;
         }
 
 

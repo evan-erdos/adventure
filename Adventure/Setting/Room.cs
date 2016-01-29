@@ -71,8 +71,8 @@ namespace PathwaysEngine.Adventure.Setting {
         IEnumerator Viewing(Player player) {
             if (!waitViewRoom) {
                 waitViewRoom = true;
-                if (collider)
-                    collider.enabled = false;
+                if (_collider)
+                    _collider.enabled = false;
                 yield return new WaitForSeconds(2f);
                 if (Seen) lit::Terminal.Log(
                     $"<cmd>Now Entering:</cmd> {Name}");

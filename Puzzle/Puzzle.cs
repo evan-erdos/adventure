@@ -148,14 +148,14 @@ namespace PathwaysEngine.Puzzle {
          * has no setter, as this state shouldn't be changed
          * externally.
          **/
-        IPiece<T> Current { get; }
+        IPiece<T> Current {get;}
 
 
         /** `Next` : **`IPiece<T>`**
          *
          * Returns the next `T` in the collection.
          **/
-        IPiece<T> Next { get; }
+        IPiece<T> Next {get;}
 
 
         /** `Advance()` : **`IPiece<T>`**
@@ -183,6 +183,6 @@ namespace PathwaysEngine.Puzzle {
          *
          * Denotes the "solved" state of the current system.
          **/
-        IDictionary<IPiece<T>,T> Pieces { get; }
+        IDictionary<IPiece<T>,T> Pieces {get;}
     }
 }

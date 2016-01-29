@@ -8,6 +8,7 @@ using util=PathwaysEngine.Utilities;
 
 namespace PathwaysEngine.Literature {
 
+
     /** `Encounter` : **`Thing`**
      *
      * Any kind of special event which displays output to the
@@ -21,7 +22,7 @@ namespace PathwaysEngine.Literature {
         internal Inputs input;
         internal bool reuse;
         internal float time;
-        Collider _collider;
+
 
         public override void Awake() { base.Awake();
             _collider = GetComponent<Collider>();

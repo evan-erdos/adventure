@@ -18,7 +18,7 @@ namespace PathwaysEngine.Movement {
         public const float step = 0.4f;
         public float landVolume = 0.6f;
         Vector3 last;
-        new AudioSource audio;
+        AudioSource _audio;
         public AudioClip[] stepSounds;
         public Dictionary<StepTypes,RandList<AudioClip>> sounds;
 
@@ -78,7 +78,7 @@ namespace PathwaysEngine.Movement {
 
 
         void PlayStep(StepTypes stepType, float volume) =>
-            audio.PlayOneShot(
+            _audio.PlayOneShot(
                 sounds[stepType].Next() ??
                 sounds[StepTypes.Default].Next(), volume);
 
@@ -102,7 +102,7 @@ namespace PathwaysEngine.Movement {
         }
 
         public override void Awake() { base.Awake();
-            audio = GetComponent<AudioSource>();
+            _audio = GetComponent<AudioSource>();
             sounds = new Dictionary<StepTypes,RandList<AudioClip>>();
             foreach (var elem in u::Enum.GetValues<StepTypes>()) {
                 sounds[elem] = new RandList<AudioClip>();

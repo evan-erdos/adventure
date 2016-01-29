@@ -20,8 +20,8 @@ namespace PathwaysEngine.Adventure {
      **/
     public class Thing : MonoBehaviour, IThing {
         bool waitView;
-        protected new Rigidbody rigidbody;
-        protected new Collider collider;
+        protected Rigidbody _rigidbody;
+        protected Collider _collider;
 
         public virtual bool Seen {get;set;}
 
@@ -97,11 +97,11 @@ namespace PathwaysEngine.Adventure {
 
         public virtual void Awake() {
             gameObject.layer = LayerMask.NameToLayer("Thing");
-            collider = GetComponent<Collider>();
-            rigidbody = GetComponent<Rigidbody>();
-            if (rigidbody!=null) {
-                rigidbody.isKinematic = true;
-                rigidbody.useGravity = false;
+            _collider = GetComponent<Collider>();
+            _rigidbody = GetComponent<Rigidbody>();
+            if (_rigidbody!=null) {
+                _rigidbody.isKinematic = true;
+                _rigidbody.useGravity = false;
             }
             Deserialize();
             AddListener(this);

@@ -28,8 +28,8 @@ namespace PathwaysEngine.Inventory {
             set { held = value;
                 foreach (Transform child in transform)
                     child.gameObject.SetActive(!held || Worn);
-                rigidbody.isKinematic = held;
-                rigidbody.useGravity = !held;
+                _rigidbody.isKinematic = held;
+                _rigidbody.useGravity = !held;
             }
         }
 

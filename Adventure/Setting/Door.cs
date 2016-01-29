@@ -28,7 +28,7 @@ namespace PathwaysEngine.Adventure.Setting {
         internal float speedDelta, delay = 0.2f;
         Vector3 dirInit, dirOpen,
                 dirFrame, dirTarget, dirDelta;
-        protected new AudioSource audio;
+        protected AudioSource _audio;
         public AudioClip soundClick, soundOpen;
         public GameObject door;
         public Transform tgt;
@@ -138,8 +138,8 @@ namespace PathwaysEngine.Adventure.Setting {
 
 
         public override void Awake() { base.Awake();
-            audio = GetComponent<AudioSource>();
-            audio.clip = soundOpen;
+            _audio = GetComponent<AudioSource>();
+            _audio.clip = soundOpen;
             if (!door) throw new System.Exception("No door!");
         }
 
@@ -188,12 +188,12 @@ namespace PathwaysEngine.Adventure.Setting {
         IEnumerator Opening(bool t) {
             if (!wait) {
                 wait = true;
-                collider.enabled = false;
+                _collider.enabled = false;
                 dirTarget = (t)?(dirOpen):(dirInit);
                 Literature.Terminal.Log((t)
                     ? $"<cmd>You open the</cmd> {Name}<cmd>.</cmd>"
                     : $"<cmd>The</cmd> {Name} <cmd>clicks closed.</cmd>");
-                audio.PlayOneShot(soundOpen,0.8f);
+                _audio.PlayOneShot(soundOpen,0.8f);
                 yield return new WaitForSeconds(time);
                 if (autoClose && t) {
                     yield return new WaitForSeconds(time);
@@ -250,7 +250,7 @@ namespace PathwaysEngine.Adventure.Setting {
         IEnumerator Unlocking() {
             if (!wait_open && !IsLocked) {
                 wait_open = true;
-                audio.PlayOneShot(soundClick,0.8f);
+                _audio.PlayOneShot(soundClick,0.8f);
                 yield break;
             }
         }

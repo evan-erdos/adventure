@@ -23,7 +23,6 @@ namespace PathwaysEngine.Adventure {
         Renderer _renderer;
         Light _light;
         Gradient gradient;
-        Collider _collider;
         public Color color;
         public Crystal[] crystals;
 
